@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelNotes">
         <activity
+            android:name=".NewTravel"
+            android:exported="true" />
+        <activity
             android:name=".TravelList"
             android:exported="true" />
         <activity
