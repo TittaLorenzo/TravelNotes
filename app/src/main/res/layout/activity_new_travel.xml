@@ -62,6 +62,14 @@
                 android:layout_height="63dp"
                 android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/NT_sceltaAndataP"
+                    android:layout_width="34dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/NT_selPartenza"
+                    android:textSize="12sp" />
+
                 <TextView
                     android:id="@+id/NT_partenzaAndata"
                     android:layout_width="112dp"
@@ -69,12 +77,6 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/NT_partenza" />
-
-                <CalendarView
-                    android:id="@+id/calendarView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
             </LinearLayout>
 
@@ -101,6 +103,14 @@
                 android:layout_height="68dp"
                 android:orientation="horizontal">
 
+                <Button
+                    android:id="@+id/NT_sceltaAndataR"
+                    android:layout_width="35dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/NT_selArrivo"
+                    android:textSize="12sp" />
+
                 <TextView
                     android:id="@+id/NT_arrivoAndata"
                     android:layout_width="112dp"
@@ -108,12 +118,6 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/NT_arrivo" />
-
-                <CalendarView
-                    android:id="@+id/calendarView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1" />
 
             </LinearLayout>
 

@@ -8,4 +8,6 @@
     <string name="NT_ritorno">Data e Ora viaggio ritorno</string>
     <string name="NT_partenza">partenza il: </string>
     <string name="NT_arrivo">arrivo il: </string>
+    <string name="NT_selPartenza">data partenza </string>
+    <string name="NT_selArrivo">data arrivo </string>
 </resources>
