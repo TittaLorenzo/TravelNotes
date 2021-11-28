@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="titleNuovaAttivita">Nuova attività</string>
+    <string name="attivitaNomeHint">Nome attività</string>
+    <string name="dataInizioAttivitaLabel">Da: </string>
+    <string name="dataFineAttivitaLabel">A: </string>
+    <string name="posizionePartenzaHint">Posizione di partenza</string>
+    <string name="destinazioneHint">Destinazione</string>
+    <string name="descrizioneHint">Descrizione</string>
+    <string name="promemoriaAttivitaLabel">Promemoria</string>
+    <string name="bottoneSalvaNewActivity">Salva</string>
+</resources>
