@@ -1,26 +1,19 @@
 package it.unimib.travelnotes;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-
-import java.util.ArrayList;
-import java.util.List;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import it.unimib.travelnotes.Model.Viaggio;
-import it.unimib.travelnotes.databinding.ActivityTravelListBinding;
 
 public class TravelList extends AppCompatActivity implements View.OnClickListener {
 
-    private Button mButtonNew;
-    private ActivityTravelListBinding binding;
-    private List<Viaggio> travelList = new ArrayList<>();
+//    private List<Viaggio> travelList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,16 +53,12 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
 
 
 
-        mButtonNew = findViewById(R.id.new_travel);
-        mButtonNew.setOnClickListener(v -> {
+        final Button mButtonNext = findViewById(R.id.new_travel);
+        mButtonNext.setOnClickListener(v -> {
             Intent intent = new Intent(this, NewTravel.class);
+            startActivity(intent);
         });
-/*
-        binding = ActivityTravelListBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
 
-        travelList.add(new Viaggio("a","b","c","d",1,2));
-*/
     }
 
     @Override

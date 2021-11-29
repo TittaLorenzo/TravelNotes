@@ -1,4 +1,4 @@
-package com.unimib.pdm.travelnotes;
+package it.unimib.travelnotes.Model;
 import java.util.ArrayList;
 
 public class Viaggio {
