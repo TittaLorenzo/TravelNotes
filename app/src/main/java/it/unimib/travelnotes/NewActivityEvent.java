@@ -5,9 +5,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TimePicker;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,6 +24,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
         Button inizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
         Button fineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
+        ImageButton backButtonNuovaAttivita = (ImageButton) findViewById(R.id.backButtonNuovaAttivita);
 
         inizioAttivitaButton.setOnClickListener(v -> {
             showDateTimeDialog(inizioAttivitaButton);
@@ -28,6 +32,11 @@ public class NewActivityEvent extends AppCompatActivity {
 
         fineAttivitaButton.setOnClickListener(v -> {
             showDateTimeDialog(fineAttivitaButton);
+        });
+
+        backButtonNuovaAttivita.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
         });
 
     }
