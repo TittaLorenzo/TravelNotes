@@ -22,16 +22,26 @@ public class NewActivityEvent extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        Button inizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
-        Button fineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
+        Button dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
+        Button dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
+        Button oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
+        Button oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
         ImageButton backButtonNuovaAttivita = (ImageButton) findViewById(R.id.backButtonNuovaAttivita);
 
-        inizioAttivitaButton.setOnClickListener(v -> {
-            showDateTimeDialog(inizioAttivitaButton);
+        dataInizioAttivitaButton.setOnClickListener(v -> {
+            showDatePickerDialog(dataInizioAttivitaButton);
         });
 
-        fineAttivitaButton.setOnClickListener(v -> {
-            showDateTimeDialog(fineAttivitaButton);
+        dataFineAttivitaButton.setOnClickListener(v -> {
+            showDatePickerDialog(dataFineAttivitaButton);
+        });
+
+        oraInizioNuovaAttivita.setOnClickListener(v -> {
+            showTimePickerDialog(oraInizioNuovaAttivita);
+        });
+
+        oraFineAttivitaButton.setOnClickListener(v -> {
+            showTimePickerDialog(oraFineAttivitaButton);
         });
 
         backButtonNuovaAttivita.setOnClickListener(v -> {
@@ -42,7 +52,7 @@ public class NewActivityEvent extends AppCompatActivity {
     }
 
 
-    private void showDateTimeDialog(final Button sceltaDateTime) {
+    private void showDatePickerDialog(final Button sceltaDateTime) {
         final Calendar calendar=Calendar.getInstance();
         DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -51,23 +61,31 @@ public class NewActivityEvent extends AppCompatActivity {
                 calendar.set(Calendar.MONTH,month);
                 calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
-                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                        calendar.set(Calendar.MINUTE,minute);
-
-                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
 
                         sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
-                    }
-                };
-
-                new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
             }
         };
 
         new DatePickerDialog(NewActivityEvent.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
+    }
+
+    private void showTimePickerDialog(final Button sceltaDateTime) {
+        final Calendar calendar=Calendar.getInstance();
+
+        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                calendar.set(Calendar.MINUTE,minute);
+
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
+
+                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        };
+
+        new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
     }
 }

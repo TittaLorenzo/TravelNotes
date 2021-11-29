@@ -9,5 +9,6 @@
     <string name="descrizioneHint">Descrizione</string>
     <string name="promemoriaAttivitaLabel">Promemoria</string>
     <string name="bottoneSalvaNewActivity">Salva</string>
-    <string name="dataHintNuovaAttivita">AAAA-MM-GG  hh-mm</string>
+    <string name="dataHintNuovaAttivita">aaaa-mm-gg</string>
+    <string name="oraHintNuovaAttivita">mm-ss</string>
 </resources>
