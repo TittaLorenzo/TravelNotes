@@ -21,5 +21,5 @@ public interface UtenteDao {
     public void cancellaUtente(Utente utente);
 
     @Query("SELECT * FROM elenco_utenti WHERE email = :idEmailUtente")
-    public Utente findUtenteById(Long idEmailUtente);
+    public Utente findUtenteById(String idEmailUtente);
 }

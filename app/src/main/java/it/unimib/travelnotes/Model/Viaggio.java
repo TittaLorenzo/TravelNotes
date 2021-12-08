@@ -100,8 +100,7 @@ public class Viaggio {
         this.durataRitorno = durataRitorno;
     }
 
-    public Viaggio() {
-    }
+    public Viaggio() {}
 
     public Viaggio(String pa, String da, String pr, String dr, double durA, double durR){
         this.partenzaAndata = pa;

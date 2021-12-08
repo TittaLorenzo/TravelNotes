@@ -93,8 +93,7 @@ public class Attivita {
         this.descrizione = descrizione;
     }
 
-    public Attivita() {
-    }
+    public Attivita() {}
 
     public Attivita(String nomeI, String descrizioneI, Date giornoI, Date di, Date df, Long IDu){
         this.nome= nomeI;
