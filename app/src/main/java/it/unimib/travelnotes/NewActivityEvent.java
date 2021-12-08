@@ -1,19 +1,31 @@
 package it.unimib.travelnotes;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
+
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
+
+import it.unimib.travelnotes.Model.Attivita;
+import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewActivityEvent extends AppCompatActivity {
 
@@ -48,9 +60,15 @@ public class NewActivityEvent extends AppCompatActivity {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         });
-
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        configuraSalvaButtonNuovaAttivita();
+
+    }
 
     private void showDatePickerDialog(final Button sceltaDateTime) {
         final Calendar calendar=Calendar.getInstance();
@@ -61,7 +79,7 @@ public class NewActivityEvent extends AppCompatActivity {
                 calendar.set(Calendar.MONTH,month);
                 calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
-                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
+                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
 
                         sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
             }
@@ -88,4 +106,52 @@ public class NewActivityEvent extends AppCompatActivity {
 
         new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
     }
+
+    public void configuraSalvaButtonNuovaAttivita() {
+        View buttonSalva = findViewById(R.id.salvaBottoneNuovaAttivita);
+        buttonSalva.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+
+                new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... voids) {
+
+                        Date dataInizio = new Date();
+                        Date dataFine = new Date();
+                        try {
+                            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+                            dataInizio = formatter.parse(
+                                    ((Button) findViewById(R.id.dataInizioNuovaAttivita)).getText().toString() +
+                                            " " + ((Button) findViewById(R.id.oraInizioNuovaAttivita)).getText().toString());
+
+                            dataFine = formatter.parse(
+                                    ((Button) findViewById(R.id.dataFineNuovaAttivita)).getText().toString() +
+                                            " " + ((Button) findViewById(R.id.oraFineNuovaAttivita)).getText().toString());
+                        } catch (Exception e) {
+                            Log.d("------------", "parsing date fallito");
+                        }
+
+                        Attivita a = new Attivita();
+                        a.setNome(((EditText) findViewById(R.id.nomeAttivitaInput)).getText().toString());
+                        a.setPosizione(((EditText) findViewById(R.id.posizionePartenzaNuovaAttivita)).getText().toString());
+                        a.setDescrizione(((EditText) findViewById(R.id.descrizioneNuovaAttivita)).getText().toString());
+                        a.setDataInizio(dataInizio);
+                        a.setDataFine(dataFine);
+
+
+                        Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
+
+                        return null;
+                    }
+                }.execute();
+
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+            }
+        });
+    }
+
 }
