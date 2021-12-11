@@ -1,6 +1,7 @@
 package it.unimib.travelnotes.Model;
 import java.util.ArrayList;
 
+
 public class Viaggio {
 
     private String partenzaAndata;
@@ -11,8 +12,8 @@ public class Viaggio {
     private double durataRitorno;
     //liste
     private ArrayList<Attivita> listaAttivita = new ArrayList<Attivita>();
-    private ArrayList<Note> listaNote = new ArrayList<Note>();
-    private ArrayList<Consigli> listaConsigli = new ArrayList<Consigli>();
+   //private ArrayList<Note> listaNote = new ArrayList<Note>();
+    //private ArrayList<Consigli> listaConsigli = new ArrayList<Consigli>();
 
 
     public String getPartenzaAndata() {
@@ -82,7 +83,7 @@ public class Viaggio {
     public void clearAttivita() {
         this.listaAttivita.clear();
     }
-
+/*
     public ArrayList<Note> getListaNote() {
         return listaNote;
     }
@@ -122,7 +123,7 @@ public class Viaggio {
     public void clearConsigli() {
         this.listaConsigli.clear();
     }
-
+*/
 
     public Viaggio(String pa, String da, String pr, String dr, double durA, double durR){
         this.partenzaAndata = pa;
@@ -132,4 +133,6 @@ public class Viaggio {
         this.durataAndata = durA;
         this.durataRitorno = durR;
     }
+
+
 }

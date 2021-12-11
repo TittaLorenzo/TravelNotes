@@ -1,0 +1,160 @@
+
+{
+	"travel":[
+				{
+					"id": "0001",
+					"partenzaAndata": "Milano",
+					"destinazioneAndata": "Parigi",
+					"partenzaRitorno": "Parigi",
+					"destinazioneRitorno": "Milano",
+					"durataAndata": "120",
+					"durataRitorno": "120",
+
+					"attività": [
+						{"id":"1"},
+						{"id":"3"},
+						{"id":"6"}
+					]
+
+				},
+
+
+				{
+					"id": "0002",
+					"partenzaAndata": "Milano",
+					"destinazioneAndata": "New York",
+					"partenzaRitorno": "New York",
+					"destinazioneRitorno": "Milano",
+					"durataAndata": "420",
+					"durataRitorno": "420",
+
+					"listaAttivita": [
+						{"id":"1"},
+						{"id":"2"},
+						{"id":"3"},
+						{"id":"6"},
+						{"id":"7"}
+					]
+
+				},
+
+
+				{
+					"id": "0003",
+					"partenzaAndata": "Verona",
+					"destinazioneAndata": "Barcellona",
+					"partenzaRitorno": "Barcellona",
+					"destinazioneRitorno": "Verona",
+					"durataAndata": "180",
+					"durataRitorno": "180",
+
+					"listaAttivita": [
+						{"id":"2"},
+						{"id":"3"},
+						{"id":"5"}
+					]
+
+				},
+
+
+				{
+					"id": "0004",
+					"partenzaAndata": "Roma",
+					"destinazioneAndata": "Djerba",
+					"partenzaRitorno": "Djerba",
+					"destinazioneRitorno": "Roma",
+					"durataAndata": "120",
+					"durataRitorno": "120",
+
+					"listaAttivita": [
+						{"id":"5"},
+						{"id":"4"},
+						{"id":"8"}
+					]
+
+				},
+
+
+				{
+					"id": "0005",
+					"partenzaAndata": "Roma",
+					"destinazioneAndata": "Berlino",
+					"partenzaRitorno": null,
+					"destinazioneRitorno": null,
+					"durataAndata": "120",
+					"durataRitorno": null,
+
+					"listaAttivita": [
+						{"id":"1"},
+						{"id":"6"},
+						{"id":"7"}
+					]
+
+				},
+
+
+				{
+					"id": "0006",
+					"partenzaAndata": "Roma",
+					"destinazioneAndata": "Djerba",
+					"partenzaRitorno": null,
+					"destinazioneRitorno": null,
+					"durataAndata": "120",
+					"durataRitorno": null,
+
+					"listaAttivita": [
+						{"id":"5"},
+						{"id":"4"},
+						{"id":"6"},
+						{"id":"7"},
+						{"id":"8"}
+					]
+
+				},
+
+
+				{
+					"id": "0007",
+					"partenzaAndata": "Roma",
+					"destinazioneAndata": "Marrakesh",
+					"partenzaRitorno": null,
+					"destinazioneRitorno": null,
+					"durataAndata": "120",
+					"durataRitorno": null,
+
+					"listaAttivita": [
+						{"id":"1"},
+						{"id":"2"},
+						{"id":"3"},
+						{"id":"4"},
+						{"id":"6"},
+						{"id":"7"},
+						{"id":"8"}
+					]
+
+				},
+
+
+				{
+					"id": "0008",
+					"partenzaAndata": "Roma",
+					"destinazioneAndata": "Marrakesh",
+					"partenzaRitorno": "Marrakesh",
+					"destinazioneRitorno": "Roma",
+					"durataAndata": "120",
+					"durataRitorno": "120",
+
+					"listaAttivita": [
+						{"id":"1"},
+						{"id":"2"},
+						{"id":"3"},
+						{"id":"4"},
+						{"id":"6"},
+						{"id":"7"},
+						{"id":"8"}
+					]
+
+				}
+	]
+}
+

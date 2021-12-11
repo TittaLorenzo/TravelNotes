@@ -9,16 +9,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import it.unimib.travelnotes.Model.Viaggio;
 
 public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelViewHolder> {
 
-    Viaggio[] viaggio;
+    Viaggio[] viaggi;
     Context context;
 
-    public TravelAdapter(Viaggio[] viaggio, TravelList activity) {
-        this.viaggio = viaggio;
+    public TravelAdapter(Viaggio[] viaggi, TravelList activity) {
+        this.viaggi = viaggi;
         this.context = activity;
     }
 /*
@@ -47,7 +46,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
     @Override
     public void onBindViewHolder(@NonNull TravelViewHolder holder, int position) {
         //TravelViewHolder.getTextView(localDataSet[position]);
-        final Viaggio travelList = viaggio[position];
+        final Viaggio travelList = viaggi[position];
         holder.travelDeparture.setText(travelList.getPartenzaAndata());
         holder.travelDestination.setText(travelList.getDestinazioneAndata());
         //holder.travelTime.setText((int) travelList.getDurataAndata());
@@ -67,9 +66,10 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
         */
     }
 
+
     @Override
     public int getItemCount() {
-        return viaggio.length;
+        return 100;
 
     }
 
