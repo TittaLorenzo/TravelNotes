@@ -127,7 +127,12 @@ public class NewActivityEvent extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... voids) {
 
-                Attivita attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
+                Attivita attivitaSelezionata = new Attivita();
+                try {
+                    attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
+                } catch (Exception e) {
+                    Log.e("Crash_personal_error_load", e.toString());
+                }
 
                 EditText nomeAttivitaInput = (EditText) findViewById(R.id.nomeAttivitaInput);
                 nomeAttivitaInput.setText(attivitaSelezionata.getNome());
@@ -144,11 +149,6 @@ public class NewActivityEvent extends AppCompatActivity {
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(attivitaSelezionata.getDataInizio());
-                /*calendar.get(Calendar.YEAR);
-                calendar.get(Calendar.MONTH);
-                calendar.get(Calendar.DAY_OF_MONTH);
-                calendar.get(Calendar.HOUR_OF_DAY);
-                calendar.get(Calendar.MINUTE);*/
 
                 Button dataInizioNuovaAttivita = (Button) findViewById(R.id.dataInizioNuovaAttivita);
                 dataInizioNuovaAttivita.setText(simpleDateFormat.format(calendar.getTime()));
@@ -211,8 +211,11 @@ public class NewActivityEvent extends AppCompatActivity {
                         a.setDataInizio(dataInizio);
                         a.setDataFine(dataFine);
 
-
-                        Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
+                        try {
+                            Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
+                        } catch (Exception e) {
+                            Log.e("Crash_personal_error_save", e.toString());
+                        }
 
                         return null;
                     }

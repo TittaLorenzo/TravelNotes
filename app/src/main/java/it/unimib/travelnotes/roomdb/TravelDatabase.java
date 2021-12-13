@@ -14,7 +14,7 @@ import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.Viaggio;
 
-@Database(entities = {Utente.class, Viaggio.class, Attivita.class}, version = 1)
+@Database(entities = {Utente.class, Viaggio.class, Attivita.class}, version = 3)
 @TypeConverters({Converters.class})
 public abstract class TravelDatabase extends RoomDatabase {
 
