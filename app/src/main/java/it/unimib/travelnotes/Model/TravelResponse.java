@@ -12,7 +12,6 @@ public class TravelResponse {
     public TravelResponse() {
     }
 
-
     public Viaggio[] getViaggi() {
         return travel;
     }
@@ -20,8 +19,6 @@ public class TravelResponse {
     public void setViaggi(Viaggio[] travel) {
         this.travel = travel;
     }
-
-
 
 
 }

@@ -23,7 +23,7 @@ import it.unimib.travelnotes.Model.Viaggio;
 
 public class TravelList extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "TravelFragment";
+    //private static final String TAG = "TravelFragment";
 
     private Viaggio[] travelArray ;
     private List<Viaggio> travelList;
@@ -69,7 +69,14 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
         for (int i = 0; i < travelArray.size(); i++) {
             Log.d(TAG, "Gson: " + travelArray.get(i));
         }
+
 */
+
+        /*
+        *
+        * FARE ORDINAMENTO IN BASE ALLA DATA
+        *
+        * */
 
         TravelAdapter travelAdapter = new TravelAdapter(travelArray, TravelList.this);
         recyclerView.setAdapter(travelAdapter);
@@ -84,57 +91,6 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
     }
 
 
-
-    /*private TravelListJson readJsonFileWithJsonObjectArray() {
-
-        TravelListJson viaggi = null;
-
-
-        try {
-
-            InputStream is = getAssets().open("viaggi.json");
-
-            int size = is.available();
-
-            // Read the entire asset into a local byte buffer.
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
-            String jsonContent = new String(buffer);
-
-            viaggi = new TravelListJson();
-
-            JSONObject rootJsonObject = new JSONObject(jsonContent);
-
-
-            JSONArray travelsJsonArray = rootJsonObject.getJSONArray("travel");
-
-            viaggi.setViaggi(travelArray);
-
-            Viaggio[] travelArray = new Viaggio[]{
-            for (int i = 0; i < travelsJsonArray.length(); i++) {
-
-                JSONObject travelJsonObject = travelsJsonArray.getJSONObject(i);
-
-
-                    (new Viaggio(
-                        travelJsonObject.getString("partenzaAndata"),
-                        travelJsonObject.getString("destinazioneAndata"),
-                        travelJsonObject.getString("partenzaRitorno"),
-                        travelJsonObject.getString("destinazioneRitorno"),
-                        travelJsonObject.getDouble("durataAndata"),
-                        travelJsonObject.getDouble("durataRitorno,")
-                    ));
-                }
-            }
-
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-
-        return viaggi;
-    }*/
 
     private TravelResponse readJsonFileWithGson() {
 
