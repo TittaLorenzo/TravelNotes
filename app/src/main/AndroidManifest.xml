@@ -10,6 +10,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelNotes">
         <activity
+            android:name=".Activity_travel_view"
+            android:exported="false"
+            android:label="@string/title_activity_travel_view" />
+        <activity
             android:name=".NewActivityEvent"
             android:exported="false" />
         <activity
