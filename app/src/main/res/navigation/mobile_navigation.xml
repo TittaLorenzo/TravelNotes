@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="it.unimib.travelnotes.ui.dashboard.DashboardFragment"
+        android:name="it.unimib.travelnotes.ui.attivita.AttivitaFragment"
         android:label="@string/attivita"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_attivita" />
 
     <fragment
         android:id="@+id/navigation_notifications"

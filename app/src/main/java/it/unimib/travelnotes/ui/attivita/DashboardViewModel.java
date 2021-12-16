@@ -1,4 +1,4 @@
-package it.unimib.travelnotes.ui.dashboard;
+package it.unimib.travelnotes.ui.attivita;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
