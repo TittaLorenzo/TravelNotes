@@ -34,11 +34,10 @@
                 android:layout_height="59dp"
                 android:orientation="horizontal">
 
-                <RadioButton
-                    android:id="@+id/NT_radioButtonAR"
-                    android:layout_width="0dp"
+                <CheckBox
+                    android:id="@+id/NT_checkAR"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:text="@string/AR" />
             </LinearLayout>
 
@@ -86,10 +85,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:hint="@string/NT_da"
                         android:importantForAutofill="no"
                         android:inputType="textPersonName"
                         android:minHeight="48dp"
-                        android:text="@string/NT_da"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -119,9 +118,9 @@
                         android:layout_height="54dp"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:hint="@string/NT_a"
                         android:importantForAutofill="no"
                         android:inputType="textPersonName"
-                        android:text="@string/NT_a"
                         android:textSize="14sp" />
 
                 </LinearLayout>
@@ -193,9 +192,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:hint="@string/NT_da"
                         android:inputType="textPersonName"
                         android:minHeight="48dp"
-                        android:text="@string/NT_da"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -225,9 +224,9 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:ems="10"
+                        android:hint="@string/NT_a"
                         android:inputType="textPersonName"
                         android:minHeight="48dp"
-                        android:text="@string/NT_a"
                         android:textSize="14sp" />
 
                 </LinearLayout>
