@@ -1,4 +1,4 @@
-package it.unimib.travelnotes.ui.notifications;
+package it.unimib.travelnotes.ui.group;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

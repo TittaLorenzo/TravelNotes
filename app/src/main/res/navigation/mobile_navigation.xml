@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="it.unimib.travelnotes.ui.notifications.NotificationsFragment"
+        android:name="it.unimib.travelnotes.ui.group.GroupFragment"
         android:label="@string/gruppo"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_group" />
 </navigation>
