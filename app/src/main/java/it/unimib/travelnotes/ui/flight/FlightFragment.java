@@ -1,31 +1,26 @@
-package it.unimib.travelnotes.ui.home;
+package it.unimib.travelnotes.ui.flight;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
-import it.unimib.travelnotes.R;
-import it.unimib.travelnotes.databinding.FragmentHomeBinding;
+import it.unimib.travelnotes.databinding.FragmentFlightBinding;
 
-public class HomeFragment extends Fragment {
+public class FlightFragment extends Fragment {
 
     // private HomeViewModel homeViewModel;
-    private FragmentHomeBinding binding;
+    private FragmentFlightBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // homeViewModel =
                 // new ViewModelProvider(this).get(HomeViewModel.class);
 
-        binding = FragmentHomeBinding.inflate(inflater, container, false);
+        binding = FragmentFlightBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         // final TextView textView = binding.textHome;

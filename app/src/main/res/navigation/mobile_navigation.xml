@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="it.unimib.travelnotes.ui.home.HomeFragment"
+        android:name="it.unimib.travelnotes.ui.flight.FlightFragment"
         android:label="@string/volo"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_flight" />
 
     <fragment
         android:id="@+id/navigation_dashboard"

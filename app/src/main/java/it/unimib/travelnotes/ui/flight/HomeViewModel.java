@@ -1,4 +1,4 @@
-package it.unimib.travelnotes.ui.home;
+package it.unimib.travelnotes.ui.flight;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
