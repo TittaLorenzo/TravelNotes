@@ -57,9 +57,9 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Riempi i campi obbligatori", Toast.LENGTH_SHORT).show();
                 } else if (txtPassword.length() < 6) {
                     Toast.makeText(RegisterActivity.this, "Password troppo corta", Toast.LENGTH_SHORT).show();
-                } else if (txtPassword != txtPassword2) {
+                } /*else if (txtPassword != txtPassword2) {
                     Toast.makeText(RegisterActivity.this, "Le password non coincidono", Toast.LENGTH_SHORT).show();
-                } else {
+                } */else {
                     registerUser(txtEmail, txtPassword);
                 }
             }
