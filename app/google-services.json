@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1000512829892",
+    "project_id": "travelnotes-334817",
+    "storage_bucket": "travelnotes-334817.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1000512829892:android:d0342e6267f507557a4c91",
+        "android_client_info": {
+          "package_name": "it.unimib.travelnotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1000512829892-tlnc1upgt9vdtt5fmlr8chu8e5o9ksj3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBnWItarVvcVjLtJxn7nmO9ktmwc5UzOc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1000512829892-tlnc1upgt9vdtt5fmlr8chu8e5o9ksj3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

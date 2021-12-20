@@ -1,16 +1,23 @@
 package it.unimib.travelnotes;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -18,28 +25,55 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Viaggio;
+import it.unimib.travelnotes.autentication.LoginActivity;
+import it.unimib.travelnotes.autentication.RegisterActivity;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewActivityEvent extends AppCompatActivity {
+
+    private FirebaseAuth mAuth;
+
+    private Button dataInizioAttivitaButton;
+    private Button dataFineAttivitaButton;
+    private Button oraInizioNuovaAttivita;
+    private Button oraFineAttivitaButton;
+
+    private EditText campoNome;
+    private EditText campoPosizione;
+    private EditText campoDescrizione;
+    private Button buttonSalva;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-        Button dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
-        Button dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
-        Button oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
-        Button oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
+        mAuth = FirebaseAuth.getInstance();
+
+        dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
+        dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
+        oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
+        oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
+
+        campoNome = findViewById(R.id.nomeAttivitaInput);
+        campoPosizione = findViewById(R.id.posizionePartenzaNuovaAttivita);
+        campoDescrizione = findViewById(R.id.descrizioneNuovaAttivita);
+        buttonSalva = findViewById(R.id.salvaBottoneNuovaAttivita);
+
         ImageButton backButtonNuovaAttivita = (ImageButton) findViewById(R.id.backButtonNuovaAttivita);
 
         dataInizioAttivitaButton.setOnClickListener(v -> {
@@ -63,25 +97,76 @@ public class NewActivityEvent extends AppCompatActivity {
             startActivity(intent);
         });
 
-
-        Long idAttivitaI;
-        try {
-            idAttivitaI = Long.valueOf((int) getIntent().getExtras().get("idAttivita"));
-        } catch (Exception e) {
-            idAttivitaI = null;
-        }
-        if (idAttivitaI != null) {
-            caricaDatiAttivita(idAttivitaI);
-        }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        configuraSalvaButtonNuovaAttivita();
+        if (TextUtils.isEmpty(campoNome.getText().toString())) {
+            Toast.makeText(this, "Devi inserire un nome attività", Toast.LENGTH_SHORT).show();
+        } else {
+            salvaButtonNuovaAttivita();
+        }
+    }
 
+    //menu logout
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoutItemMenu:
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user != null) {
+                    FirebaseAuth.getInstance().signOut();
+                    Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(this, LoginActivity.class));
+                } else {
+                    Toast.makeText(this, "Nessun utente loggato", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.changePwItemMenu:
+                EditText newPassword = new EditText(this);
+                AlertDialog.Builder changePwDialog = new AlertDialog.Builder(this);
+                changePwDialog.setTitle("Cambia password?");
+                changePwDialog.setMessage("Inserisci la tua nuova password.");
+                changePwDialog.setView(newPassword);
+
+                changePwDialog.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String newPw = newPassword.getText().toString();
+                        mAuth.getCurrentUser().updatePassword(newPw).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(@NonNull Void unused) {
+                                Toast.makeText(NewActivityEvent.this, "La password è stata cambiata", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(NewActivityEvent.this, "Errore! Password non cambiata", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                changePwDialog.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // close Dialog
+                    }
+                });
+
+                changePwDialog.create().show();
+
+                break;
+        }
+        return true;
     }
 
     private void showDatePickerDialog(final Button sceltaDateTime) {
@@ -93,9 +178,9 @@ public class NewActivityEvent extends AppCompatActivity {
                 calendar.set(Calendar.MONTH,month);
                 calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
-                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
 
-                        sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
+                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
             }
         };
 
@@ -112,9 +197,9 @@ public class NewActivityEvent extends AppCompatActivity {
                 calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
                 calendar.set(Calendar.MINUTE,minute);
 
-                SimpleDateFormat simpleHourFormat=new SimpleDateFormat("HH:mm");
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
 
-                sceltaDateTime.setText(simpleHourFormat.format(calendar.getTime()));
+                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
             }
         };
 
@@ -131,8 +216,11 @@ public class NewActivityEvent extends AppCompatActivity {
                 try {
                     attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
                 } catch (Exception e) {
-                    Log.e("Crash_personal_error_load", e.toString());
+                    Log.e("personal_error_load", e.toString());
                 }
+
+                TextView titoloNuovaAttivita = findViewById(R.id.titloloNuovaAttivitaId);
+                titoloNuovaAttivita.setText(R.string.titleModificaAttivita);
 
                 EditText nomeAttivitaInput = (EditText) findViewById(R.id.nomeAttivitaInput);
                 nomeAttivitaInput.setText(attivitaSelezionata.getNome());
@@ -172,13 +260,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
     }
 
-
-
-
-
-
-    public void configuraSalvaButtonNuovaAttivita() {
-        View buttonSalva = findViewById(R.id.salvaBottoneNuovaAttivita);
+    public void salvaButtonNuovaAttivita() {
         buttonSalva.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -205,16 +287,16 @@ public class NewActivityEvent extends AppCompatActivity {
                         }
 
                         Attivita a = new Attivita();
-                        a.setNome(((EditText) findViewById(R.id.nomeAttivitaInput)).getText().toString());
-                        a.setPosizione(((EditText) findViewById(R.id.posizionePartenzaNuovaAttivita)).getText().toString());
-                        a.setDescrizione(((EditText) findViewById(R.id.descrizioneNuovaAttivita)).getText().toString());
+                        a.setNome(campoNome.getText().toString());
+                        a.setPosizione(campoPosizione.getText().toString());
+                        a.setDescrizione(campoDescrizione.getText().toString());
                         a.setDataInizio(dataInizio);
                         a.setDataFine(dataFine);
 
                         try {
                             Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
                         } catch (Exception e) {
-                            Log.e("Crash_personal_error_save", e.toString());
+                            Log.e("personal_error_save", e.toString());
                         }
 
                         return null;
@@ -226,5 +308,4 @@ public class NewActivityEvent extends AppCompatActivity {
             }
         });
     }
-
 }

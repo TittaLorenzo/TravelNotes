@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TravelNotes</string>
+    <string name="app_name">Travel Notes</string>
     <string name="login_button">LOGIN</string>
     <string name="title_activity_new_travel">NewTravel</string>
 
