@@ -69,7 +69,10 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
 
     @Override
     public int getItemCount() {
-        return 100;
+        if(viaggi!= null){
+            return viaggi.length;
+        }
+        return 0;
 
     }
 

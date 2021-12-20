@@ -2,6 +2,7 @@ package it.unimib.travelnotes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -23,7 +24,7 @@ import it.unimib.travelnotes.Model.Viaggio;
 
 public class TravelList extends AppCompatActivity implements View.OnClickListener {
 
-    //private static final String TAG = "TravelFragment";
+    private static final String TAG = "TravelFragment";
 
     private Viaggio[] travelArray ;
     private List<Viaggio> travelList;
@@ -65,12 +66,12 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
 
         TravelResponse travelListWithJsonReader = readJsonFileWithGson();
         travelArray = travelListWithJsonReader.getViaggi();
-/*
-        for (int i = 0; i < travelArray.size(); i++) {
-            Log.d(TAG, "Gson: " + travelArray.get(i));
+
+        for (int i = 0; i < travelArray.length; i++) {
+            Log.d(TAG, "Gson: " + travelArray[i]);
         }
 
-*/
+
 
         /*
         *
