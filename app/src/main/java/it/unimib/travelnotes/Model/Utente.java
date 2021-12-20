@@ -19,6 +19,10 @@ public class Utente {
     private String cognome;
     private Date nascita;
 
+    //liste
+    @Ignore
+    private ArrayList<Viaggio> listaViaggi = new ArrayList<Viaggio>();
+
 
     public String getNome() {
         return nome;
@@ -50,6 +54,26 @@ public class Utente {
 
     public void setNascita(Date nascita) {
         this.nascita = nascita;
+    }
+
+    public ArrayList<Viaggio> getListaViaggi() {
+        return listaViaggi;
+    }
+
+    public void addListaViaggi(Viaggio nuovoViaggio) {
+        this.listaViaggi.add(nuovoViaggio);
+    }
+
+    public void setViaggioIndex(int index, Viaggio modificaViaggio) {
+        this.listaViaggi.set(index, modificaViaggio);
+    }
+
+    public void removeViaggio(int index) {
+        this.listaViaggi.remove(index);
+    }
+
+    public void clearViaggio() {
+        this.listaViaggi.clear();
     }
 
     public Utente() {
