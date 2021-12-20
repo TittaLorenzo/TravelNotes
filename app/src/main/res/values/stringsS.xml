@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="titleNuovaAttivita">Nuova attività</string>
+    <string name="titleModificaAttivita">Modifica attività</string>
     <string name="attivitaNomeHint">Nome attività</string>
     <string name="dataInizioAttivitaLabel">Da: </string>
     <string name="dataFineAttivitaLabel">A:  </string>
@@ -11,4 +12,7 @@
     <string name="bottoneSalvaNewActivity">Salva</string>
     <string name="dataHintNuovaAttivita">aaaa-mm-gg</string>
     <string name="oraHintNuovaAttivita">mm-ss</string>
+    <string name="logoutItemMenu">Logout</string>
+    <string name="impostazioniItemMenu">Impostazioni</string>
+    <string name="changePwItemMenu">Cambia password</string>
 </resources>
