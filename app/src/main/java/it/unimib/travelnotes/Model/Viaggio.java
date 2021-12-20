@@ -1,8 +1,37 @@
 package it.unimib.travelnotes.Model;
+import static androidx.room.ForeignKey.CASCADE;
+
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.ForeignKey;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 
+<<<<<<< HEAD
 
+=======
+@Entity (tableName = "elenco_viaggi",
+        indices = @Index("id_utente"),
+        foreignKeys = {
+                @ForeignKey(
+                        entity = Utente.class,
+                        parentColumns = "email",
+                        childColumns = "id_utente",
+                        onDelete = CASCADE,
+                        onUpdate = CASCADE
+                )
+        })
+>>>>>>> confa_schermataAttività
 public class Viaggio {
+
+    @PrimaryKey(autoGenerate = true)
+    private Long id;
+
+    @ColumnInfo(name = "id_utente")
+    private Long idUtente;
 
     private String partenzaAndata;
     private String destinazioneAndata;
@@ -10,11 +39,35 @@ public class Viaggio {
     private String destinazioneRitorno;
     private double durataAndata;
     private double durataRitorno;
+
     //liste
+    @Ignore
     private ArrayList<Attivita> listaAttivita = new ArrayList<Attivita>();
+<<<<<<< HEAD
    //private ArrayList<Note> listaNote = new ArrayList<Note>();
     //private ArrayList<Consigli> listaConsigli = new ArrayList<Consigli>();
+=======
+    @Ignore
+    private ArrayList<Note> listaNote = new ArrayList<Note>();
+    @Ignore
+    private ArrayList<Consigli> listaConsigli = new ArrayList<Consigli>();
+>>>>>>> confa_schermataAttività
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getIdUtente() {
+        return idUtente;
+    }
+
+    public void setIdUtente(Long idUtente) {
+        this.idUtente = idUtente;
+    }
 
     public String getPartenzaAndata() {
         return partenzaAndata;
@@ -123,7 +176,12 @@ public class Viaggio {
     public void clearConsigli() {
         this.listaConsigli.clear();
     }
+<<<<<<< HEAD
 */
+=======
+
+    public Viaggio() {}
+>>>>>>> confa_schermataAttività
 
     public Viaggio(String pa, String da, String pr, String dr, double durA, double durR){
         this.partenzaAndata = pa;

@@ -1,17 +1,26 @@
 package it.unimib.travelnotes.Model;
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
 import java.util.ArrayList;
 import java.util.Date;
 
+@Entity (tableName = "elenco_utenti", indices = {@Index({"nome", "cognome"})})
 public class Utente {
+
+    @PrimaryKey
+    @NonNull
+    private String email;
 
     private String nome;
     private String cognome;
-
-    //TODO: private String email; da capire come gestire eamil e psw e da inserire nel costruttore
-    //private String psw;
-
     private Date nascita;
+
     //liste
+    @Ignore
     private ArrayList<Viaggio> listaViaggi = new ArrayList<Viaggio>();
 
 
@@ -29,6 +38,14 @@ public class Utente {
 
     public void setCognome(String cognome) {
         this.cognome = cognome;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String emailU) {
+        this.email = emailU;
     }
 
     public Date getNascita() {
@@ -59,10 +76,13 @@ public class Utente {
         this.listaViaggi.clear();
     }
 
+    public Utente() {
+    }
 
-    public Utente(String nomeI, String cognomeI, Date nascitaI){
+    public Utente(String nomeI, String cognomeI, Date nascitaI, String emailU){
         this.nome= nomeI;
         this.cognome = cognomeI;
         this.nascita = nascitaI;
+        this.email = emailU;
     }
 }
