@@ -10,9 +10,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
 
-<<<<<<< HEAD
 
-=======
 @Entity (tableName = "elenco_viaggi",
         indices = @Index("id_utente"),
         foreignKeys = {
@@ -24,7 +22,6 @@ import java.util.ArrayList;
                         onUpdate = CASCADE
                 )
         })
->>>>>>> confa_schermataAttività
 public class Viaggio {
 
     @PrimaryKey(autoGenerate = true)
@@ -43,15 +40,12 @@ public class Viaggio {
     //liste
     @Ignore
     private ArrayList<Attivita> listaAttivita = new ArrayList<Attivita>();
-<<<<<<< HEAD
    //private ArrayList<Note> listaNote = new ArrayList<Note>();
     //private ArrayList<Consigli> listaConsigli = new ArrayList<Consigli>();
-=======
     @Ignore
     private ArrayList<Note> listaNote = new ArrayList<Note>();
     @Ignore
     private ArrayList<Consigli> listaConsigli = new ArrayList<Consigli>();
->>>>>>> confa_schermataAttività
 
     public Long getId() {
         return id;
@@ -136,7 +130,7 @@ public class Viaggio {
     public void clearAttivita() {
         this.listaAttivita.clear();
     }
-/*
+
     public ArrayList<Note> getListaNote() {
         return listaNote;
     }
@@ -176,12 +170,9 @@ public class Viaggio {
     public void clearConsigli() {
         this.listaConsigli.clear();
     }
-<<<<<<< HEAD
-*/
-=======
+
 
     public Viaggio() {}
->>>>>>> confa_schermataAttività
 
     public Viaggio(String pa, String da, String pr, String dr, double durA, double durR){
         this.partenzaAndata = pa;
