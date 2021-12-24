@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,12 +15,15 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Viaggio;
+import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewTravel extends AppCompatActivity {
 
@@ -56,6 +60,28 @@ public class NewTravel extends AppCompatActivity {
 
         arrivoAndataButton.setOnClickListener(v -> {
             showDateTimeDialog(arrivoAndataButton);
+
+            SimpleDateFormat dateParser = new SimpleDateFormat("MM/dd/yy HH:mm");
+                try {
+                    Log.i("ciao", "ciaonee");
+                    Date date1 = dateParser.parse(partenzaAndataButton.getText().toString());
+                    Date date2 = dateParser.parse(arrivoAndataButton.getText().toString());
+                    Log.i("ciao1", "ciaonee1");
+                    Log.i("date1 e date2", date1 + "  + " + date2);
+
+                    if(date1.compareTo(date2) < 0){
+                        Log.i("piccola", "d1<d2");
+                    }
+                    if(date1.compareTo(date2) > 0){
+                        Log.i("grande", "d1>d2");
+                    }
+                    else{
+                        Log.i("uguale", "d1=d2");
+                    }
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
         });
 
         partenzaRitornoButton.setOnClickListener(v -> {
@@ -77,8 +103,24 @@ public class NewTravel extends AppCompatActivity {
         invio.setOnClickListener(v -> {
             String dav = andataVDa.getText().toString();
             String av = andataVA.getText().toString();
-            Viaggio viaggio = new Viaggio(dav, av, av, dav, 1, 1);
-            Log.i("Prova_invio", "viaggio.toString()");
+            Viaggio viagg = new Viaggio(dav, av, av, dav, 1, 1);
+            Log.i("Prova_invio", "viagg.toString()");
+
+            new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+
+                    try {
+                        Log.i("back", "background");
+                        Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().nuovoViaggio(viagg);
+                    } catch (Exception e) {
+                        Log.e("personal_error_save", e.toString());
+                    }
+
+                    return null;
+                }
+            }.execute();
+
         });
     }
 
