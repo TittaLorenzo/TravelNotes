@@ -1,14 +1,10 @@
 package it.unimib.travelnotes;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.appcompat.app.AppCompatActivity;
 
 import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.autentication.RegisterActivity;
@@ -23,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         //bottone login che porta alla lista viaggi
         final Button mButtonNext = findViewById(R.id.L_button);
         mButtonNext.setOnClickListener(v -> {
-            Intent intent = new Intent(this, Activity_travel_view.class);
+            Intent intent = new Intent(this, TravelList.class);
             startActivity(intent);
         });
 

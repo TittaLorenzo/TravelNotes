@@ -1,6 +1,7 @@
 package it.unimib.travelnotes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,23 +16,17 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
 
     Viaggio[] viaggi;
     Context context;
+    String rDeparture[];
+    String rDestination[];
+
+
 
     public TravelAdapter(Viaggio[] viaggi, TravelList activity) {
         this.viaggi = viaggi;
         this.context = activity;
     }
-/*
-    public interface OnItemClickListener {
-        void onItemClick(Viaggio viaggio);
-    }
-    private List <Viaggio> travelList;
-    private final OnItemClickListener mOnItemClickListener;
-    //private String [] localDataSet;
-    public TravelAdapter(Viaggio[] travelList, TravelListActivity onItemClickListener) {
-        this.travelList = travelList;
-        this.mOnItemClickListener = onItemClickListener;
-    }
-*/
+
+
 
     @NonNull
     @Override
@@ -51,21 +46,14 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
         holder.travelDestination.setText(travelList.getDestinazioneAndata());
         //holder.travelTime.setText((int) travelList.getDurataAndata());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
+        /*holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*
-                APRIRE IL VIAGGIO
-                Intent intent = new Intent(this, NewTravel.class);
-                 */
-            }
-        });
-        /*
-        Viaggio viaggio = travelList.get(position);
-        holder.travelDestination.setText(viaggio.getDestinazioneAndata());
-        */
-    }
 
+               Intent intent = new Intent(this, Activity_travel_view.class);
+            }
+        });*/
+    }
 
     @Override
     public int getItemCount() {
@@ -92,6 +80,16 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
             textViewName = itemView.findViewById(R.id.date);
             textViewDate = itemView.findViewById(R.id.time);
              */
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent=new Intent(context, Activity_travel_view.class);
+                    intent.putExtra("partenza", rDeparture[getAdapterPosition()]);
+                    intent.putExtra("arrivo", rDestination[getAdapterPosition()]);
+                    context.startActivity(intent);
+                }
+            });
 
         }
 

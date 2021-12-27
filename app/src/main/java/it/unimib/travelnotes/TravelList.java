@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +30,8 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
     private Viaggio[] travelArray ;
     private List<Viaggio> travelList;
     private List<Viaggio> mTravelListJson;
+    //private final DatabaseReference mFirebaseDatabase;
+    private CardView travelCard;
 
 
     @Override
@@ -41,37 +44,12 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-        /*Viaggio[] viaggio = new Viaggio[]{
-                new Viaggio("Milano", "Parigi", "Parigi", "Milano", 90, 90),
-                new Viaggio("Roma", "Berlino", "Berlino", "Roma", 90, 90),
-                new Viaggio("Napoli", "Palermo", "Palermo", "Napoli", 90, 90),
-                new Viaggio("Parigi", "Tokyo", "Tokyo", "Parigi", 90, 90),
-                new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
-                new Viaggio("Berlino", "Tokyo", "Tokyo", "Berlino", 90, 90),
-                new Viaggio("Madrid", "Porto", "Porto", "Madrid", 90, 90),
-                new Viaggio("Lisbona", "Barcellona", "Barcellona", "Lisbona", 90, 90),
-                new Viaggio("Milano", "Roma", "Roma", "Milano", 90, 90),
-                new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
-                new Viaggio("Milano", "Parigi", "Parigi", "Milano", 90, 90),
-                new Viaggio("Roma", "Berlino", "Berlino", "Roma", 90, 90),
-                new Viaggio("Napoli", "Palermo", "Palermo", "Napoli", 90, 90),
-                new Viaggio("Parigi", "Tokyo", "Tokyo", "Parigi", 90, 90),
-                new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
-                new Viaggio("Berlino", "Tokyo", "Tokyo", "Berlino", 90, 90),
-                new Viaggio("Madrid", "Porto", "Porto", "Madrid", 90, 90),
-                new Viaggio("Lisbona", "Barcellona", "Barcellona", "Lisbona", 90, 90),
-                new Viaggio("Milano", "Roma", "Roma", "Milano", 90, 90),
-                new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
-        };*/
-
         TravelResponse travelListWithJsonReader = readJsonFileWithGson();
         travelArray = travelListWithJsonReader.getViaggi();
 
         for (int i = 0; i < travelArray.length; i++) {
             Log.d(TAG, "Gson: " + travelArray[i]);
         }
-
-
 
         /*
         *
@@ -83,11 +61,17 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
         recyclerView.setAdapter(travelAdapter);
 
 
-        final Button mButtonNext = findViewById(R.id.new_travel);
+        final ImageButton mButtonNext = findViewById(R.id.new_travel);
         mButtonNext.setOnClickListener(v -> {
             Intent intent = new Intent(this, NewTravel.class);
             startActivity(intent);
         });
+/*
+        final CardView mTravelCard = findViewById(R.id.travel_card);
+        mTravelCard.setOnClickListener(v -> {
+            Intent intent = new Intent(this, Activity_travel_view.class);
+            startActivity(intent);
+        });*/
 
     }
 
@@ -110,13 +94,57 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
         return viaggi;
     }
 
+    /*public MutableLiveData Viaggio[] readUserInfo(String uId) {
 
+        mFirebaseDatabase.child(USER_COLLECTION).child(uId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, String.valueOf(task.getResult().getValue()));
+                    travelArray.postValue(task.getResult().getValue(Viaggio.class));
+                }
+                else {
+                    Log.d(TAG, "Error getting data", task.getException());
+                    travelArray.postValue(null);
+                }
+            }
+        });
+
+        return travelArray;
+    }*/
 
 
     @Override
     public void onClick(View v) {
 
     }
+
+
+
+    /*Viaggio[] viaggio = new Viaggio[]{
+                new Viaggio("Milano", "Parigi", "Parigi", "Milano", 90, 90),
+                new Viaggio("Roma", "Berlino", "Berlino", "Roma", 90, 90),
+                new Viaggio("Napoli", "Palermo", "Palermo", "Napoli", 90, 90),
+                new Viaggio("Parigi", "Tokyo", "Tokyo", "Parigi", 90, 90),
+                new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
+                new Viaggio("Berlino", "Tokyo", "Tokyo", "Berlino", 90, 90),
+                new Viaggio("Madrid", "Porto", "Porto", "Madrid", 90, 90),
+                new Viaggio("Lisbona", "Barcellona", "Barcellona", "Lisbona", 90, 90),
+                new Viaggio("Milano", "Roma", "Roma", "Milano", 90, 90),
+                new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
+                new Viaggio("Milano", "Parigi", "Parigi", "Milano", 90, 90),
+                new Viaggio("Roma", "Berlino", "Berlino", "Roma", 90, 90),
+                new Viaggio("Napoli", "Palermo", "Palermo", "Napoli", 90, 90),
+                new Viaggio("Parigi", "Tokyo", "Tokyo", "Parigi", 90, 90),
+                new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
+                new Viaggio("Berlino", "Tokyo", "Tokyo", "Berlino", 90, 90),
+                new Viaggio("Madrid", "Porto", "Porto", "Madrid", 90, 90),
+                new Viaggio("Lisbona", "Barcellona", "Barcellona", "Lisbona", 90, 90),
+                new Viaggio("Milano", "Roma", "Roma", "Milano", 90, 90),
+                new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
+        };*/
+
+
 
 
 }
