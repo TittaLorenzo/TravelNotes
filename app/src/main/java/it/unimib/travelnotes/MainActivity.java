@@ -4,14 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-
-import com.google.firebase.auth.FirebaseAuth;
 
 import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.autentication.RegisterActivity;
+import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class MainActivity extends AppCompatActivity {
 

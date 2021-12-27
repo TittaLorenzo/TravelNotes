@@ -1,4 +1,4 @@
-package it.unimib.travelnotes;
+package it.unimib.travelnotes.ui.newactivityevent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -37,10 +37,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.Model.Viaggio;
+import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.autentication.LoginActivity;
-import it.unimib.travelnotes.autentication.RegisterActivity;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewActivityEvent extends AppCompatActivity {

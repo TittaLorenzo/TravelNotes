@@ -19,7 +19,7 @@
             android:name=".autentication.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".NewActivityEvent"
+            android:name=".ui.newactivityevent.NewActivityEvent"
             android:exported="false" />
         <activity
             android:name=".NewTravel"
