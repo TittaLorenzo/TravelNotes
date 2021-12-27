@@ -1,5 +1,6 @@
 package it.unimib.travelnotes.Model;
 import static androidx.room.ForeignKey.CASCADE;
+import static androidx.room.ForeignKey.SET_NULL;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -9,26 +10,14 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-@Entity (tableName = "elenco_viaggi",
-        indices = @Index("id_utente"),
-        foreignKeys = {
-                @ForeignKey(
-                        entity = Utente.class,
-                        parentColumns = "email",
-                        childColumns = "id_utente",
-                        onDelete = CASCADE,
-                        onUpdate = CASCADE
-                )
-        })
+@Entity (tableName = "elenco_viaggi")
 public class Viaggio {
 
     @PrimaryKey(autoGenerate = true)
-    private Long id;
-
-    @ColumnInfo(name = "id_utente")
-    private Long idUtente;
+    private Long viaggioId;
 
     private String partenzaAndata;
     private String destinazioneAndata;
@@ -37,30 +26,12 @@ public class Viaggio {
     private double durataAndata;
     private double durataRitorno;
 
-    //liste
-    @Ignore
-    private ArrayList<Attivita> listaAttivita = new ArrayList<Attivita>();
-   //private ArrayList<Note> listaNote = new ArrayList<Note>();
-    //private ArrayList<Consigli> listaConsigli = new ArrayList<Consigli>();
-    @Ignore
-    private ArrayList<Note> listaNote = new ArrayList<Note>();
-    @Ignore
-    private ArrayList<Consigli> listaConsigli = new ArrayList<Consigli>();
-
-    public Long getId() {
-        return id;
+    public Long getViaggioId() {
+        return viaggioId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getIdUtente() {
-        return idUtente;
-    }
-
-    public void setIdUtente(Long idUtente) {
-        this.idUtente = idUtente;
+    public void setViaggioId(Long viaggioId) {
+        this.viaggioId = viaggioId;
     }
 
     public String getPartenzaAndata() {
@@ -110,67 +81,6 @@ public class Viaggio {
     public void setDurataRitorno(double durataRitorno) {
         this.durataRitorno = durataRitorno;
     }
-
-    public ArrayList<Attivita> getListaAttivita() {
-        return listaAttivita;
-    }
-
-    public void addListaAttivita(Attivita nuovaAttivita) {
-        this.listaAttivita.add(nuovaAttivita);
-    }
-
-    public void setAttivitaIndex(int index, Attivita modificaAttivita) {
-        this.listaAttivita.set(index, modificaAttivita);
-    }
-
-    public void removeAttivita(int index) {
-        this.listaAttivita.remove(index);
-    }
-
-    public void clearAttivita() {
-        this.listaAttivita.clear();
-    }
-
-    public ArrayList<Note> getListaNote() {
-        return listaNote;
-    }
-
-    public void addListaNote(Note nuovaNota) {
-        this.listaNote.add(nuovaNota);
-    }
-
-    public void setNoteIndex(int index, Note modificaNota) {
-        this.listaNote.set(index, modificaNota);
-    }
-
-    public void removeNota(int index) {
-        this.listaNote.remove(index);
-    }
-
-    public void clearNote() {
-        this.listaNote.clear();
-    }
-
-    public ArrayList<Consigli> getListaConsigli() {
-        return listaConsigli;
-    }
-
-    public void addListaConsigli(Consigli nuovoConsiglio) {
-        this.listaConsigli.add(nuovoConsiglio);
-    }
-
-    public void setConsigliIndex(int index, Consigli modificaConsigli) {
-        this.listaConsigli.set(index, modificaConsigli);
-    }
-
-    public void removeConsigli(int index) {
-        this.listaConsigli.remove(index);
-    }
-
-    public void clearConsigli() {
-        this.listaConsigli.clear();
-    }
-
 
     public Viaggio() {}
 

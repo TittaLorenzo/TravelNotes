@@ -11,21 +11,11 @@ import androidx.room.TypeConverters;
 
 import java.util.Date;
 
-@Entity (tableName = "elenco_attivita",
-        indices = @Index("id_viaggio"),
-        foreignKeys = {
-                @ForeignKey(
-                        entity = Viaggio.class,
-                        parentColumns = "id",
-                        childColumns = "id_viaggio",
-                        onDelete = CASCADE,
-                        onUpdate = CASCADE
-                )
-        })
+@Entity (tableName = "elenco_attivita")
 public class Attivita {
 
     @PrimaryKey(autoGenerate = true)
-    private Long id;
+    private Long attivitaId;
 
     @ColumnInfo(name = "id_viaggio")
     private Long idViaggio;
@@ -36,13 +26,12 @@ public class Attivita {
     private String nome;
     private String descrizione;
 
-
-    public Long getId() {
-        return id;
+    public Long getAttivitaId() {
+        return attivitaId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAttivitaId(Long attivitaId) {
+        this.attivitaId = attivitaId;
     }
 
     public Long getIdViaggio() {
@@ -100,6 +89,6 @@ public class Attivita {
         this.descrizione = descrizioneI;
         this.dataInizio = di;
         this.dataFine = df;
-        this.id = IDu;
+        this.attivitaId = IDu;
     }
 }

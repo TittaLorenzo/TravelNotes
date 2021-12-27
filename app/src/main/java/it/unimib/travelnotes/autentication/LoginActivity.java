@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import it.unimib.travelnotes.MainActivity;
+import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
 
 public class LoginActivity extends AppCompatActivity {
