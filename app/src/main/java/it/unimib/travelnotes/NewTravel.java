@@ -60,28 +60,6 @@ public class NewTravel extends AppCompatActivity {
 
         arrivoAndataButton.setOnClickListener(v -> {
             showDateTimeDialog(arrivoAndataButton);
-
-            SimpleDateFormat dateParser = new SimpleDateFormat("MM/dd/yy HH:mm");
-                try {
-                    Log.i("ciao", "ciaonee");
-                    Date date1 = dateParser.parse(partenzaAndataButton.getText().toString());
-                    Date date2 = dateParser.parse(arrivoAndataButton.getText().toString());
-                    Log.i("ciao1", "ciaonee1");
-                    Log.i("date1 e date2", date1 + "  + " + date2);
-
-                    if(date1.compareTo(date2) < 0){
-                        Log.i("piccola", "d1<d2");
-                    }
-                    if(date1.compareTo(date2) > 0){
-                        Log.i("grande", "d1>d2");
-                    }
-                    else{
-                        Log.i("uguale", "d1=d2");
-                    }
-
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
         });
 
         partenzaRitornoButton.setOnClickListener(v -> {
@@ -141,6 +119,50 @@ public class NewTravel extends AppCompatActivity {
                         calendar.set(Calendar.MINUTE,minute);
 
                         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+
+                        sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
+                    }
+                };
+
+                new TimePickerDialog(NewTravel.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+            }
+        };
+
+        new DatePickerDialog(NewTravel.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+
+    }
+
+    private void showDateTimeDialog2(final Button sceltaDateTime, Date date1) {
+        final Calendar calendar=Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH,month);
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                        calendar.set(Calendar.MINUTE,minute);
+
+                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+                        Date date2 = null;
+                        try {
+                            date2 = simpleDateFormat.parse(simpleDateFormat.format(calendar.getTime()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if(date1.compareTo(date2) < 0){
+                            Log.i("piccola", "d1<d2");
+                        }
+                        else if(date1.compareTo(date2) > 0){
+                            Log.i("grande", "d1>d2");
+                        }
+                        else{
+                            Log.i("uguale", "d1=d2");
+                        }
 
                         sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
                     }

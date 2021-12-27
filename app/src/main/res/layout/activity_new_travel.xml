@@ -237,11 +237,11 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="28dp" />
+                android:layout_height="14dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="67dp"
                 android:gravity="center|right"
                 android:orientation="horizontal">
 
@@ -253,7 +253,7 @@
                     android:contentDescription="TODO"
                     android:rotationX="0"
                     android:scaleType="center"
-                    app:srcCompat="@android:drawable/ic_menu_send"
+                    app:srcCompat="@drawable/ic_baseline_add_24"
                     tools:ignore="SpeakableTextPresentCheck" />
             </LinearLayout>
 
