@@ -19,6 +19,7 @@ public interface ViaggiDao {
     @Delete
     public void cancellaViaggio(Viaggio viaggio);
 
-    @Query("SELECT * FROM elenco_viaggi WHERE id = :idViaggio")
+    @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio")
+
     public Viaggio findViaggioById(Long idViaggio);
 }

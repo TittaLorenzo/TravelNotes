@@ -77,7 +77,7 @@ public class NewTravel extends AppCompatActivity {
         invio.setOnClickListener(v -> {
             String dav = andataVDa.getText().toString();
             String av = andataVA.getText().toString();
-            Viaggio viaggio = new Viaggio(dav, av, av, dav, 1, 1);
+
             Log.i("Prova_invio", "viaggio.toString()");
         });
     }

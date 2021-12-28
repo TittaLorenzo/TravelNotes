@@ -35,7 +35,9 @@ import com.google.gson.Gson;
 public class AttivitaFragment extends Fragment  {
     private static final String TAG = "AttivitaFragment";
 
-    private Attivita[] attivitaArray;
+    private Attivita[] attivitaArray ;
+
+
     private List<Attivita> AttivitaList;
     private FragmentAttivitaBinding binding;
    
@@ -49,9 +51,28 @@ public class AttivitaFragment extends Fragment  {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
-        Attivita[] viaggio = new Attivita[]{
+        attivitaArray = new Attivita[]{
                 new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo"),
+
+
+
 
 
         };

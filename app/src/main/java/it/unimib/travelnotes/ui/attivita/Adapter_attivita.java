@@ -51,6 +51,7 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
         //AttivitaViewHolder.getTextView(localDataSet[position]);
         final Attivita attivitaList = attivita[position];
         holder.attivitaNome.setText(attivitaList.getNome());
+        holder.descrizione.setText(attivitaList.getDescrizione());
         //holder.travelDestination.setText(travelList.getDestinazioneAndata());
         //holder.travelTime.setText((int) travelList.getDurataAndata());
 
