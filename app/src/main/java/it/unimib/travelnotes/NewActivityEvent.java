@@ -38,9 +38,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.autentication.LoginActivity;
-import it.unimib.travelnotes.autentication.RegisterActivity;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewActivityEvent extends AppCompatActivity {
@@ -212,7 +210,7 @@ public class NewActivityEvent extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... voids) {
 
-                Attivita attivitaSelezionata = new Attivita();
+                Attivita attivitaSelezionata = new Attivita("Milano", "Parigi", 10, 10, 90, 90);
                 try {
                     attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
                 } catch (Exception e) {
@@ -286,7 +284,7 @@ public class NewActivityEvent extends AppCompatActivity {
                             Log.v("----------------", "parsing date fallito");
                         }
 
-                        Attivita a = new Attivita();
+                        Attivita a = new Attivita("Milano", "Parigi", 10, 10, 90, 90);
                         a.setNome(campoNome.getText().toString());
                         a.setPosizione(campoPosizione.getText().toString());
                         a.setDescrizione(campoDescrizione.getText().toString());
