@@ -52,7 +52,7 @@ public class AttivitaFragment extends Fragment  {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         attivitaArray = new Attivita[]{
-                new Attivita("Degustazione", "degustazione nel culo"),
+                new Attivita("Degustazione", "degustazione nel culo con scappellamento a destra e salto mortale sulle palle del cameriere che poverino sta lavorando da 120 ore di fila"),
                 new Attivita("Degustazione", "degustazione nel culo"),
                 new Attivita("Degustazione", "degustazione nel culo"),
                 new Attivita("Degustazione", "degustazione nel culo"),
