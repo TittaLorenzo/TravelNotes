@@ -12,7 +12,7 @@ public class ViaggioConAttivita {
     @Embedded public Viaggio viaggio;
     @Relation(
             parentColumn = "viaggioId",
-            entityColumn = "attivitaId"
+            entityColumn = "viaggioId"
     )
     public List<Attivita> activities;
 

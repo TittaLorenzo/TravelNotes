@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.roomdb.relations.ViaggioConUtenti;
 import it.unimib.travelnotes.roomdb.relations.ViaggioUtenteCrossRef;
@@ -17,7 +18,10 @@ import it.unimib.travelnotes.roomdb.relations.ViaggioUtenteCrossRef;
 public interface ViaggiDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public Long nuovoViaggio(Viaggio viaggio);
+    public long nuovoViaggio(Viaggio viaggio);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public void popolaViaggi(List<Viaggio> listViaggio);
 
     @Update
     public void aggiornaViaggio(Viaggio viaggio);
@@ -26,12 +30,12 @@ public interface ViaggiDao {
     public void cancellaViaggio(Viaggio viaggio);
 
     @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio")
-    public Viaggio findViaggioById(Long idViaggio);
+    public Viaggio findViaggioById(long idViaggio);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public Long insertViaggioUtenteCrossRef(ViaggioUtenteCrossRef crossRef);
+    public long insertViaggioUtenteCrossRef(ViaggioUtenteCrossRef crossRef);
 
     @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio")
-    public List<ViaggioConUtenti> getViaggioConUtenti(Long idViaggio);
+    public ViaggioConUtenti getViaggioConUtenti(long idViaggio);
 }

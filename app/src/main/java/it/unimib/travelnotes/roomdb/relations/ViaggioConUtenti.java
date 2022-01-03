@@ -16,6 +16,6 @@ public class ViaggioConUtenti {
             entityColumn = "utenteId",
             associateBy = @Junction(ViaggioUtenteCrossRef.class)
     )
-    public List<Utente> gruppo;
+    public List<Utente> gruppoViaggio;
 
 }

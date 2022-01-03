@@ -16,7 +16,7 @@ import it.unimib.travelnotes.roomdb.relations.UtenteConViaggi;
 public interface UtenteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public Long nuovoUtente(Utente utente);
+    public long nuovoUtente(Utente utente);
 
     @Update
     public void aggiornaUtente(Utente utente);
@@ -25,8 +25,8 @@ public interface UtenteDao {
     public void cancellaUtente(Utente utente);
 
     @Query("SELECT * FROM elenco_utenti WHERE utenteId = :utenteId")
-    public Utente findUtenteById(Long utenteId);
+    public Utente findUtenteById(String utenteId);
 
     @Query("SELECT * FROM elenco_utenti WHERE utenteId = :utenteId")
-    public List<UtenteConViaggi> getUtenteConViaggi(Long utenteId);
+    public UtenteConViaggi getUtenteConViaggi(String utenteId);
 }

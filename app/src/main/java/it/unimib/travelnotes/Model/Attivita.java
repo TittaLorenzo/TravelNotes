@@ -1,13 +1,7 @@
 package it.unimib.travelnotes.Model;
-import static androidx.room.ForeignKey.CASCADE;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 import java.util.Date;
 
@@ -15,10 +9,9 @@ import java.util.Date;
 public class Attivita {
 
     @PrimaryKey(autoGenerate = true)
-    private Long attivitaId;
+    private long attivitaId;
 
-    @ColumnInfo(name = "id_viaggio")
-    private Long idViaggio;
+    private long viaggioId;
 
     private Date dataInizio;
     private Date dataFine;
@@ -26,20 +19,20 @@ public class Attivita {
     private String nome;
     private String descrizione;
 
-    public Long getAttivitaId() {
+    public long getAttivitaId() {
         return attivitaId;
     }
 
-    public void setAttivitaId(Long attivitaId) {
+    public void setAttivitaId(long attivitaId) {
         this.attivitaId = attivitaId;
     }
 
-    public Long getIdViaggio() {
-        return idViaggio;
+    public long getViaggioId() {
+        return viaggioId;
     }
 
-    public void setIdViaggio(Long idViaggio) {
-        this.idViaggio = idViaggio;
+    public void setViaggioId(long viaggioId) {
+        this.viaggioId = viaggioId;
     }
 
     public Date getDataInizio() {
@@ -84,11 +77,12 @@ public class Attivita {
 
     public Attivita() {}
 
-    public Attivita(String nomeI, String descrizioneI, Date giornoI, Date di, Date df, Long IDu){
+    public Attivita(String nomeI, String descrizioneI,String posizione, Date di, Date df, long IDu){
         this.nome= nomeI;
         this.descrizione = descrizioneI;
+        this.posizione = posizione;
         this.dataInizio = di;
         this.dataFine = df;
-        this.attivitaId = IDu;
+        this.viaggioId = IDu;
     }
 }
