@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +19,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,10 +27,14 @@ import com.google.firebase.auth.FirebaseUser;
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.repository.ITravelRepository;
+import it.unimib.travelnotes.repository.TravelRepository;
+import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private ITravelRepository mITravelRepository;
 
     private EditText email;
     private EditText password;
@@ -41,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        mITravelRepository = new TravelRepository(getApplication());
 
         email = findViewById(R.id.emailLogin);
         password = findViewById(R.id.passwordLogin);
@@ -117,6 +125,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Login effettuato", Toast.LENGTH_SHORT).show();
 
+                            String userId = mAuth.getCurrentUser().getUid();
+                            mITravelRepository.loadUtente(userId);
+
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
@@ -125,4 +136,23 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    /*private void addUser(String email, String userId) {
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Utente u = new Utente();
+                u.setEmail(mAuth.getCurrentUser().getEmail());
+                u.setUtenteId(mAuth.getUid());
+
+                try {
+                    long idRow = TravelDatabase.getDatabase(getApplicationContext()).getUtenteDao().nuovoUtente(u);
+                } catch (Exception e) {
+                    Log.e("personal_error_save", e.toString());
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }*/
 }

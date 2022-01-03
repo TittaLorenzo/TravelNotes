@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,12 +20,22 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import it.unimib.travelnotes.MainActivity;
+import it.unimib.travelnotes.Model.Attivita;
+import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.repository.ITravelRepository;
+import it.unimib.travelnotes.repository.TravelRepository;
+import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private final ITravelRepository mITravelRepository = new TravelRepository(getApplication());
 
     private EditText email;
     private EditText password;
@@ -80,6 +92,15 @@ public class RegisterActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(RegisterActivity.this, "Registrazione avvenuta con successo!", Toast.LENGTH_SHORT).show();
 
+                            String userId = mAuth.getCurrentUser().getUid();
+                            //addUser(email, userId);
+
+                            Utente u = new Utente();
+                            u.setUtenteId(userId);
+                            u.setEmail(email);
+
+                            mITravelRepository.pushNuovoUtente(u);
+
                             startActivity(new Intent(RegisterActivity.this, MainActivity.class));
                             finish();
                         } else {
@@ -88,4 +109,24 @@ public class RegisterActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    /*private void addUser(String email, String userId) {
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Utente u = new Utente();
+                u.setUtenteId(userId);
+                u.setEmail(email);
+
+                try {
+                    long idRow = TravelDatabase.getDatabase(getApplicationContext()).getUtenteDao().nuovoUtente(u);
+                } catch (Exception e) {
+                    Log.e("personal_error_save", e.toString());
+                }
+            }
+        };
+        new Thread(runnable).start();
+
+    }*/
 }
