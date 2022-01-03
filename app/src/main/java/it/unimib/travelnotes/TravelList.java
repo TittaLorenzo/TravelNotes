@@ -34,6 +34,7 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
     private CardView travelCard;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +51,7 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
         for (int i = 0; i < travelArray.length; i++) {
             Log.d(TAG, "Gson: " + travelArray[i]);
         }
+
 
         /*
         *

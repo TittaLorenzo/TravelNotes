@@ -49,10 +49,15 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
         /*holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String s1 = travelList.getPartenzaAndata();
+                String s2 = travelList.getDestinazioneAndata();
+                Intent intent=new Intent(context, Activity_travel_view.class);
+                intent.putExtra("partenza", s1);
+                intent.putExtra("arrivo", s2);
 
-               Intent intent = new Intent(this, Activity_travel_view.class);
             }
         });*/
+
     }
 
     @Override
@@ -68,6 +73,8 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
 
         TextView travelDeparture;
         TextView travelDestination;
+        //TextView travelDepartureR;
+        //TextView travelDestinationR;
        // TextView travelTime;
 
 
@@ -75,6 +82,8 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
             super(itemView);
             travelDeparture = itemView.findViewById(R.id.departure);
             travelDestination = itemView.findViewById(R.id.destination);
+            //travelDepartureR = itemView.findViewById(R.id.departure2);
+            //travelDestinationR = itemView.findViewById(R.id.destination2);
             //travelTime = itemView.findViewById(R.id.time);
             /*MODIFICARE CON DATA E ORA
             textViewName = itemView.findViewById(R.id.date);
@@ -85,8 +94,10 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
                 @Override
                 public void onClick(View v) {
                     Intent intent=new Intent(context, Activity_travel_view.class);
-                    intent.putExtra("partenza", rDeparture[getAdapterPosition()]);
-                    intent.putExtra("arrivo", rDestination[getAdapterPosition()]);
+                    intent.putExtra("partenza", travelDeparture.toString());
+                    intent.putExtra("arrivo",  travelDestination.toString());
+                    //intent.putExtra("partenzaR", rDeparture[getAdapterPosition()]);
+                    //intent.putExtra("arrivoR", rDestination[getAdapterPosition()]);
                     context.startActivity(intent);
                 }
             });

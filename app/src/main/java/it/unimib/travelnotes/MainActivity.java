@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         //bottone login che porta alla lista viaggi
         final Button mButtonNext = findViewById(R.id.L_button);
         mButtonNext.setOnClickListener(v -> {
