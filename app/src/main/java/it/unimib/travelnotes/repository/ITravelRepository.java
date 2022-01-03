@@ -2,24 +2,39 @@ package it.unimib.travelnotes.repository;
 
 import androidx.lifecycle.MutableLiveData;
 
-import java.util.List;
+
 
 import it.unimib.travelnotes.Model.Attivita;
+import it.unimib.travelnotes.Model.response.AttivitaResponse;
+import it.unimib.travelnotes.Model.response.ViaggioResponse;
+import it.unimib.travelnotes.Model.response.ListaAttivitaResponse;
+import it.unimib.travelnotes.Model.response.ListaUtentiResponse;
+import it.unimib.travelnotes.Model.response.ListaViaggiResponse;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.Viaggio;
 
 public interface ITravelRepository {
 
-    void fetchViaggio(Long viaggioId, long lastUpdate);
+    void pushNuovoViaggio(Viaggio viaggio, boolean esiste);
 
-    void pushViaggio(Viaggio viaggio);
+    void pushNuovaAttivita(Attivita attivita, boolean esiste);
 
-    void fetchAttivita(Long attivita, long lastUpdate);
+    void pushNuovoUtente(Utente utente);
 
-    void pushAttivita(Attivita attivita);
+    void loadUtente(String utenteId);
 
-    void fetchUtente(Long utenteId, long lastUpdate);
+    MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(long viaggioId);
 
-    void pushUtente(Utente utente);
+    MutableLiveData<ListaUtentiResponse> fetchGruppoViaggio(long viaggioId);
+
+    MutableLiveData<ListaViaggiResponse> fetchListaViaggi(String userId);
+
+    MutableLiveData<ViaggioResponse> fetchViaggio(long viaggioId);
+
+    MutableLiveData<AttivitaResponse> fetchAttivita(long attivitaId);
+
+    void getAttivitaSingleCall(long attivitaId);
+
+    void getViaggioSingleCall(long viaggioId);
 
 }
