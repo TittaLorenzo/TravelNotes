@@ -1,4 +1,4 @@
-package it.unimib.travelnotes;
+/*package it.unimib.travelnotes;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,20 +10,24 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import it.unimib.travelnotes.Model.Viaggio;
 
 public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelViewHolder> {
 
     Viaggio[] viaggi;
     Context context;
+    ArrayList<Viaggio> list;
+
     String rDeparture[];
     String rDestination[];
 
 
 
-    public TravelAdapter(Viaggio[] viaggi, TravelList activity) {
-        this.viaggi = viaggi;
-        this.context = activity;
+    public TravelAdapter(Context context, ArrayList<Viaggio> list) {
+        this.context = context;
+        this.list = list;
     }
 
 
@@ -56,7 +60,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
                 intent.putExtra("arrivo", s2);
 
             }
-        });*/
+        });
 
     }
 
@@ -88,7 +92,7 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
             /*MODIFICARE CON DATA E ORA
             textViewName = itemView.findViewById(R.id.date);
             textViewDate = itemView.findViewById(R.id.time);
-             */
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -107,4 +111,67 @@ public class TravelAdapter extends RecyclerView.Adapter<TravelAdapter.TravelView
 
     }
 }
+*/
+package it.unimib.travelnotes;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
+import it.unimib.travelnotes.Model.Viaggio;
+
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.TravelViewHolder> {
+
+    Context context;
+
+    ArrayList<Viaggio> list;
+
+
+    public MyAdapter(Context context, ArrayList<Viaggio> list) {
+        this.context = context;
+        this.list = list;
+    }
+
+    @NonNull
+    @Override
+    public TravelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(context).inflate(R.layout.travel,parent,false);
+        return  new TravelViewHolder(v);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull TravelViewHolder holder, int position) {
+
+        Viaggio viaggio = list.get(position);
+        holder.travelDeparture.setText(viaggio.getPartenzaAndata());
+        holder.travelDestination.setText(viaggio.getDestinazioneAndata());
+
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
+
+    public static class TravelViewHolder extends RecyclerView.ViewHolder{
+
+        TextView travelDeparture, travelDestination;
+
+        public TravelViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            travelDeparture = itemView.findViewById(R.id.departure);
+            travelDestination = itemView.findViewById(R.id.destination);
+
+        }
+    }
+
+}

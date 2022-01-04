@@ -1,4 +1,4 @@
-package it.unimib.travelnotes;
+/*package it.unimib.travelnotes;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,12 +11,15 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import it.unimib.travelnotes.Model.TravelResponse;
@@ -28,10 +31,14 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
     private static final String TAG = "TravelFragment";
 
     private Viaggio[] travelArray ;
-    private List<Viaggio> travelList;
+
     private List<Viaggio> mTravelListJson;
-    //private final DatabaseReference mFirebaseDatabase;
     private CardView travelCard;
+
+    List<Viaggio> list;
+    DatabaseReference database;
+    TravelAdapter travelAdapter;
+    RecyclerView recyclerView;
 
 
 
@@ -40,9 +47,14 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_list);
 
-        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        recyclerView = findViewById(R.id.recyclerView);
+        database = FirebaseDatabase.getInstance().getReference("travel");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        list = new ArrayList<>();
+        travelAdapter = new TravelAdapter(this,list);
+        recyclerView.setAdapter(travelAdapter);
 
 
         TravelResponse travelListWithJsonReader = readJsonFileWithGson();
@@ -53,11 +65,7 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
         }
 
 
-        /*
-        *
-        * FARE ORDINAMENTO IN BASE ALLA DATA
-        *
-        * */
+
 
         TravelAdapter travelAdapter = new TravelAdapter(travelArray, TravelList.this);
         recyclerView.setAdapter(travelAdapter);
@@ -68,12 +76,12 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
             Intent intent = new Intent(this, NewTravel.class);
             startActivity(intent);
         });
-/*
+
         final CardView mTravelCard = findViewById(R.id.travel_card);
         mTravelCard.setOnClickListener(v -> {
             Intent intent = new Intent(this, Activity_travel_view.class);
             startActivity(intent);
-        });*/
+        });
 
     }
 
@@ -113,7 +121,7 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
         });
 
         return travelArray;
-    }*/
+    }
 
 
     @Override
@@ -123,7 +131,7 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
 
 
 
-    /*Viaggio[] viaggio = new Viaggio[]{
+    Viaggio[] viaggio = new Viaggio[]{
                 new Viaggio("Milano", "Parigi", "Parigi", "Milano", 90, 90),
                 new Viaggio("Roma", "Berlino", "Berlino", "Roma", 90, 90),
                 new Viaggio("Napoli", "Palermo", "Palermo", "Napoli", 90, 90),
@@ -144,12 +152,84 @@ public class TravelList extends AppCompatActivity implements View.OnClickListene
                 new Viaggio("Lisbona", "Barcellona", "Barcellona", "Lisbona", 90, 90),
                 new Viaggio("Milano", "Roma", "Roma", "Milano", 90, 90),
                 new Viaggio("Los Angeles", "New York", "Los Angeles", "New York", 90, 90),
-        };*/
+        };
 
 
 
 
+}*/
+package it.unimib.travelnotes;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.ImageButton;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+import it.unimib.travelnotes.Model.Viaggio;
+
+public class TravelList extends AppCompatActivity {
+
+    RecyclerView recyclerView;
+    DatabaseReference database;
+    MyAdapter myAdapter;
+    ArrayList<Viaggio> list;
+    public static final String FIREBASE_DATABASE_URL = "https://travelnotes-334817-default-rtdb.europe-west1.firebasedatabase.app/";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_travel_list);
+
+        recyclerView = findViewById(R.id.recyclerView);
+        database = FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference("travel");
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        list = new ArrayList<>();
+        myAdapter = new MyAdapter(this,list);
+        recyclerView.setAdapter(myAdapter);
+
+        final ImageButton mButtonNext = findViewById(R.id.new_travel);
+        mButtonNext.setOnClickListener(v -> {
+            Intent intent = new Intent(this, NewTravel.class);
+            startActivity(intent);
+        });
+
+        database.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                    Viaggio viaggio = dataSnapshot.getValue(Viaggio.class);
+                    list.add(viaggio);
+
+
+                }
+                myAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
+    }
 }
-
 
 
