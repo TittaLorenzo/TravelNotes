@@ -8,5 +8,5 @@ public class ViaggioUtenteCrossRef {
     @NonNull
     public long viaggioId;
     @NonNull
-    public long utenteId;
+    public String utenteId;
 }

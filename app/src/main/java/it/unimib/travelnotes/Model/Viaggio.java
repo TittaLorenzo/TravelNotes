@@ -1,16 +1,20 @@
 package it.unimib.travelnotes.Model;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
 
-@Entity (tableName = "elenco_viaggi")
+@Entity (tableName = "elenco_viaggi",
+        indices = {@Index(value = {"viaggioOnlineId"}, unique = true)})
 public class Viaggio {
 
     @PrimaryKey(autoGenerate = true)
     private long viaggioId;
+
+    private String viaggioOnlineId;
 
     private Date dataAndata;
     private Date dataRitorno;
@@ -27,6 +31,14 @@ public class Viaggio {
 
     public void setViaggioId(long viaggioId) {
         this.viaggioId = viaggioId;
+    }
+
+    public String getViaggioOnlineId() {
+        return viaggioOnlineId;
+    }
+
+    public void setViaggioOnlineId(String viaggioOnlineId) {
+        this.viaggioOnlineId = viaggioOnlineId;
     }
 
     public Date getDataAndata() {
@@ -106,21 +118,21 @@ public class Viaggio {
         this.durataRitorno = durR;
     }
 
-    public Viaggio(Date dataAndata, String pa, String da, double durA){
+    /*public Viaggio(Date dataAndata, String pa, String da, double durA){
         this.dataAndata = dataAndata;
         this.partenzaAndata = pa;
         this.destinazioneAndata = da;
         this.durataAndata = durA;
-    }
+    }*/
 
-    /*public Viaggio(String pa, String da, String pr, String dr, double durA, double durR){
+    public Viaggio(String pa, String da, String pr, String dr, double durA, double durR){
         this.partenzaAndata = pa;
         this.destinazioneAndata = da;
         this.partenzaRitorno = pr;
         this.destinazioneRitorno = dr;
         this.durataAndata = durA;
         this.durataRitorno = durR;
-    }*/
+    }
 
 
 }

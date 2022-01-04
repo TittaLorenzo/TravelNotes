@@ -19,22 +19,20 @@ public interface ITravelRepository {
 
     void pushNuovaAttivita(Attivita attivita, boolean esiste);
 
+    void pushAggiungiAlGruppo(String email, long viaggioId);
+
     void pushNuovoUtente(Utente utente);
 
     void loadUtente(String utenteId);
 
-    MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(long viaggioId);
+    MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(long viaggioId, boolean refresh);
 
-    MutableLiveData<ListaUtentiResponse> fetchGruppoViaggio(long viaggioId);
+    MutableLiveData<ListaUtentiResponse> fetchGruppoViaggio(long viaggioId, boolean refresh);
 
-    MutableLiveData<ListaViaggiResponse> fetchListaViaggi(String userId);
+    MutableLiveData<ListaViaggiResponse> fetchListaViaggi(String userId, boolean refresh);
 
-    MutableLiveData<ViaggioResponse> fetchViaggio(long viaggioId);
+    MutableLiveData<ViaggioResponse> fetchViaggio(long viaggioId, boolean refresh);
 
-    MutableLiveData<AttivitaResponse> fetchAttivita(long attivitaId);
-
-    void getAttivitaSingleCall(long attivitaId);
-
-    void getViaggioSingleCall(long viaggioId);
+    MutableLiveData<AttivitaResponse> fetchAttivita(long attivitaId, boolean refresh);
 
 }

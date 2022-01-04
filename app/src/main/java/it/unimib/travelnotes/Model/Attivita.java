@@ -1,17 +1,22 @@
 package it.unimib.travelnotes.Model;
 
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity (tableName = "elenco_attivita")
+@Entity (tableName = "elenco_attivita",
+        indices = {@Index(value = {"viaggioOnlineId"}, unique = true)})
 public class Attivita {
 
     @PrimaryKey(autoGenerate = true)
     private long attivitaId;
 
     private long viaggioId;
+
+    private String viaggioOnlineId;
+    private String attivitaOnlineId;
 
     private Date dataInizio;
     private Date dataFine;
@@ -33,6 +38,22 @@ public class Attivita {
 
     public void setViaggioId(long viaggioId) {
         this.viaggioId = viaggioId;
+    }
+
+    public String getViaggioOnlineId() {
+        return viaggioOnlineId;
+    }
+
+    public void setViaggioOnlineId(String viaggioOnlineId) {
+        this.viaggioOnlineId = viaggioOnlineId;
+    }
+
+    public String getAttivitaOnlineId() {
+        return attivitaOnlineId;
+    }
+
+    public void setAttivitaOnlineId(String attivitaOnlineId) {
+        this.attivitaOnlineId = attivitaOnlineId;
     }
 
     public Date getDataInizio() {

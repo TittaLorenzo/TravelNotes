@@ -78,6 +78,6 @@ public class TravelListViewModel extends AndroidViewModel {
     }
 
     private void fetchListaViaggiViewModel() {
-        mListaViaggiLiveData = mITravelRepository.fetchListaViaggi(utenteId);
+        mListaViaggiLiveData = mITravelRepository.fetchListaViaggi(utenteId, false);
     }
 }

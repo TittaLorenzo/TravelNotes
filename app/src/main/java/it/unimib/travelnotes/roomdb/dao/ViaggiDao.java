@@ -21,7 +21,7 @@ public interface ViaggiDao {
     public long nuovoViaggio(Viaggio viaggio);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void popolaViaggi(List<Viaggio> listViaggio);
+    public void addAllViaggi(List<Viaggio> listViaggio);
 
     @Update
     public void aggiornaViaggio(Viaggio viaggio);
@@ -31,6 +31,9 @@ public interface ViaggiDao {
 
     @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio")
     public Viaggio findViaggioById(long idViaggio);
+
+    @Query("SELECT * FROM elenco_viaggi WHERE viaggioOnlineId = :viaggioOnlineId")
+    public Viaggio findViaggioByOnlineId(String viaggioOnlineId);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

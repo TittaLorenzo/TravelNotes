@@ -77,7 +77,7 @@ public class GruppoViaggioViewModel extends AndroidViewModel {
     }
 
     private void fetchListaUtentiViewModel() {
-        mListaUtentiLiveData = mITravelRepository.fetchGruppoViaggio(viaggioId);
+        mListaUtentiLiveData = mITravelRepository.fetchGruppoViaggio(viaggioId, false);
     }
 
 }

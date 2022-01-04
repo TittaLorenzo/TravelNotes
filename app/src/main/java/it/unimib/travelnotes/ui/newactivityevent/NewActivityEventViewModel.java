@@ -88,7 +88,7 @@ public class NewActivityEventViewModel extends AndroidViewModel {
     }
 
     private void fetchAttivitaViewModel() {
-        mAttivitaLiveData = mITravelRepository.fetchAttivita(attivitaId);
+        mAttivitaLiveData = mITravelRepository.fetchAttivita(attivitaId, false);
     }
 
 }

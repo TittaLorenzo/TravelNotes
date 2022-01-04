@@ -20,7 +20,7 @@ public interface AttivitaDao {
     public long nuovaAttivita(Attivita attivita);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void popolaAttivita(List<Attivita> listaAttivita);
+    public void addAllAttivita(List<Attivita> listaAttivita);
 
     @Update
     public void aggiornaAttivita(Attivita attivita);

@@ -69,7 +69,7 @@ public class FlightViewModel extends AndroidViewModel {
     }
 
     private void fetchViaggioViewModel() {
-        mViaggioLiveData = mITravelRepository.fetchViaggio(viaggioId);
+        mViaggioLiveData = mITravelRepository.fetchViaggio(viaggioId, false);
     }
 
 }

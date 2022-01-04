@@ -9,6 +9,7 @@ import androidx.room.Update;
 
 import java.util.List;
 
+import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.roomdb.relations.UtenteConViaggi;
 
@@ -17,6 +18,9 @@ public interface UtenteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public long nuovoUtente(Utente utente);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    public void addAllUtenti(List<Utente> listaUtenti);
 
     @Update
     public void aggiornaUtente(Utente utente);
