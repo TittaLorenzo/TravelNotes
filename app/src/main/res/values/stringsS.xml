@@ -15,4 +15,14 @@
     <string name="logoutItemMenu">Logout</string>
     <string name="impostazioniItemMenu">Impostazioni</string>
     <string name="changePwItemMenu">Cambia password</string>
+    <string name="emailInputHint">Email</string>
+    <string name="passwordInputHint">Password</string>
+    <string name="loginButtonLogin">Login</string>
+    <string name="cancelButtonLogin">cancel</string>
+    <string name="nonRegistratoButtonLogin">Devi ancora registrarti? Clicca qui</string>
+    <string name="password_dimenticata">Password dimenticata?</string>
+    <string name="ripeti_password">Ripeti Password</string>
+    <string name="registrati">registrati</string>
+    <string name="giaRegistratoRegister">Già registrato? Effettua il Login qui</string>
+    <string name="indietro">Indietro</string>
 </resources>

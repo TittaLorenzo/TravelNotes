@@ -6,9 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,17 +17,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import it.unimib.travelnotes.MainActivity;
-import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
-import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private Button login;
+    private Button cancelButton;
     private TextView registrati;
     private TextView pwDimenticataLink;
 
@@ -50,9 +45,10 @@ public class LoginActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mITravelRepository = new TravelRepository(getApplication());
 
-        email = findViewById(R.id.emailLogin);
-        password = findViewById(R.id.passwordLogin);
+        email = findViewById(R.id.email_register_edit_text);
+        password = findViewById(R.id.password_register_edit_text);
         login = findViewById(R.id.loginButton);
+        cancelButton = findViewById(R.id.cancel_button);
 
         registrati = findViewById(R.id.registratiTv);
         pwDimenticataLink = findViewById(R.id.pwLostLink);
@@ -65,6 +61,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 loginUser(txtEmail, txtPassword);
             }
+        });
+
+        cancelButton.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         });
 
         registrati.setOnClickListener(v -> {

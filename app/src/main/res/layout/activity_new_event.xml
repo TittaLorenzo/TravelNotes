@@ -28,6 +28,7 @@
             android:orientation="horizontal">
 
             <ImageButton
+                android:contentDescription="@string/indietro"
                 android:id="@+id/backButtonNuovaAttivita"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -44,6 +45,7 @@
                 android:layout_weight="5"
                 android:text="@string/titleNuovaAttivita"
                 android:textAlignment="center"
+                android:textColor="@color/primaryColor"
                 android:textSize="30sp" />
 
             <Space
@@ -63,6 +65,8 @@
                 android:orientation="vertical">
 
                 <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:baselineAligned="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -70,15 +74,21 @@
                     android:layout_marginBottom="20dp"
                     android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/nomeAttivitaInput"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/nomeAttivitaField"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
                         android:hint="@string/attivitaNomeHint"
-                        android:inputType="textCapSentences"
-                        android:minHeight="48dp" />
+                        android:layout_weight="1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/nomeAttivitaInput"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -91,6 +101,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:layout_marginTop="10dp"
                         android:id="@+id/labelDataInizioNuovaAttivita"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -99,14 +110,6 @@
                         android:text="@string/dataInizioAttivitaLabel"
                         android:textSize="20sp" />
 
-                    <!--<EditText
-                android:id=""
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:ems="10"
-                android:inputType="date"
-                android:minHeight="50dp" />-->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -121,7 +124,11 @@
                             android:layout_weight="5"
                             android:hint="@string/dataHintNuovaAttivita"
                             android:text=""
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            app:icon="@drawable/ic_baseline_calendar_today_24"
+                            app:strokeColor="@color/primaryColor"
+                            app:strokeWidth="2dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
                         <Button
                             android:id="@+id/oraInizioNuovaAttivita"
@@ -129,7 +136,11 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:hint="@string/oraHintNuovaAttivita"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            app:icon="@drawable/ic_baseline_access_time_24"
+                            app:strokeColor="@color/primaryColor"
+                            app:strokeWidth="2dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -144,6 +155,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:layout_marginTop="10dp"
                         android:id="@+id/labelDataFineNuovaAttivita"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -152,14 +164,6 @@
                         android:text="@string/dataFineAttivitaLabel"
                         android:textSize="20sp" />
 
-                    <!--<EditText
-                android:id="@+id/dataFineNuovaAttivita"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:ems="10"
-                android:inputType="date"
-                android:minHeight="50dp" />-->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -173,7 +177,11 @@
                             android:layout_weight="5"
                             android:hint="@string/dataHintNuovaAttivita"
                             android:text=""
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            app:icon="@drawable/ic_baseline_calendar_today_24"
+                            app:strokeColor="@color/primaryColor"
+                            app:strokeWidth="2dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
 
                         <Button
                             android:id="@+id/oraFineNuovaAttivita"
@@ -181,7 +189,11 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:hint="@string/oraHintNuovaAttivita"
-                            android:textSize="20sp" />
+                            android:textSize="20sp"
+                            app:icon="@drawable/ic_baseline_access_time_24"
+                            app:strokeColor="@color/primaryColor"
+                            app:strokeWidth="2dp"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"/>
                     </LinearLayout>
 
                 </LinearLayout>
@@ -194,15 +206,20 @@
                     android:layout_marginBottom="20dp"
                     android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/posizionePartenzaNuovaAttivita"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/posizioneAttivitaField"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
                         android:hint="@string/posizionePartenzaHint"
-                        android:inputType="text"
-                        android:minHeight="48dp" />
+                        android:layout_weight="1">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/posizionePartenzaNuovaAttivita"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -233,7 +250,27 @@
                     android:layout_marginBottom="20dp"
                     android:orientation="horizontal">
 
-                    <EditText
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/descrizioneAttivitaField"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/descrizioneHint"
+                        android:layout_weight="1"
+                        android:scrollbars="vertical" >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/descrizioneNuovaAttivita"
+                            android:inputType="textMultiLine"
+                            android:lines="5"
+                            android:maxLines="10"
+                            android:gravity="top|start"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!--EditText
                         android:id="@+id/descrizioneNuovaAttivita"
                         android:layout_width="0dp"
                         android:layout_height="150dp"
@@ -244,7 +281,7 @@
                         android:inputType="textMultiLine"
                         android:lines="3"
                         android:maxLines="5"
-                        android:scrollbars="vertical" />
+                        android:scrollbars="vertical" /-->
 
                 </LinearLayout>
 
@@ -260,6 +297,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textColor="@color/whiteTextColor"
+                        android:textSize="18dp"
                         android:text="@string/bottoneSalvaNewActivity" />
                 </LinearLayout>
 

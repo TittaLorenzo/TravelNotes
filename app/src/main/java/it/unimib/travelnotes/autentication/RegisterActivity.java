@@ -4,10 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,19 +16,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import it.unimib.travelnotes.MainActivity;
-import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
-import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -41,6 +32,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText password;
     private EditText password2;
     private Button register;
+    private Button cancelButtonRegister;
     private TextView giaRegistrato;
 
 
@@ -51,10 +43,11 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        email = findViewById(R.id.emailRegister);
-        password = findViewById(R.id.passwordRegister);
-        password2 = findViewById(R.id.passwordRegister2);
+        email = findViewById(R.id.email_register_edit_text);
+        password = findViewById(R.id.password_register_edit_text);
+        password2 = findViewById(R.id.password2_register_edit_text);
         register = findViewById(R.id.registerButton);
+        cancelButtonRegister = findViewById(R.id.cancel_button_register);
 
         giaRegistrato = findViewById(R.id.giaRegistratoTv);
 
@@ -75,6 +68,11 @@ public class RegisterActivity extends AppCompatActivity {
                     registerUser(txtEmail, txtPassword);
                 }
             }
+        });
+
+        cancelButtonRegister.setOnClickListener(v -> {
+            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
+            finish();
         });
 
         giaRegistrato.setOnClickListener(v -> {
