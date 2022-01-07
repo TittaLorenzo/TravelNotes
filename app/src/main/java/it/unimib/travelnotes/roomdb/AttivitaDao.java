@@ -20,7 +20,7 @@ public interface AttivitaDao {
     @Delete
     public void cancellaAttivita(Attivita attivita);
 
-    @Query("SELECT * FROM elenco_attivita WHERE id = :idAttivita")
+    @Query("SELECT * FROM elenco_attivita WHERE attivitaId = :idAttivita")
     public Attivita findAttivitaById(Long idAttivita);
 
 

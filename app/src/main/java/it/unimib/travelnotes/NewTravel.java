@@ -79,17 +79,23 @@ public class NewTravel extends AppCompatActivity {
         });
 
         invio.setOnClickListener(v -> {
-            String dav = andataVDa.getText().toString();
-            String av = andataVA.getText().toString();
-            Viaggio viagg = new Viaggio(dav, av, av, dav, 1, 1);
+            String daA = andataVDa.getText().toString();
+            String aA = andataVA.getText().toString();
+            String daR = andataVDa.getText().toString();
+            String aR = andataVA.getText().toString();
+            //Viaggio viagg = new Viaggio(daA, aA, daR, aR, 1, 1);
             Log.i("Prova_invio", "viagg.toString()");
-
-            new AsyncTask<Void, Void, Void>() {
+            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+            try {
+                Date andataD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
+                Date ritornoD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
+                Viaggio viagg = new Viaggio(andataD, ritornoD, daA, aA, daR, aR, 1, 1);
+                 new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
 
                     try {
-                        Log.i("back", "background");
+                        Log.i("StampaPreLog", "background");
                         Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().nuovoViaggio(viagg);
                     } catch (Exception e) {
                         Log.e("personal_error_save", e.toString());
@@ -99,6 +105,24 @@ public class NewTravel extends AppCompatActivity {
                 }
             }.execute();
 
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            /* new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... voids) {
+
+                    try {
+                        Log.i("back", "background");
+                        //Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().nuovoViaggio(viagg);
+                    } catch (Exception e) {
+                        Log.e("personal_error_save", e.toString());
+                    }
+
+                    return null;
+                }
+            }.execute();*/
         });
     }
 
@@ -175,4 +199,5 @@ public class NewTravel extends AppCompatActivity {
         new DatePickerDialog(NewTravel.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
+
 }
