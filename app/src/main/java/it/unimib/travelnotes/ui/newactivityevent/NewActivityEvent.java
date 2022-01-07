@@ -359,62 +359,64 @@ public class NewActivityEvent extends AppCompatActivity {
     }
 
     public void salvaButtonNuovaAttivita() {
-/*
-            //scrittura su cloud
-            mDatabase.child("attivita").child(String.valueOf(attivita.getAttivitaId())).setValue(attivita)
+
+        /*//scrittura su cloud
+        mDatabase.child("attivita").child(String.valueOf(attivita.getAttivitaId())).setValue(attivita)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void unused) {
-                    Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
-                }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
-                }
-            });*/
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
+                    }
+                });*/
 
 
-                        Date dataInizio = new Date();
-                        Date dataFine = new Date();
-                        try {
-                            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        Date dataInizio = new Date();
+        Date dataFine = new Date();
+        try {
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-                            dataInizio = formatter.parse(
-                                    ((Button) findViewById(R.id.dataInizioNuovaAttivita)).getText().toString() +
-                                            " " + ((Button) findViewById(R.id.oraInizioNuovaAttivita)).getText().toString());
+            dataInizio = formatter.parse(
+                    ((Button) findViewById(R.id.dataInizioNuovaAttivita)).getText().toString() +
+                            " " + ((Button) findViewById(R.id.oraInizioNuovaAttivita)).getText().toString());
 
-                            dataFine = formatter.parse(
-                                    ((Button) findViewById(R.id.dataFineNuovaAttivita)).getText().toString() +
-                                            " " + ((Button) findViewById(R.id.oraFineNuovaAttivita)).getText().toString());
-                        } catch (Exception e) {
-                            Log.v("MyLog", "parsing date fallito");
-                        }
+            dataFine = formatter.parse(
+                    ((Button) findViewById(R.id.dataFineNuovaAttivita)).getText().toString() +
+                            " " + ((Button) findViewById(R.id.oraFineNuovaAttivita)).getText().toString());
+        } catch (Exception e) {
+            Log.v("MyLog", "parsing date fallito");
+        }
 
-                        Attivita a = new Attivita();
-                        a.setNome(campoNome.getText().toString());
-                        a.setViaggioId(viaggioId);
-                        a.setPosizione(campoPosizione.getText().toString());
-                        a.setDescrizione(campoDescrizione.getText().toString());
-                        a.setDataInizio(dataInizio);
-                        a.setDataFine(dataFine);
+        Attivita a = new Attivita();
+        a.setNome(campoNome.getText().toString());
+        a.setViaggioId(viaggioId);
+        a.setPosizione(campoPosizione.getText().toString());
+        a.setDescrizione(campoDescrizione.getText().toString());
+        a.setDataInizio(dataInizio);
+        a.setDataFine(dataFine);
 
-                        if (idAttivitaI != null) {
-                            a.setAttivitaId(idAttivitaI);
+        if (idAttivitaI != null) {
+            a.setAttivitaId((long) idAttivitaI);
+            a.setViaggioId((long) idViaggioI);
 
-                            //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().aggiornaAttivita(a);
+            //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().aggiornaAttivita(a);
 
-                            mITravelRepository.pushNuovaAttivita(a, true);
+            mITravelRepository.pushNuovaAttivita(a, true);
 
-                        } else {
-                            mITravelRepository.pushNuovaAttivita(a, false);
+        } else {
+            mITravelRepository.pushNuovaAttivita(a, false);
 
-                            //long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
-                        }
+            //long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
+        }
 
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
 
     }
 

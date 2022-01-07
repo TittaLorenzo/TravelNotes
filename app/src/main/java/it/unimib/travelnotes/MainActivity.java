@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         //bottone login che porta alla lista viaggi
         final Button mButtonNext = findViewById(R.id.L_button);
         mButtonNext.setOnClickListener(v -> {
-            Intent intent = new Intent(this, Activity_travel_view.class);
+            Intent intent = new Intent(this, TravelList.class);
             startActivity(intent);
         });
 
@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         attivitaUno.setOnClickListener(v -> {
             Intent i = new Intent(this, NewActivityEvent.class);
             i.putExtra("idAttivita", 1);
+            i.putExtra("viaggioId", 1);
             startActivity(i);
         });
 
