@@ -4,4 +4,6 @@
 <string name="volo">volo</string>
 <string name="attivita">attività</string>
 <string name="gruppo">gruppo</string>
+    <string name="nuovaAttivita">nuova attività</string>
+
 </resources>

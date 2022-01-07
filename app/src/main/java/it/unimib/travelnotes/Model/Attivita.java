@@ -106,4 +106,10 @@ public class Attivita {
         this.dataFine = df;
         this.viaggioId = IDu;
     }
+
+    public Attivita(String nomeI, String descrizioneI){
+        this.nome= nomeI;
+        this.descrizione = descrizioneI;
+
+    }
 }
