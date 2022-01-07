@@ -19,18 +19,21 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.repository.ITravelRepository;
+import it.unimib.travelnotes.repository.TravelRepository;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private ITravelRepository mITravelRepository;
 
     private EditText email;
     private EditText password;
     private Button login;
+    private Button cancelButton;
     private TextView registrati;
     private TextView pwDimenticataLink;
 
@@ -40,10 +43,12 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        mITravelRepository = new TravelRepository(getApplication());
 
-        email = findViewById(R.id.emailLogin);
-        password = findViewById(R.id.passwordLogin);
+        email = findViewById(R.id.email_register_edit_text);
+        password = findViewById(R.id.password_register_edit_text);
         login = findViewById(R.id.loginButton);
+        cancelButton = findViewById(R.id.cancel_button);
 
         registrati = findViewById(R.id.registratiTv);
         pwDimenticataLink = findViewById(R.id.pwLostLink);
@@ -56,6 +61,11 @@ public class LoginActivity extends AppCompatActivity {
 
                 loginUser(txtEmail, txtPassword);
             }
+        });
+
+        cancelButton.setOnClickListener(v -> {
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
         });
 
         registrati.setOnClickListener(v -> {
@@ -116,6 +126,9 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             Toast.makeText(LoginActivity.this, "Login effettuato", Toast.LENGTH_SHORT).show();
 
+                            String userId = mAuth.getCurrentUser().getUid();
+                            mITravelRepository.loadUtente(userId);
+
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
                         } else {
@@ -124,4 +137,23 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    /*private void addUser(String email, String userId) {
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Utente u = new Utente();
+                u.setEmail(mAuth.getCurrentUser().getEmail());
+                u.setUtenteId(mAuth.getUid());
+
+                try {
+                    long idRow = TravelDatabase.getDatabase(getApplicationContext()).getUtenteDao().nuovoUtente(u);
+                } catch (Exception e) {
+                    Log.e("personal_error_save", e.toString());
+                }
+            }
+        };
+        new Thread(runnable).start();
+    }*/
 }

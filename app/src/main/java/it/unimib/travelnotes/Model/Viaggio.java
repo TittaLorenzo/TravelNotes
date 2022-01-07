@@ -1,24 +1,20 @@
 package it.unimib.travelnotes.Model;
-import static androidx.room.ForeignKey.CASCADE;
-import static androidx.room.ForeignKey.SET_NULL;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 
-@Entity (tableName = "elenco_viaggi")
+@Entity (tableName = "elenco_viaggi",
+        indices = {@Index(value = {"viaggioOnlineId"}, unique = true)})
 public class Viaggio {
 
     @PrimaryKey(autoGenerate = true)
     private long viaggioId;
+
+    private String viaggioOnlineId;
 
     private Date dataAndata;
     private Date dataRitorno;
@@ -35,6 +31,14 @@ public class Viaggio {
 
     public void setViaggioId(long viaggioId) {
         this.viaggioId = viaggioId;
+    }
+
+    public String getViaggioOnlineId() {
+        return viaggioOnlineId;
+    }
+
+    public void setViaggioOnlineId(String viaggioOnlineId) {
+        this.viaggioOnlineId = viaggioOnlineId;
     }
 
     public Date getDataAndata() {
@@ -106,6 +110,22 @@ public class Viaggio {
     public Viaggio(Date dataAndata, Date dataRitorno, String pa, String da, String pr, String dr, double durA, double durR){
         this.dataAndata = dataAndata;
         this.dataRitorno = dataRitorno;
+        this.partenzaAndata = pa;
+        this.destinazioneAndata = da;
+        this.partenzaRitorno = pr;
+        this.destinazioneRitorno = dr;
+        this.durataAndata = durA;
+        this.durataRitorno = durR;
+    }
+
+    /*public Viaggio(Date dataAndata, String pa, String da, double durA){
+        this.dataAndata = dataAndata;
+        this.partenzaAndata = pa;
+        this.destinazioneAndata = da;
+        this.durataAndata = durA;
+    }*/
+
+    public Viaggio(String pa, String da, String pr, String dr, double durA, double durR){
         this.partenzaAndata = pa;
         this.destinazioneAndata = da;
         this.partenzaRitorno = pr;

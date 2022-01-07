@@ -1,19 +1,24 @@
-package it.unimib.travelnotes;
+package it.unimib.travelnotes.ui.newactivityevent;
+
+import static it.unimib.travelnotes.roomdb.TravelDatabase.getDatabase;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,31 +36,52 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.Model.Viaggio;
+import it.unimib.travelnotes.Model.response.AttivitaResponse;
+import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.autentication.LoginActivity;
-import it.unimib.travelnotes.autentication.RegisterActivity;
+import it.unimib.travelnotes.repository.ITravelRepository;
+import it.unimib.travelnotes.repository.TravelRepository;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
+import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
 
 public class NewActivityEvent extends AppCompatActivity {
 
+    private static final String REALTIME_URL = "https://travelnotes-334817-default-rtdb.europe-west1.firebasedatabase.app/";
+
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
+    private NewActivityEventViewModel mNewActivityEventViewModel;
+    private ITravelRepository mITravelRepository;
+    private Attivita attivita;
 
     private Button dataInizioAttivitaButton;
     private Button dataFineAttivitaButton;
     private Button oraInizioNuovaAttivita;
     private Button oraFineAttivitaButton;
+    private Button loadAttivita;
+    private Button buttonSalva;
 
     private EditText campoNome;
     private EditText campoPosizione;
     private EditText campoDescrizione;
-    private Button buttonSalva;
+
+    private Long idAttivitaI;
+    private Long idViaggioI;
+    private long attivitaId;
+    private long viaggioId = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +89,14 @@ public class NewActivityEvent extends AppCompatActivity {
         setContentView(R.layout.activity_new_event);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance(REALTIME_URL).getReference();
+        mITravelRepository = new TravelRepository(getApplication());
 
         dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
         dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
         oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
         oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
+        loadAttivita = findViewById(R.id.loadCloud1);
 
         campoNome = findViewById(R.id.nomeAttivitaInput);
         campoPosizione = findViewById(R.id.posizionePartenzaNuovaAttivita);
@@ -97,17 +126,57 @@ public class NewActivityEvent extends AppCompatActivity {
             startActivity(intent);
         });
 
-    }
+        buttonSalva.setOnClickListener(c -> {
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+            if (TextUtils.isEmpty(campoNome.getText().toString())) {
+                Toast.makeText(this, "Devi inserire un nome attività", Toast.LENGTH_SHORT).show();
+            } else {
+                salvaButtonNuovaAttivita();
+            }
 
-        if (TextUtils.isEmpty(campoNome.getText().toString())) {
-            Toast.makeText(this, "Devi inserire un nome attività", Toast.LENGTH_SHORT).show();
-        } else {
-            salvaButtonNuovaAttivita();
+        });
+
+
+        // Leggo valori passati come intent extra: se ci sono valori non nulli allora è una modifica a una attività, quindi bisogna
+        try {
+            idAttivitaI = (Long) getIntent().getExtras().get("idAttivita");
+        } catch (Exception e) {
+            idAttivitaI = null;
         }
+        try {
+            idViaggioI = (Long) getIntent().getExtras().get("viaggioId");
+        } catch (Exception e) {
+            viaggioId = 0;
+        }
+        if (idAttivitaI != null) {
+            caricaDatiAttivita((long) idAttivitaI);
+        }
+
+        loadAttivita.setOnClickListener(v -> {
+            caricaOnline();
+        });
+
+        Button buttonMaps = findViewById(R.id.buttonMaps);
+        buttonMaps.setOnClickListener(v -> {
+            apriMappe(campoPosizione.getText().toString());
+        });
+
+        mNewActivityEventViewModel = new ViewModelProvider(this).get(NewActivityEventViewModel.class);
+
+        if (idAttivitaI != null) {
+            long attivitaId = (long) idAttivitaI;
+            mNewActivityEventViewModel.setAttivitaId(attivitaId);
+        }
+        if (idViaggioI != null) {
+            viaggioId = (long) idViaggioI;
+            mNewActivityEventViewModel.setViaggioId(viaggioId);
+        }
+
+        if (attivita == null) {
+            attivita = new Attivita();
+        }
+
+
     }
 
     //menu logout
@@ -125,6 +194,16 @@ public class NewActivityEvent extends AppCompatActivity {
                 if (user != null) {
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
+
+                    /*Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            //TravelDatabase.getDatabase(getApplicationContext()).getUtenteDao().deleteAllUtenti();
+                            //TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().deleteAllViaggio();
+                            //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().deleteAllAttivita();
+                        }
+                    };*/
+
                     startActivity(new Intent(this, LoginActivity.class));
                 } else {
                     Toast.makeText(this, "Nessun utente loggato", Toast.LENGTH_SHORT).show();
@@ -206,18 +285,39 @@ public class NewActivityEvent extends AppCompatActivity {
         new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
     }
 
-    private void caricaDatiAttivita(Long idAttivitaI) {
+    /*@Nullable
+    @Override
+    public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
 
-        new AsyncTask<Void, Void, Void>() {
+        final Observer<AttivitaResponse> observer = new Observer<AttivitaResponse>() {
             @Override
-            protected Void doInBackground(Void... voids) {
-
-                Attivita attivitaSelezionata = new Attivita();
-                try {
-                    attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
-                } catch (Exception e) {
-                    Log.e("personal_error_load", e.toString());
+            public void onChanged(AttivitaResponse attivitaResponse) {
+                if (attivitaResponse.isError()) {
+                    //updateUIForFaliure(listaAttivitaResponse.getStatus());
                 }
+                if (attivitaResponse.getAttivita() != null && attivitaResponse.getTotalResults() != -1) {
+                    //mAttivitaViewModel.setTotalResult(attivitaResponse.getTotalResults());
+
+                    // updateUIForSuccess(attivitaResponse.getAttivita(), attivitaResponse.isLoading());
+
+                }
+                //mProgressBar.setVisibility(View.GONE);
+            }
+        };
+        //mNewActivityEventViewModel.getAttivita().observe(this, observer);
+
+        return super.onCreateView(name, context, attrs);
+    }*/
+
+    private void caricaDatiAttivita(long idAttivitaI) {
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+
+                Attivita attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
+
+                viaggioId = attivitaSelezionata.getViaggioId();
 
                 TextView titoloNuovaAttivita = findViewById(R.id.titloloNuovaAttivitaId);
                 titoloNuovaAttivita.setText(R.string.titleModificaAttivita);
@@ -253,59 +353,115 @@ public class NewActivityEvent extends AppCompatActivity {
                 Button oraFineNuovaAttivita = (Button) findViewById(R.id.oraFineNuovaAttivita);
                 oraFineNuovaAttivita.setText(simpleHourFormat.format(calendar.getTime()));
 
-                return null;
             }
-        }.execute();
-
-
+        };
+        new Thread(runnable).start();
     }
 
     public void salvaButtonNuovaAttivita() {
-        buttonSalva.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
 
-                new AsyncTask<Void, Void, Void>() {
+        /*//scrittura su cloud
+        mDatabase.child("attivita").child(String.valueOf(attivita.getAttivitaId())).setValue(attivita)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    protected Void doInBackground(Void... voids) {
-
-                        Date dataInizio = new Date();
-                        Date dataFine = new Date();
-                        try {
-                            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-                            dataInizio = formatter.parse(
-                                    ((Button) findViewById(R.id.dataInizioNuovaAttivita)).getText().toString() +
-                                            " " + ((Button) findViewById(R.id.oraInizioNuovaAttivita)).getText().toString());
-
-                            dataFine = formatter.parse(
-                                    ((Button) findViewById(R.id.dataFineNuovaAttivita)).getText().toString() +
-                                            " " + ((Button) findViewById(R.id.oraFineNuovaAttivita)).getText().toString());
-                        } catch (Exception e) {
-                            Log.v("----------------", "parsing date fallito");
-                        }
-
-                        Attivita a = new Attivita();
-                        a.setNome(campoNome.getText().toString());
-                        a.setPosizione(campoPosizione.getText().toString());
-                        a.setDescrizione(campoDescrizione.getText().toString());
-                        a.setDataInizio(dataInizio);
-                        a.setDataFine(dataFine);
-
-                        try {
-                            Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
-                        } catch (Exception e) {
-                            Log.e("personal_error_save", e.toString());
-                        }
-
-                        return null;
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
                     }
-                }.execute();
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
+                    }
+                });*/
 
-                Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(i);
-            }
-        });
+
+        Date dataInizio = new Date();
+        Date dataFine = new Date();
+        try {
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+            dataInizio = formatter.parse(
+                    ((Button) findViewById(R.id.dataInizioNuovaAttivita)).getText().toString() +
+                            " " + ((Button) findViewById(R.id.oraInizioNuovaAttivita)).getText().toString());
+
+            dataFine = formatter.parse(
+                    ((Button) findViewById(R.id.dataFineNuovaAttivita)).getText().toString() +
+                            " " + ((Button) findViewById(R.id.oraFineNuovaAttivita)).getText().toString());
+        } catch (Exception e) {
+            Log.v("MyLog", "parsing date fallito");
+        }
+
+        Attivita a = new Attivita();
+        a.setNome(campoNome.getText().toString());
+        a.setViaggioId(viaggioId);
+        a.setPosizione(campoPosizione.getText().toString());
+        a.setDescrizione(campoDescrizione.getText().toString());
+        a.setDataInizio(dataInizio);
+        a.setDataFine(dataFine);
+
+        if (idAttivitaI != null) {
+            a.setAttivitaId((long) idAttivitaI);
+            a.setViaggioId((long) idViaggioI);
+
+            //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().aggiornaAttivita(a);
+
+            mITravelRepository.pushNuovaAttivita(a, true);
+
+        } else {
+            mITravelRepository.pushNuovaAttivita(a, false);
+
+            //long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
+        }
+
+
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(i);
+
     }
+
+    public void caricaOnline() {
+
+        Log.v("MyLog", "CaricaOnline");
+
+        long idViaggio = 1;
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ViaggioConAttivita listaAttivita = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().getViaggioConAttivita(idViaggio);
+
+                Gson gson = new Gson();
+                String viaggiCOnAttivitaJson = gson.toJson(listaAttivita);
+                Log.v("MyLog", viaggiCOnAttivitaJson);
+
+                //scrittura su cloud
+                mDatabase.child("prova").child("1").setValue(viaggiCOnAttivitaJson)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                                //Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                //Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+            }
+        };
+        new Thread(runnable).start();
+
+    }
+
+    public void apriMappe (String posizione) {
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setData(Uri.parse("geo:0,0?q=" + Uri.encode(posizione)));
+
+        if (i.resolveActivity(getPackageManager()) != null) {
+            startActivity(i);
+        }
+    }
+
 }

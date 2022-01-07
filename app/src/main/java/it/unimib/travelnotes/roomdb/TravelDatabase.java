@@ -13,8 +13,12 @@ import java.util.concurrent.Executors;
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.Viaggio;
+import it.unimib.travelnotes.roomdb.dao.AttivitaDao;
+import it.unimib.travelnotes.roomdb.dao.UtenteDao;
+import it.unimib.travelnotes.roomdb.dao.ViaggiDao;
+import it.unimib.travelnotes.roomdb.relations.ViaggioUtenteCrossRef;
 
-@Database(entities = {Utente.class, Viaggio.class, Attivita.class}, version = 3)
+@Database(entities = {Utente.class, Viaggio.class, Attivita.class, ViaggioUtenteCrossRef.class}, version = 7)
 @TypeConverters({Converters.class})
 public abstract class TravelDatabase extends RoomDatabase {
 

@@ -1,24 +1,22 @@
 package it.unimib.travelnotes.Model;
-import static androidx.room.ForeignKey.CASCADE;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 import java.util.Date;
 
-@Entity (tableName = "elenco_attivita")
+@Entity (tableName = "elenco_attivita",
+        indices = {@Index(value = {"viaggioOnlineId"}, unique = true)})
 public class Attivita {
 
     @PrimaryKey(autoGenerate = true)
     private long attivitaId;
 
-    @ColumnInfo(name = "id_viaggio")
-    private long idViaggio;
+    private long viaggioId;
+
+    private String viaggioOnlineId;
+    private String attivitaOnlineId;
 
     private Date dataInizio;
     private Date dataFine;
@@ -34,12 +32,28 @@ public class Attivita {
         this.attivitaId = attivitaId;
     }
 
-    public long getIdViaggio() {
-        return idViaggio;
+    public long getViaggioId() {
+        return viaggioId;
     }
 
-    public void setIdViaggio(long idViaggio) {
-        this.idViaggio = idViaggio;
+    public void setViaggioId(long viaggioId) {
+        this.viaggioId = viaggioId;
+    }
+
+    public String getViaggioOnlineId() {
+        return viaggioOnlineId;
+    }
+
+    public void setViaggioOnlineId(String viaggioOnlineId) {
+        this.viaggioOnlineId = viaggioOnlineId;
+    }
+
+    public String getAttivitaOnlineId() {
+        return attivitaOnlineId;
+    }
+
+    public void setAttivitaOnlineId(String attivitaOnlineId) {
+        this.attivitaOnlineId = attivitaOnlineId;
     }
 
     public Date getDataInizio() {
@@ -90,6 +104,6 @@ public class Attivita {
         this.posizione = posizione;
         this.dataInizio = di;
         this.dataFine = df;
-        this.idViaggio = IDu;
+        this.viaggioId = IDu;
     }
 }
