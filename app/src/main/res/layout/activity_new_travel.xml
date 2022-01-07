@@ -57,7 +57,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="13dp" />
+                    android:layout_height="29dp" />
 
                 <LinearLayout
                     android:id="@+id/NT_layoutDateAndataP"
@@ -92,6 +92,10 @@
                         android:textSize="14sp" />
 
                 </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp" />
 
                 <LinearLayout
                     android:id="@+id/NT_layoutDateAndataA"
@@ -129,18 +133,7 @@
                     android:id="@+id/NT_layoutSpinnerA"
                     android:layout_width="match_parent"
                     android:layout_height="71dp"
-                    android:orientation="horizontal">
-
-                    <Spinner
-                        android:id="@+id/NT_spinnerCompagniaA"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:entries="@android:array/emailAddressTypes"
-                        android:minHeight="48dp"
-                        android:spinnerMode="dropdown"
-                        tools:ignore="SpeakableTextPresentCheck" />
-                </LinearLayout>
+                    android:orientation="horizontal"/>
 
             </LinearLayout>
 
@@ -164,7 +157,7 @@
 
                 <Space
                     android:layout_width="match_parent"
-                    android:layout_height="13dp" />
+                    android:layout_height="24dp" />
 
                 <LinearLayout
                     android:id="@+id/NT_layoutDateRitornoP"
@@ -197,6 +190,10 @@
                         android:minHeight="48dp"
                         android:textSize="14sp" />
                 </LinearLayout>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="31dp" />
 
                 <LinearLayout
                     android:id="@+id/NT_layoutDateRitornoA"
@@ -235,25 +232,16 @@
                     android:id="@+id/NT_layoutSpinnerR"
                     android:layout_width="match_parent"
                     android:layout_height="67dp"
-                    android:orientation="horizontal">
-
-                    <Spinner
-                        android:id="@+id/NT_spinnerR"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:entries="@android:array/postalAddressTypes"
-                        android:minHeight="48dp" />
-                </LinearLayout>
+                    android:orientation="horizontal"/>
             </LinearLayout>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="28dp" />
+                android:layout_height="14dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="67dp"
                 android:gravity="center|right"
                 android:orientation="horizontal">
 
@@ -265,7 +253,7 @@
                     android:contentDescription="TODO"
                     android:rotationX="0"
                     android:scaleType="center"
-                    app:srcCompat="@android:drawable/ic_menu_send"
+                    app:srcCompat="@drawable/ic_baseline_add_24"
                     tools:ignore="SpeakableTextPresentCheck" />
             </LinearLayout>
 

@@ -11,24 +11,14 @@ import androidx.room.TypeConverters;
 
 import java.util.Date;
 
-@Entity (tableName = "elenco_attivita",
-        indices = @Index("id_viaggio"),
-        foreignKeys = {
-                @ForeignKey(
-                        entity = Viaggio.class,
-                        parentColumns = "id",
-                        childColumns = "id_viaggio",
-                        onDelete = CASCADE,
-                        onUpdate = CASCADE
-                )
-        })
+@Entity (tableName = "elenco_attivita")
 public class Attivita {
 
     @PrimaryKey(autoGenerate = true)
-    private Long id;
+    private long attivitaId;
 
     @ColumnInfo(name = "id_viaggio")
-    private Long idViaggio;
+    private long idViaggio;
 
     private Date dataInizio;
     private Date dataFine;
@@ -36,20 +26,19 @@ public class Attivita {
     private String nome;
     private String descrizione;
 
-
-    public Long getId() {
-        return id;
+    public long getAttivitaId() {
+        return attivitaId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setAttivitaId(long attivitaId) {
+        this.attivitaId = attivitaId;
     }
 
-    public Long getIdViaggio() {
+    public long getIdViaggio() {
         return idViaggio;
     }
 
-    public void setIdViaggio(Long idViaggio) {
+    public void setIdViaggio(long idViaggio) {
         this.idViaggio = idViaggio;
     }
 
@@ -95,11 +84,12 @@ public class Attivita {
 
     public Attivita() {}
 
-    public Attivita(String nomeI, String descrizioneI, Date giornoI, Date di, Date df, Long IDu){
+    public Attivita(String nomeI, String descrizioneI,String posizione, Date di, Date df, long IDu){
         this.nome= nomeI;
         this.descrizione = descrizioneI;
+        this.posizione = posizione;
         this.dataInizio = di;
         this.dataFine = df;
-        this.id = IDu;
+        this.idViaggio = IDu;
     }
 }

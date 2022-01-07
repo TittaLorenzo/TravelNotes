@@ -40,7 +40,6 @@ public abstract class TravelDatabase extends RoomDatabase {
                 }
             }
         }
-
         return INSTANCE;
     }
 }
