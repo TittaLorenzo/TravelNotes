@@ -1,8 +1,12 @@
 package it.unimib.travelnotes;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.autentication.RegisterActivity;
@@ -14,6 +18,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String defaultValue = getResources().getString(R.string.shared_userid_key);
+        String userId = sharedPref.getString(getString(R.string.shared_userid_key), defaultValue);
+        if (userId != null) {
+            startActivity(new Intent(this, TravelList.class));
+        }
 
 
         //bottone login che porta alla lista viaggi

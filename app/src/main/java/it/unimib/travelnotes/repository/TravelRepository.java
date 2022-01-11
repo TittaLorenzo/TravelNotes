@@ -65,7 +65,6 @@ public class TravelRepository implements ITravelRepository {
 
 
     // richiedi elenco attività con live data
-
     @Override
     public MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(long viaggioId, boolean refresh) {
 
@@ -425,7 +424,7 @@ public class TravelRepository implements ITravelRepository {
 
                 Viaggio viaggio = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(viaggioId);
 
-                mDatabase.child("email-utente").child(email).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                mDatabase.child("email-utente").child(email.trim()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         if (!task.isSuccessful()) {
@@ -477,10 +476,10 @@ public class TravelRepository implements ITravelRepository {
     }
 
     @Override
-    public void pushNuovoUtente(Utente utente) {
+    public void pushNuovoUtente(Utente utente)  {
 
         //scrittura su cloud
-        mDatabase.child("utenti").child(utente.getUtenteId()).child("datiUtente").setValue(utente)
+        mDatabase.child("utenti").child(utente.getUtenteId()).child("datiutente").setValue(utente)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -523,7 +522,7 @@ public class TravelRepository implements ITravelRepository {
     @Override
     public void loadUtente(String utenteId) {
 
-        mDatabase.child("utente").child(String.valueOf(utenteId)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mDatabase.child("utenti").child(String.valueOf(utenteId)).child("datiutente").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -531,7 +530,8 @@ public class TravelRepository implements ITravelRepository {
 
                 }
                 else {
-                    Utente utente = (Utente) task.getResult().getValue();
+
+                    Utente utente = task.getResult().getValue(Utente.class);
 
                     Runnable runnable = new Runnable() {
                         @Override
@@ -558,7 +558,7 @@ public class TravelRepository implements ITravelRepository {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    Viaggio viaggio = (Viaggio) task.getResult().getValue();
+                    Viaggio viaggio = task.getResult().getValue(Viaggio.class);
 
                     Runnable runnable = new Runnable() {
                         @Override
@@ -592,7 +592,7 @@ public class TravelRepository implements ITravelRepository {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
-                    Attivita attivita = (Attivita) task.getResult().getValue();
+                    Attivita attivita = task.getResult().getValue(Attivita.class);
 
                     Runnable runnable = new Runnable() {
                         @Override
@@ -633,7 +633,7 @@ public class TravelRepository implements ITravelRepository {
                     int i = 0;
                     for (DataSnapshot parentIdSnapshot: task.getResult().getChildren()) {
                         try {
-                            listaViaggi.set(i, (Viaggio) parentIdSnapshot.getValue());
+                            listaViaggi.set(i, parentIdSnapshot.getValue(Viaggio.class));
                         } catch (Exception e) {
                             Log.e("MyLog", String.valueOf(task.getResult()));
                         }
@@ -679,7 +679,7 @@ public class TravelRepository implements ITravelRepository {
                     int i = 0;
                     for (DataSnapshot parentIdSnapshot: task.getResult().getChildren()) {
                         try {
-                            listaAttivita.set(i, (Attivita) parentIdSnapshot.getValue());
+                            listaAttivita.set(i, parentIdSnapshot.getValue(Attivita.class));
                         } catch (Exception e) {
                             Log.e("MyLog", String.valueOf(task.getResult()));
                         }
@@ -725,7 +725,7 @@ public class TravelRepository implements ITravelRepository {
                     int i = 0;
                     for (DataSnapshot parentIdSnapshot: task.getResult().getChildren()) {
                         try {
-                            listaUtenti.set(i, (Utente) parentIdSnapshot.getValue());
+                            listaUtenti.set(i, parentIdSnapshot.getValue(Utente.class));
                         } catch (Exception e) {
                             Log.e("MyLog", String.valueOf(task.getResult()));
                         }

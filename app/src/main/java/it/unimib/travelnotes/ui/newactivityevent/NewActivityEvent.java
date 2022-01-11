@@ -15,6 +15,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -45,23 +46,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import it.unimib.travelnotes.Activity_travel_view;
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
-<<<<<<< HEAD:app/src/main/java/it/unimib/travelnotes/ui/newactivityevent/NewActivityEvent.java
-import it.unimib.travelnotes.Model.response.AttivitaResponse;
+
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
-=======
-import it.unimib.travelnotes.autentication.LoginActivity;
->>>>>>> soldati_schermataviaggio:app/src/main/java/it/unimib/travelnotes/NewActivityEvent.java
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
 
 public class NewActivityEvent extends AppCompatActivity {
 
-<<<<<<< HEAD:app/src/main/java/it/unimib/travelnotes/ui/newactivityevent/NewActivityEvent.java
     private static final String REALTIME_URL = "https://travelnotes-334817-default-rtdb.europe-west1.firebasedatabase.app/";
 
     private FirebaseAuth mAuth;
@@ -88,14 +85,11 @@ public class NewActivityEvent extends AppCompatActivity {
     private long viaggioId = 0;
 
 
-=======
->>>>>>> soldati_schermataviaggio:app/src/main/java/it/unimib/travelnotes/NewActivityEvent.java
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
-<<<<<<< HEAD:app/src/main/java/it/unimib/travelnotes/ui/newactivityevent/NewActivityEvent.java
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance(REALTIME_URL).getReference();
         mITravelRepository = new TravelRepository(getApplication());
@@ -111,12 +105,10 @@ public class NewActivityEvent extends AppCompatActivity {
         campoDescrizione = findViewById(R.id.descrizioneNuovaAttivita);
         buttonSalva = findViewById(R.id.salvaBottoneNuovaAttivita);
 
-=======
         Button dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
         Button dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
         Button oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
         Button oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
->>>>>>> soldati_schermataviaggio:app/src/main/java/it/unimib/travelnotes/NewActivityEvent.java
         ImageButton backButtonNuovaAttivita = (ImageButton) findViewById(R.id.backButtonNuovaAttivita);
 
         dataInizioAttivitaButton.setOnClickListener(v -> {
@@ -136,13 +128,12 @@ public class NewActivityEvent extends AppCompatActivity {
         });
 
         backButtonNuovaAttivita.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
+            Intent intent = new Intent(this, Activity_travel_view.class);
             startActivity(intent);
         });
 
         buttonSalva.setOnClickListener(c -> {
 
-<<<<<<< HEAD:app/src/main/java/it/unimib/travelnotes/ui/newactivityevent/NewActivityEvent.java
             if (TextUtils.isEmpty(campoNome.getText().toString())) {
                 Toast.makeText(this, "Devi inserire un nome attività", Toast.LENGTH_SHORT).show();
             } else {
@@ -210,14 +201,12 @@ public class NewActivityEvent extends AppCompatActivity {
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
 
-                    /*Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            //TravelDatabase.getDatabase(getApplicationContext()).getUtenteDao().deleteAllUtenti();
-                            //TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().deleteAllViaggio();
-                            //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().deleteAllAttivita();
-                        }
-                    };*/
+                    SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedPref.edit();
+                    editor.putString(getString(R.string.shared_userid_key), null);
+                    editor.apply();
+
+                    //delateAll RoomDb
 
                     startActivity(new Intent(this, LoginActivity.class));
                 } else {
@@ -262,8 +251,6 @@ public class NewActivityEvent extends AppCompatActivity {
         }
         return true;
     }
-=======
->>>>>>> soldati_schermataviaggio:app/src/main/java/it/unimib/travelnotes/NewActivityEvent.java
 
     private void showDatePickerDialog(final Button sceltaDateTime) {
         final Calendar calendar=Calendar.getInstance();
@@ -301,7 +288,6 @@ public class NewActivityEvent extends AppCompatActivity {
 
         new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
     }
-<<<<<<< HEAD:app/src/main/java/it/unimib/travelnotes/ui/newactivityevent/NewActivityEvent.java
 
     /*@Nullable
     @Override
@@ -433,7 +419,7 @@ public class NewActivityEvent extends AppCompatActivity {
         }
 
 
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), Activity_travel_view.class);
         startActivity(i);
 
     }
@@ -482,6 +468,4 @@ public class NewActivityEvent extends AppCompatActivity {
         }
     }
 
-=======
->>>>>>> soldati_schermataviaggio:app/src/main/java/it/unimib/travelnotes/NewActivityEvent.java
 }
