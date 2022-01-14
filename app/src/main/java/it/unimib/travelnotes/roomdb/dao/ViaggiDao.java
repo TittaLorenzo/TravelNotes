@@ -18,23 +18,32 @@ import it.unimib.travelnotes.roomdb.relations.ViaggioUtenteCrossRef;
 public interface ViaggiDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public long nuovoViaggio(Viaggio viaggio);
+    long nuovoViaggio(Viaggio viaggio);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void addAllViaggi(List<Viaggio> listViaggio);
+    void addAllViaggi(List<Viaggio> listViaggio);
 
     @Update
-    public void aggiornaViaggio(Viaggio viaggio);
+    void aggiornaViaggio(Viaggio viaggio);
 
     @Delete
-    public void cancellaViaggio(Viaggio viaggio);
+    void cancellaViaggio(Viaggio viaggio);
 
-    @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio")
-    public Viaggio findViaggioById(String idViaggio);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public long insertViaggioUtenteCrossRef(ViaggioUtenteCrossRef crossRef);
+    @Query("DELETE FROM elenco_viaggi WHERE viaggioId = :viaggioId")
+    void deleteViaggioById(String viaggioId);
 
     @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :viaggioId")
-    public ViaggioConUtenti getViaggioConUtenti(String viaggioId);
+    Viaggio findViaggioById(String viaggioId);
+
+
+    @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :viaggioId")
+    ViaggioConUtenti getViaggioConUtenti(String viaggioId);
+
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insertViaggioUtenteCrossRef(ViaggioUtenteCrossRef crossRef);
+
+    @Query("DELETE FROM ViaggioUtenteCrossRef WHERE viaggioId = :viaggioId AND utenteId = :utenteId")
+    void togliDalGruppo(String viaggioId, String utenteId);
+
 }

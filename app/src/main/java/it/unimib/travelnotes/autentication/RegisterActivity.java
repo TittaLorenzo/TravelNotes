@@ -30,7 +30,7 @@ import it.unimib.travelnotes.repository.TravelRepository;
 public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
-    private final ITravelRepository mITravelRepository = new TravelRepository(getApplication());
+    private ITravelRepository mITravelRepository;
 
     private EditText email;
     private EditText password;
@@ -39,9 +39,6 @@ public class RegisterActivity extends AppCompatActivity {
     private Button register;
     private Button cancelButtonRegister;
     private TextView giaRegistrato;
-
-    private TextInputLayout pw1TextInputLayout;
-    private TextInputLayout pw2TextInputLayout;
 
     private String txtUsername;
 
@@ -52,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_register);
 
         mAuth = FirebaseAuth.getInstance();
+        mITravelRepository = new TravelRepository(getApplication());
 
         email = findViewById(R.id.email_register_edit_text);
         password = findViewById(R.id.password_register_edit_text);
@@ -60,8 +58,8 @@ public class RegisterActivity extends AppCompatActivity {
         register = findViewById(R.id.registerButton);
         cancelButtonRegister = findViewById(R.id.cancel_button_register);
 
-        pw1TextInputLayout = (TextInputLayout) findViewById(R.id.password_register_text_input);
-        pw2TextInputLayout = (TextInputLayout) findViewById(R.id.password2_register_text_input);
+        //TextInputLayout pw1TextInputLayout = (TextInputLayout) findViewById(R.id.password_register_text_input);
+        //TextInputLayout pw2TextInputLayout = (TextInputLayout) findViewById(R.id.password2_register_text_input);
 
         giaRegistrato = findViewById(R.id.giaRegistratoTv);
 
@@ -77,10 +75,10 @@ public class RegisterActivity extends AppCompatActivity {
                     Toast.makeText(RegisterActivity.this, "Riempi i campi obbligatori", Toast.LENGTH_SHORT).show();
                 } else if (txtPassword.length() < 6) {
                     Toast.makeText(RegisterActivity.this, "Password troppo corta", Toast.LENGTH_SHORT).show();
-                    pw1TextInputLayout.setError(getString(R.string.pwCortaError));
+                    //pw1TextInputLayout.setError(getString(R.string.pwCortaError));
                 } else if (!txtPassword.equals(txtPassword2)) {
                     Toast.makeText(RegisterActivity.this, "Le password non coincidono", Toast.LENGTH_SHORT).show();
-                    pw2TextInputLayout.setError(getString(R.string.pwNonCoincidonoError));
+                    //pw2TextInputLayout.setError(getString(R.string.pwNonCoincidonoError));
                 } else {
                     registerUser(txtEmail, txtPassword);
                 }

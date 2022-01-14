@@ -8,10 +8,12 @@ public class SharedPreferencesProvider {
 
     private final Application mApplication;
     private final SharedPreferences sharedPref;
+    int i;
 
     public SharedPreferencesProvider(Application application) {
         this.mApplication = application;
         sharedPref = mApplication.getSharedPreferences(mApplication.getString(R.string.preferences_file_key), Context.MODE_PRIVATE);
+        this.i = 2;
     }
 
     public String getSharedUserId() {

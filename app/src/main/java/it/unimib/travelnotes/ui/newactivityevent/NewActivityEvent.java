@@ -202,6 +202,7 @@ public class NewActivityEvent extends AppCompatActivity {
                     Toast.makeText(this, "Nessun utente loggato", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
             case R.id.changePwItemMenu:
                 EditText newPassword = new EditText(this);
                 AlertDialog.Builder changePwDialog = new AlertDialog.Builder(this);
@@ -233,9 +234,12 @@ public class NewActivityEvent extends AppCompatActivity {
                         // close Dialog
                     }
                 });
-
                 changePwDialog.create().show();
 
+                break;
+
+            case R.id.RefreshItemMenu:
+                //refresh method
                 break;
         }
         return true;
