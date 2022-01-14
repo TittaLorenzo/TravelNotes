@@ -251,10 +251,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:contentDescription="TODO"
+                    android:minHeight="48dp"
                     android:rotationX="0"
                     android:scaleType="center"
                     app:srcCompat="@drawable/ic_baseline_add_24"
-                    tools:ignore="SpeakableTextPresentCheck" />
+                    tools:ignore="SpeakableTextPresentCheck"
+                    tools:srcCompat="@drawable/ic_baseline_flight_takeoff_24" />
             </LinearLayout>
 
         </LinearLayout>

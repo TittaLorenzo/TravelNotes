@@ -43,6 +43,7 @@ public class NewTravel extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setContentView(R.layout.activity_new_travel);
         findViewById(R.id.NT_layoutRitorno).setVisibility(View.INVISIBLE);
         partenzaAndataButton = findViewById(R.id.NT_sceltaAndataP);
@@ -83,31 +84,59 @@ public class NewTravel extends AppCompatActivity {
             String aA = andataVA.getText().toString();
             String daR = andataVDa.getText().toString();
             String aR = andataVA.getText().toString();
-            //Viaggio viagg = new Viaggio(daA, aA, daR, aR, 1, 1);
-            Log.i("Prova_invio", "viagg.toString()");
-            SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
-            try {
-                Date andataD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
-                Date ritornoD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
-                Viaggio viagg = new Viaggio(andataD, ritornoD, daA, aA, daR, aR, 1, 1);
-                 new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... voids) {
+            //uso un if per verificare quale delle
+            if (checkAR.isChecked()){
+                Log.i("Prova_invioAR", "viagg.toString()");
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+                try {
+                    Date andataD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
+                    Date ritornoD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
+                    Viaggio viagg = new Viaggio(andataD, ritornoD, daA, aA, daR, aR, 1, 1);
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
 
-                    try {
-                        Log.i("StampaPreLog", "background");
-                        Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().nuovoViaggio(viagg);
-                    } catch (Exception e) {
-                        Log.e("personal_error_save", e.toString());
-                    }
+                            try {
+                                Log.i("StampaPreLog", "background");
+                                Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().nuovoViaggio(viagg);
+                            } catch (Exception e) {
+                                Log.e("personal_error_save", e.toString());
+                            }
 
-                    return null;
+                            return null;
+                        }
+                    }.execute();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-            }.execute();
+            } else{
+                Log.i("Prova_invioAR", "viagg.toString()");
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+                try {
+                    Date andataD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
+                    Date ritornoD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
+                    Viaggio viagg = new Viaggio(andataD, daA, aA, 1);
+                    new AsyncTask<Void, Void, Void>() {
+                        @Override
+                        protected Void doInBackground(Void... voids) {
 
-            } catch (ParseException e) {
-                e.printStackTrace();
+                            try {
+                                Log.i("StampaPreLog", "background");
+                                Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().nuovoViaggio(viagg);
+                            } catch (Exception e) {
+                                Log.e("personal_error_save", e.toString());
+                            }
+
+                            return null;
+                        }
+                    }.execute();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
             }
+
 
             /* new AsyncTask<Void, Void, Void>() {
                 @Override
