@@ -14,6 +14,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,6 +24,8 @@ import java.util.Calendar;
 
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Viaggio;
+import it.unimib.travelnotes.repository.ITravelRepository;
+import it.unimib.travelnotes.repository.TravelRepository;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewTravel extends AppCompatActivity {
@@ -34,11 +37,13 @@ public class NewTravel extends AppCompatActivity {
     Button arrivoRitornoButton;
     EditText andataVDa;
     EditText andataVA;
-    //EditText ritornoVDa;
-    //EditText ritornoVA;
+    EditText ritornoVDa;
+    EditText ritornoVA;
     CheckBox checkAR;
     String s1, s2;
     Date data1, data2;
+
+    private ITravelRepository mITravelRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +59,9 @@ public class NewTravel extends AppCompatActivity {
         checkAR = findViewById(R.id.NT_checkAR);
         andataVDa = findViewById(R.id.NT_andataDa);
         andataVA = findViewById(R.id.NT_andataA);
+        ritornoVDa = findViewById(R.id.NT_ritornoDa);
+        ritornoVA = findViewById(R.id.NT_ritornoA);
+        mITravelRepository = new TravelRepository(getApplication());
 
         partenzaAndataButton.setOnClickListener(v -> {
             showDateTimeDialog(partenzaAndataButton);
@@ -82,17 +90,25 @@ public class NewTravel extends AppCompatActivity {
         invio.setOnClickListener(v -> {
             String daA = andataVDa.getText().toString();
             String aA = andataVA.getText().toString();
-            String daR = andataVDa.getText().toString();
-            String aR = andataVA.getText().toString();
+            String daR = ritornoVDa.getText().toString();
+            String aR = ritornoVA.getText().toString();
             //uso un if per verificare quale delle
+
             if (checkAR.isChecked()){
                 Log.i("Prova_invioAR", "viagg.toString()");
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
                 try {
+                    SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
                     Date andataD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
-                    Date ritornoD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
-                    Viaggio viagg = new Viaggio(andataD, ritornoD, daA, aA, daR, aR, 1, 1);
-                    new AsyncTask<Void, Void, Void>() {
+                    Date arrivoD = simpleDateFormat.parse(arrivoAndataButton.getText().toString());
+                    Date andataR = simpleDateFormat.parse(partenzaRitornoButton.getText().toString());
+                    Date arrivoR = simpleDateFormat.parse(arrivoRitornoButton.getText().toString());
+                    long diff = (arrivoD.getTime() - andataD.getTime());
+                    long diffMinutesD = diff / (60 * 1000);
+                    diff = (arrivoR.getTime() - andataR.getTime());
+                    long diffMinutesR = diff / (60 * 1000);
+                    Viaggio viagg = new Viaggio(andataD, andataR, daA, aA, daR, aR, Double.longBitsToDouble(diffMinutesD), Double.longBitsToDouble(diffMinutesR));
+                    mITravelRepository.pushNuovoViaggio(viagg, false);
+                    /*new AsyncTask<Void, Void, Void>() {
                         @Override
                         protected Void doInBackground(Void... voids) {
 
@@ -105,19 +121,22 @@ public class NewTravel extends AppCompatActivity {
 
                             return null;
                         }
-                    }.execute();
+                    }.execute();*/
 
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             } else{
                 Log.i("Prova_invioAR", "viagg.toString()");
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
                 try {
+                    SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
                     Date andataD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
-                    Date ritornoD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
-                    Viaggio viagg = new Viaggio(andataD, daA, aA, 1);
-                    new AsyncTask<Void, Void, Void>() {
+                    Date arrivoD = simpleDateFormat.parse(arrivoAndataButton.getText().toString());
+                    long diff = (arrivoD.getTime() - andataD.getTime());
+                    long diffMinutes = diff / (60 * 1000);
+                    Viaggio viagg = new Viaggio(andataD, daA, aA, Double.longBitsToDouble(diffMinutes));
+                    mITravelRepository.pushNuovoViaggio(viagg, false);
+                    /*new AsyncTask<Void, Void, Void>() {
                         @Override
                         protected Void doInBackground(Void... voids) {
 
@@ -130,28 +149,12 @@ public class NewTravel extends AppCompatActivity {
 
                             return null;
                         }
-                    }.execute();
+                    }.execute();*/
 
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
             }
-
-
-            /* new AsyncTask<Void, Void, Void>() {
-                @Override
-                protected Void doInBackground(Void... voids) {
-
-                    try {
-                        Log.i("back", "background");
-                        //Long idRow = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().nuovoViaggio(viagg);
-                    } catch (Exception e) {
-                        Log.e("personal_error_save", e.toString());
-                    }
-
-                    return null;
-                }
-            }.execute();*/
         });
     }
 
