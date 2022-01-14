@@ -3,6 +3,10 @@ package it.unimib.travelnotes.repository;
 import static android.content.ContentValues.TAG;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -31,6 +35,7 @@ import it.unimib.travelnotes.Model.response.ListaUtentiResponse;
 import it.unimib.travelnotes.Model.response.ListaViaggiResponse;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.Viaggio;
+import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 import it.unimib.travelnotes.roomdb.relations.UtenteConViaggi;
 import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
@@ -41,11 +46,13 @@ import it.unimib.travelnotes.roomdb.relations.ViaggioUtenteCrossRef;
 public class TravelRepository implements ITravelRepository {
 
     private static final String REALTIME_URL = "https://travelnotes-334817-default-rtdb.europe-west1.firebasedatabase.app/";
-
-    private final FirebaseAuth mAuth;
-    private final DatabaseReference mDatabase;
+    public static final int FRESH_TIMEOUT = 60*1000;
 
     private final Application mApplication;
+    private final FirebaseAuth mAuth;
+    private final DatabaseReference mDatabase;
+    private final SharedPreferencesProvider mSharedPreferencesProvider;
+
     private final MutableLiveData<ListaAttivitaResponse> mListaAttivitaLiveData;
     private final MutableLiveData<ListaUtentiResponse> mListaUtentiLiveData;
     private final MutableLiveData<ListaViaggiResponse> mListaViaggiLiveData;
@@ -61,113 +68,49 @@ public class TravelRepository implements ITravelRepository {
         this.mViaggioLiveData = new MutableLiveData<>();
         this.mAttivitaLiveData = new MutableLiveData<>();
         mAuth = FirebaseAuth.getInstance();
+        mSharedPreferencesProvider = new SharedPreferencesProvider(mApplication);
     }
 
 
     // richiedi elenco attività con live data
     @Override
-    public MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(long viaggioId, boolean refresh) {
+    public MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(String viaggioId) {
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        long currentTime = System.currentTimeMillis();
+        long lastUpdate = mSharedPreferencesProvider.getLastUpdateListaAttivita();
 
-                if (refresh) {
-                    String viaggioOnlineId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(viaggioId).getViaggioOnlineId();
-                    getListaAttivitaSingleCall(viaggioOnlineId);
-                    addListaAttivitaListener(viaggioOnlineId);
-                } else {
-                    getElencoAttivitaFromDatabase(viaggioId);
-                }
-            }
-        };
-        new Thread(runnable).start();
+        if (isOnline() && currentTime - lastUpdate > FRESH_TIMEOUT) {
+            getListaAttivitaSingleCall(viaggioId);
+        } else {
+            getElencoAttivitaFromDatabase(viaggioId);
+        }
 
         return mListaAttivitaLiveData;
     }
 
-    private void getElencoAttivitaFromDatabase(long viaggioId) {
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                ListaAttivitaResponse listaAttivitaResponse = mListaAttivitaLiveData.getValue();
-
-                if (listaAttivitaResponse == null) {
-                    listaAttivitaResponse = new ListaAttivitaResponse();
-                }
-
-                if (viaggioId != 0) {
-                    ViaggioConAttivita elencoAttivita = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().getViaggioConAttivita(viaggioId);
-
-                    listaAttivitaResponse.setElencoAttivita(elencoAttivita.activities);
-                    listaAttivitaResponse.setViaggio(elencoAttivita.viaggio);
-                    //listaAttivitaResponse....
-                }
-
-                //if (errorMessage != null)
-
-                mListaAttivitaLiveData.postValue(listaAttivitaResponse);
-            }
-        };
-        new Thread(runnable).start();
-    }
-
     @Override
-    public MutableLiveData<ListaUtentiResponse> fetchGruppoViaggio(long viaggioId, boolean refresh) {
+    public MutableLiveData<ListaUtentiResponse> fetchGruppoViaggio(String viaggioId) {
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        long currentTime = System.currentTimeMillis();
+        long lastUpdate = mSharedPreferencesProvider.getLastUpdateGruppoViaggio();
 
-                if (refresh) {
-                    String viaggioOnlineId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(viaggioId).getViaggioOnlineId();
-                    getListaUtentiSingleCall(viaggioOnlineId);
-                    addListaUtentiListener(viaggioOnlineId);
-                } else {
-                    getElencoUtentiFromDatabase(viaggioId);
-                }
-            }
-        };
-        new Thread(runnable).start();
+        if (isOnline() && currentTime - lastUpdate > FRESH_TIMEOUT) {
+            getListaUtentiSingleCall(viaggioId);
+        } else {
+            getElencoUtentiFromDatabase(viaggioId);
+        }
 
         return mListaUtentiLiveData;
     }
 
-    private void getElencoUtentiFromDatabase(long viaggioId) {
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-
-                ListaUtentiResponse listaUtentiResponse = mListaUtentiLiveData.getValue();
-
-                if (listaUtentiResponse == null) {
-                    listaUtentiResponse = new ListaUtentiResponse();
-                }
-
-                if (viaggioId != 0) {
-                    ViaggioConUtenti elencoUtenti = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().getViaggioConUtenti(viaggioId);
-
-                    listaUtentiResponse.setElencoUtenti(elencoUtenti.gruppoViaggio);
-                    listaUtentiResponse.setViaggio(elencoUtenti.viaggio);
-                    //listaUtentiResponse...
-                }
-
-                //if (errorMessage != null)
-
-                mListaUtentiLiveData.postValue(listaUtentiResponse);
-            }
-        };
-        new Thread(runnable).start();
-    }
-
     @Override
-    public MutableLiveData<ListaViaggiResponse> fetchListaViaggi(String utenteId, boolean refresh) {
+    public MutableLiveData<ListaViaggiResponse> fetchListaViaggi(String utenteId) {
 
-        if (refresh) {
+        long currentTime = System.currentTimeMillis();
+        long lastUpdate = mSharedPreferencesProvider.getLastUpdateListaViaggi();
+
+        if (isOnline() && currentTime - lastUpdate > FRESH_TIMEOUT) {
             getListaViaggiSingleCall(utenteId);
-            addListaViaggiListener(utenteId);
         } else {
             getElencoViaggiFromDatabase(utenteId);
         }
@@ -175,125 +118,31 @@ public class TravelRepository implements ITravelRepository {
         return mListaViaggiLiveData;
     }
 
-    private void getElencoViaggiFromDatabase(String utenteId) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-
-                ListaViaggiResponse listaViaggiResponse = mListaViaggiLiveData.getValue();
-
-                if (listaViaggiResponse == null) {
-                    listaViaggiResponse = new ListaViaggiResponse();
-                }
-
-                UtenteConViaggi elencoViaggi = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getUtenteDao().getUtenteConViaggi(utenteId);
-
-                listaViaggiResponse.setElencoViaggi(elencoViaggi.viaggi);
-                listaViaggiResponse.setUtente(elencoViaggi.utente);
-                //listaViaggiResponse...
-
-                //if (errorMessage != null)
-
-                mListaViaggiLiveData.postValue(listaViaggiResponse);
-            }
-        };
-        new Thread(runnable).start();
-    }
-
     @Override
-    public MutableLiveData<ViaggioResponse> fetchViaggio(long viaggioId, boolean refresh) {
+    public MutableLiveData<ViaggioResponse> fetchViaggio(String viaggioId) {
 
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        long currentTime = System.currentTimeMillis();
+        long lastUpdate = mSharedPreferencesProvider.getLastUpdateViaggio();
 
-                if (refresh) {
-                    String viaggioOnlineId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(viaggioId).getViaggioOnlineId();
-                    getViaggioSingleCall(viaggioOnlineId);
-                    addViaggioListener(viaggioOnlineId);
-                } else {
-                    getViaggioFromDatabase(viaggioId);
-                }
-
-
-            }
-        };
-        new Thread(runnable).start();
+        if (isOnline() && currentTime - lastUpdate > FRESH_TIMEOUT) {
+            getViaggioSingleCall(viaggioId);
+        } else {
+            getViaggioFromDatabase(viaggioId);
+        }
 
         return mViaggioLiveData;
     }
 
-    private void getViaggioFromDatabase(long viaggioId) {
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-
-                ViaggioResponse viaggioResponse = mViaggioLiveData.getValue();
-
-                if (viaggioResponse == null) {
-                    viaggioResponse = new ViaggioResponse();
-                }
-
-                Viaggio viaggio = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(viaggioId);
-
-                viaggioResponse.setViaggio(viaggio);
-                //viaggioResponse...
-
-                //if (errorMessage != null)
-
-                mViaggioLiveData.postValue(viaggioResponse);
-            }
-        };
-        new Thread(runnable).start();
-
-    }
-
     @Override
-    public MutableLiveData<AttivitaResponse> fetchAttivita(long attivitaId, boolean refresh) {
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+    public MutableLiveData<AttivitaResponse> fetchAttivita(String attivitaId, String viaggioId) {
 
-                if (refresh) {
-                    Attivita a = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().findAttivitaById(attivitaId);
-                    String attivitaOnlineId = a.getAttivitaOnlineId();
-                    String viaggioOnlineId = a.getViaggioOnlineId();
-                    getAttivitaSingleCall(attivitaOnlineId, viaggioOnlineId);
-                } else {
-                    getAttivitaFromDatabase(attivitaId);
-                }
-            }
-        };
-        new Thread(runnable).start();
+        if (isOnline()) {
+            getAttivitaSingleCall(attivitaId, viaggioId);
+        } else {
+            getAttivitaFromDatabase(attivitaId);
+        }
 
         return mAttivitaLiveData;
-    }
-
-    private void getAttivitaFromDatabase(long attivitaId) {
-
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-
-                AttivitaResponse attivitaResponse = mAttivitaLiveData.getValue();
-
-                if (attivitaResponse == null) {
-                    attivitaResponse = new AttivitaResponse();
-                }
-
-                Attivita attivita = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().findAttivitaById(attivitaId);
-
-                attivitaResponse.setAttivita(attivita);
-                //attivitaResponse...
-
-                //if (errorMessage != null)
-
-                mAttivitaLiveData.postValue(attivitaResponse);
-            }
-        };
-        new Thread(runnable).start();
-
     }
 
 
@@ -303,14 +152,12 @@ public class TravelRepository implements ITravelRepository {
     public void pushNuovoViaggio(Viaggio viaggio, boolean esiste) {
 
         //scrittura su cloud
-        String parentViaggio = viaggio.getViaggioOnlineId();
-        if (!esiste) {
+        String parentViaggio = viaggio.getViaggioId();
+        if (!esiste || parentViaggio == null || parentViaggio.equals("")) {
             parentViaggio = mDatabase.child("viaggi").push().getKey();
-            viaggio.setViaggioOnlineId(parentViaggio);
+            viaggio.setViaggioId(parentViaggio);
         }
-        if (parentViaggio != null) {
 
-        }
         mDatabase.child("viaggi").child(parentViaggio).child("dettagliviaggio").setValue(viaggio)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -340,28 +187,17 @@ public class TravelRepository implements ITravelRepository {
                 });
 
         //scrittura su db locale
-        String finalParentViaggio = parentViaggio;
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if(esiste) {
-                    TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().aggiornaViaggio(viaggio);
-                } else {
-                    long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().nuovoViaggio(viaggio);
-                }
-
-                long viaggioId;
-                if (esiste) {
-                    Viaggio v = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioByOnlineId(finalParentViaggio);
-                    viaggioId = v.getViaggioId();
-                } else {
-                    viaggioId = viaggio.getViaggioId();
-                }
-                ViaggioUtenteCrossRef crossRef = new ViaggioUtenteCrossRef();
-                crossRef.utenteId = mAuth.getUid();
-                crossRef.viaggioId = viaggioId;
-                TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().insertViaggioUtenteCrossRef(crossRef);
+        Runnable runnable = () -> {
+            if(esiste) {
+                TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().aggiornaViaggio(viaggio);
+            } else {
+                long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().nuovoViaggio(viaggio);
             }
+
+            ViaggioUtenteCrossRef crossRef = new ViaggioUtenteCrossRef();
+            crossRef.utenteId = mAuth.getUid();
+            crossRef.viaggioId = viaggio.getViaggioId();
+            TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().insertViaggioUtenteCrossRef(crossRef);
         };
         new Thread(runnable).start();
 
@@ -370,45 +206,38 @@ public class TravelRepository implements ITravelRepository {
     @Override
     public void pushNuovaAttivita(Attivita attivita, boolean esiste) {
 
+        //scrittura su cloud
+        String parentViaggio = attivita.getViaggioId();
+        String parentAttivita = attivita.getAttivitaId();
+        if (!esiste) {
+            /* Fittizio  parentViaggio = mDatabase.child("viaggi").push().getKey();*/
+            /* Fittizio  attivita.setViaggioId(parentViaggio);*/
+
+            parentAttivita = mDatabase.child("viaggi").child(parentViaggio).child("listaattivita").push().getKey();
+            attivita.setAttivitaId(parentAttivita);
+        }
+
+        mDatabase.child("viaggi").child(parentViaggio).child("listaattivita").child(parentAttivita).setValue(attivita)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         //scrittura su db locale
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        Runnable runnable = () -> {
 
-                //scrittura su cloud
-                String parentViaggio = attivita.getAttivitaOnlineId();
-                String parentAttivita = attivita.getAttivitaOnlineId();
-                if (!esiste) {
-                    // Serve l'OnlineId
-                    //parentViaggio = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(attivita.getViaggioId()).getViaggioOnlineId();
-                    /* Fittizio */ parentViaggio = mDatabase.child("viaggi").push().getKey();
-                    attivita.setViaggioOnlineId(parentViaggio);
-
-                    parentAttivita = mDatabase.child("viaggi").child(parentViaggio).child("listaattivita").push().getKey();
-                    attivita.setAttivitaOnlineId(parentAttivita);
-                }
-
-                mDatabase.child("viaggi").child(parentViaggio).child("listaattivita").child(parentAttivita).setValue(attivita)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-
-
-                if (esiste) {
-                    TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().aggiornaAttivita(attivita);
-                } else {
-                    long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().nuovaAttivita(attivita);
-                }
+            if (esiste) {
+                TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().aggiornaAttivita(attivita);
+            } else {
+                long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().nuovaAttivita(attivita);
             }
         };
         new Thread(runnable).start();
@@ -416,67 +245,67 @@ public class TravelRepository implements ITravelRepository {
     }
 
     @Override
-    public void pushAggiungiAlGruppo(String email, long viaggioId) {
+    public void pushAggiungiAlGruppo(String email, String viaggioId) {
         //email-userid
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
+        Runnable runnable = () -> {
 
-                Viaggio viaggio = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(viaggioId);
+            Viaggio viaggio = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(viaggioId);
 
-                mDatabase.child("email-utente").child(email.trim()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e("firebase", "Error getting data", task.getException());
-                        }
-                        else {
-
-                            Utente utente = (Utente) task.getResult().getValue();
-
-                            mDatabase.child("utenti").child(utente.getUtenteId()).child("listaviaggi").child(viaggio.getViaggioOnlineId()).setValue(viaggio)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-                            mDatabase.child("viaggi").child(viaggio.getViaggioOnlineId()).child("listautenti").child(utente.getUtenteId()).setValue(utente)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void unused) {
-                                            Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-
-                        }
+            mDatabase.child("email_utente").child(email.trim()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    if (!task.isSuccessful()) {
+                        Log.e("firebase", "Error getting data", task.getException());
                     }
-                });
+                    else {
+
+                        Utente utente = (Utente) task.getResult().getValue();
+
+                        mDatabase.child("utenti").child(utente.getUtenteId()).child("listaviaggi").child(viaggio.getViaggioId()).setValue(viaggio)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                        mDatabase.child("viaggi").child(viaggio.getViaggioId()).child("listautenti").child(utente.getUtenteId()).setValue(utente)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
 
-            }
+                    }
+                }
+            });
+
+
         };
         new Thread(runnable).start();
 
+        getListaUtentiSingleCall(viaggioId);
 
     }
 
     @Override
     public void pushNuovoUtente(Utente utente)  {
+
+        mSharedPreferencesProvider.setSharedUserId(utente.getUtenteId());
 
         //scrittura su cloud
         mDatabase.child("utenti").child(utente.getUtenteId()).child("datiutente").setValue(utente)
@@ -494,7 +323,7 @@ public class TravelRepository implements ITravelRepository {
                 });
 
         // aggiunta a eleco email-userid
-        mDatabase.child("email-utente").child(utente.getEmail()).setValue(utente)
+        mDatabase.child("email_utente").child(utente.getEmail()).setValue(utente)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -509,11 +338,8 @@ public class TravelRepository implements ITravelRepository {
                 });
 
         //scrittura su db locale
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getUtenteDao().nuovoUtente(utente);
-            }
+        Runnable runnable = () -> {
+            long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getUtenteDao().nuovoUtente(utente);
         };
         new Thread(runnable).start();
 
@@ -522,7 +348,9 @@ public class TravelRepository implements ITravelRepository {
     @Override
     public void loadUtente(String utenteId) {
 
-        mDatabase.child("utenti").child(String.valueOf(utenteId)).child("datiutente").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mSharedPreferencesProvider.setSharedUserId(utenteId);
+
+        mDatabase.child("utenti").child(utenteId).child("datiutente").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -533,11 +361,8 @@ public class TravelRepository implements ITravelRepository {
 
                     Utente utente = task.getResult().getValue(Utente.class);
 
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getUtenteDao().nuovoUtente(utente);
-                        }
+                    Runnable runnable = () -> {
+                        long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getUtenteDao().nuovoUtente(utente);
                     };
                     new Thread(runnable).start();
                 }
@@ -548,24 +373,137 @@ public class TravelRepository implements ITravelRepository {
 
 
 
-    // single call Realtime Database
-    private void getViaggioSingleCall(String viaggioOnlineId) {
+    // Get From Database
+    private void getElencoAttivitaFromDatabase(String viaggioId) {
 
-        mDatabase.child("viaggi").child(viaggioOnlineId).child("dettagliviaggio").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        Runnable runnable = () -> {
+            ListaAttivitaResponse listaAttivitaResponse = mListaAttivitaLiveData.getValue();
+
+            if (listaAttivitaResponse == null) {
+                listaAttivitaResponse = new ListaAttivitaResponse();
+            }
+
+            ViaggioConAttivita elencoAttivita = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().getViaggioConAttivita(viaggioId);
+
+            listaAttivitaResponse.setElencoAttivita(elencoAttivita.activities);
+            listaAttivitaResponse.setViaggio(elencoAttivita.viaggio);
+            //listaAttivitaResponse....
+
+            //if (errorMessage != null)
+
+            mListaAttivitaLiveData.postValue(listaAttivitaResponse);
+        };
+        new Thread(runnable).start();
+    }
+
+    private void getElencoUtentiFromDatabase(String viaggioId) {
+
+        Runnable runnable = () -> {
+
+            ListaUtentiResponse listaUtentiResponse = mListaUtentiLiveData.getValue();
+
+            if (listaUtentiResponse == null) {
+                listaUtentiResponse = new ListaUtentiResponse();
+            }
+
+            ViaggioConUtenti elencoUtenti = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().getViaggioConUtenti(viaggioId);
+
+            listaUtentiResponse.setElencoUtenti(elencoUtenti.gruppoViaggio);
+            listaUtentiResponse.setViaggio(elencoUtenti.viaggio);
+            //listaUtentiResponse...
+
+            //if (errorMessage != null)
+
+            mListaUtentiLiveData.postValue(listaUtentiResponse);
+        };
+        new Thread(runnable).start();
+    }
+
+    private void getElencoViaggiFromDatabase(String utenteId) {
+        Runnable runnable = () -> {
+
+            ListaViaggiResponse listaViaggiResponse = mListaViaggiLiveData.getValue();
+
+            if (listaViaggiResponse == null) {
+                listaViaggiResponse = new ListaViaggiResponse();
+            }
+
+            UtenteConViaggi elencoViaggi = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getUtenteDao().getUtenteConViaggi(utenteId);
+
+            listaViaggiResponse.setElencoViaggi(elencoViaggi.viaggi);
+            listaViaggiResponse.setUtente(elencoViaggi.utente);
+            //listaViaggiResponse...
+
+            //if (errorMessage != null)
+
+            mListaViaggiLiveData.postValue(listaViaggiResponse);
+        };
+        new Thread(runnable).start();
+    }
+
+    private void getViaggioFromDatabase(String viaggioId) {
+
+        Runnable runnable = () -> {
+
+            ViaggioResponse viaggioResponse = mViaggioLiveData.getValue();
+
+            if (viaggioResponse == null) {
+                viaggioResponse = new ViaggioResponse();
+            }
+
+            Viaggio viaggio = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().findViaggioById(viaggioId);
+
+            viaggioResponse.setViaggio(viaggio);
+            //viaggioResponse...
+
+            //if (errorMessage != null)
+
+            mViaggioLiveData.postValue(viaggioResponse);
+        };
+        new Thread(runnable).start();
+
+    }
+
+    private void getAttivitaFromDatabase(String attivitaId) {
+
+        Runnable runnable = () -> {
+
+            AttivitaResponse attivitaResponse = mAttivitaLiveData.getValue();
+
+            if (attivitaResponse == null) {
+                attivitaResponse = new AttivitaResponse();
+            }
+
+            Attivita attivita = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().findAttivitaById(attivitaId);
+
+            attivitaResponse.setAttivita(attivita);
+            //attivitaResponse...
+
+            //if (errorMessage != null)
+
+            mAttivitaLiveData.postValue(attivitaResponse);
+        };
+        new Thread(runnable).start();
+
+    }
+
+
+
+    // single call Realtime Database
+    private void getViaggioSingleCall(String viaggioId) {
+
+        mDatabase.child("viaggi").child(viaggioId).child("dettagliviaggio").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
                     Log.e("firebase", "Error getting data", task.getException());
                 }
                 else {
+
                     Viaggio viaggio = task.getResult().getValue(Viaggio.class);
 
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().nuovoViaggio(viaggio);
-                        }
+                    Runnable runnable = () -> {
+                        long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().nuovoViaggio(viaggio);
                     };
                     new Thread(runnable).start();
 
@@ -578,14 +516,15 @@ public class TravelRepository implements ITravelRepository {
                     //viaggioResponse...
                     //if (errorMessage != null)
                     mViaggioLiveData.postValue(viaggioResponse);
+                    mSharedPreferencesProvider.setLastUpdateViaggio(System.currentTimeMillis());
                 }
             }
         });
     }
 
-    private void getAttivitaSingleCall(String attivitaOnlineId, String viaggioOnlineId) {
+    private void getAttivitaSingleCall(String attivitaId, String viaggioId) {
 
-        mDatabase.child("viaggi").child(viaggioOnlineId).child("listaattivita").child(attivitaOnlineId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mDatabase.child("viaggi").child(viaggioId).child("listaattivita").child(attivitaId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -594,12 +533,8 @@ public class TravelRepository implements ITravelRepository {
                 else {
                     Attivita attivita = task.getResult().getValue(Attivita.class);
 
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().nuovaAttivita(attivita);
-                        }
+                    Runnable runnable = () -> {
+                        long rowId = TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().nuovaAttivita(attivita);
                     };
                     new Thread(runnable).start();
 
@@ -642,12 +577,8 @@ public class TravelRepository implements ITravelRepository {
 
                     //List<Viaggio> listaViaggi = (List<Viaggio>) task.getResult().getValue();
 
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-
-                            TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().addAllViaggi(listaViaggi);
-                        }
+                    Runnable runnable = () -> {
+                        TravelDatabase.getDatabase(mApplication.getApplicationContext()).getViaggioDao().addAllViaggi(listaViaggi);
                     };
                     new Thread(runnable).start();
 
@@ -660,14 +591,16 @@ public class TravelRepository implements ITravelRepository {
                     //viaggioResponse...
                     //if (errorMessage != null)
                     mListaViaggiLiveData.postValue(listaViaggiResponse);
+                    mSharedPreferencesProvider.setLastUpdateListaViaggi(System.currentTimeMillis());
+                    mSharedPreferencesProvider.setLastUpdateViaggio(System.currentTimeMillis());
                 }
             }
         });
     }
 
-    private void getListaAttivitaSingleCall(String viaggioOnlineId) {
+    private void getListaAttivitaSingleCall(String viaggioId) {
 
-        mDatabase.child("viaggi").child(viaggioOnlineId).child("listaattivita").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mDatabase.child("viaggi").child(viaggioId).child("listaattivita").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -688,12 +621,8 @@ public class TravelRepository implements ITravelRepository {
 
                     //List<Attivita> listaAttivita = (List<Attivita>) task.getResult().getValue();
 
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-
+                    Runnable runnable = () -> {
                             TravelDatabase.getDatabase(mApplication.getApplicationContext()).getAttivitaDao().addAllAttivita(listaAttivita);
-                        }
                     };
                     new Thread(runnable).start();
 
@@ -706,14 +635,15 @@ public class TravelRepository implements ITravelRepository {
                     //viaggioResponse...
                     //if (errorMessage != null)
                     mListaAttivitaLiveData.postValue(listaViaggiResponse);
+                    mSharedPreferencesProvider.setLastUpdateListaAttivita(System.currentTimeMillis());
                 }
             }
         });
     }
 
-    private void getListaUtentiSingleCall(String viaggioOnlineId) {
+    private void getListaUtentiSingleCall(String viaggioId) {
 
-        mDatabase.child("viaggi").child(viaggioOnlineId).child("listautenti").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        mDatabase.child("viaggi").child(viaggioId).child("listautenti").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 if (!task.isSuccessful()) {
@@ -734,12 +664,8 @@ public class TravelRepository implements ITravelRepository {
 
                     //List<Utente> listaUtenti = (List<Utente>) task.getResult().getValue();
 
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-
+                    Runnable runnable = () -> {
                             TravelDatabase.getDatabase(mApplication.getApplicationContext()).getUtenteDao().addAllUtenti(listaUtenti);
-                        }
                     };
                     new Thread(runnable).start();
 
@@ -752,6 +678,7 @@ public class TravelRepository implements ITravelRepository {
                     //viaggioResponse...
                     //if (errorMessage != null)
                     mListaUtentiLiveData.postValue(listaAttivitaResponse);
+                    mSharedPreferencesProvider.setLastUpdateGruppoViaggio(System.currentTimeMillis());
                 }
             }
         });
@@ -760,20 +687,21 @@ public class TravelRepository implements ITravelRepository {
 
 
     // listener Realime Database
-    private void addListaViaggiListener(String utenteId) {
+    @Override
+    public void addListaViaggiListener(String utenteId) {
 
         ValueEventListener listaViaggiListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                ListaViaggiResponse listaViaggiResponse = new ListaViaggiResponse();
-                listaViaggiResponse = snapshot.getValue(ListaViaggiResponse.class);
+                ListaViaggiResponse listaViaggiResponse = snapshot.getValue(ListaViaggiResponse.class);
                 if (listaViaggiResponse != null) {
                     mListaViaggiLiveData.postValue(listaViaggiResponse);
                 } else {
                     // Viaggio cancellato
                 }
-
+                mSharedPreferencesProvider.setLastUpdateListaViaggi(System.currentTimeMillis());
+                mSharedPreferencesProvider.setLastUpdateViaggio(System.currentTimeMillis());
             }
 
             @Override
@@ -784,19 +712,20 @@ public class TravelRepository implements ITravelRepository {
         FirebaseDatabase.getInstance(REALTIME_URL + "utenti/" + utenteId + "/listaviaggi").getReference().addValueEventListener(listaViaggiListener);
     }
 
-    private void addListaAttivitaListener(String viaggioOnlineId) {
+    @Override
+    public void addListaAttivitaListener(String viaggioId) {
 
         ValueEventListener listaAttivitaListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                ListaAttivitaResponse listaAttivitaResponse = new ListaAttivitaResponse();
-                listaAttivitaResponse = snapshot.getValue(ListaAttivitaResponse.class);
+                ListaAttivitaResponse listaAttivitaResponse = snapshot.getValue(ListaAttivitaResponse.class);
                 if (listaAttivitaResponse != null) {
                     mListaAttivitaLiveData.postValue(listaAttivitaResponse);
                 } else {
                     // Attivita cancellata
                 }
+                mSharedPreferencesProvider.setLastUpdateListaAttivita(System.currentTimeMillis());
             }
 
             @Override
@@ -804,22 +733,23 @@ public class TravelRepository implements ITravelRepository {
                 Log.w(TAG, "loadPost:onCancelled"/*, databaseError.toException()*/);
             }
         };
-        FirebaseDatabase.getInstance(REALTIME_URL + "viaggii/" + viaggioOnlineId + "/listaattivita").getReference().addValueEventListener(listaAttivitaListener);
+        FirebaseDatabase.getInstance(REALTIME_URL + "viaggi/" + viaggioId + "/listaattivita").getReference().addValueEventListener(listaAttivitaListener);
     }
 
-    private void addListaUtentiListener(String viaggioOnlineId) {
+    @Override
+    public void addListaUtentiListener(String viaggioId) {
 
         ValueEventListener listaUtentiListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                ListaUtentiResponse listaUtentiResponse = new ListaUtentiResponse();
-                listaUtentiResponse = snapshot.getValue(ListaUtentiResponse.class);
+                ListaUtentiResponse listaUtentiResponse = snapshot.getValue(ListaUtentiResponse.class);
                 if (listaUtentiResponse != null) {
                     mListaUtentiLiveData.postValue(listaUtentiResponse);
                 } else {
                     // Lista Utente cancellata
                 }
+                mSharedPreferencesProvider.setLastUpdateGruppoViaggio(System.currentTimeMillis());
             }
 
             @Override
@@ -827,22 +757,23 @@ public class TravelRepository implements ITravelRepository {
                 Log.w(TAG, "loadPost:onCancelled"/*, databaseError.toException()*/);
             }
         };
-        FirebaseDatabase.getInstance(REALTIME_URL + "viaggii/" + viaggioOnlineId + "/listautenti").getReference().addValueEventListener(listaUtentiListener);
+        FirebaseDatabase.getInstance(REALTIME_URL + "viaggi/" + viaggioId + "/listautenti").getReference().addValueEventListener(listaUtentiListener);
     }
 
-    private void addViaggioListener(String viaggioOnlineId) {
+    @Override
+    public void addViaggioListener(String viaggioId) {
 
         ValueEventListener viaggiListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                ViaggioResponse viaggioResponse = new ViaggioResponse();
-                viaggioResponse = snapshot.getValue(ViaggioResponse.class);
+                ViaggioResponse viaggioResponse = snapshot.getValue(ViaggioResponse.class);
                 if (viaggioResponse != null) {
                     mViaggioLiveData.postValue(viaggioResponse);
                 } else {
                     // Viaggio cancellato
                 }
+                mSharedPreferencesProvider.setLastUpdateViaggio(System.currentTimeMillis());
 
             }
 
@@ -851,7 +782,16 @@ public class TravelRepository implements ITravelRepository {
                 Log.w(TAG, "loadPost:onCancelled"/*, databaseError.toException()*/);
             }
         };
-        FirebaseDatabase.getInstance(REALTIME_URL + "viaggii/" + viaggioOnlineId + "/dettagliviaggio").getReference().addValueEventListener(viaggiListener);
+        FirebaseDatabase.getInstance(REALTIME_URL + "viaggi/" + viaggioId + "/dettagliviaggio").getReference().addValueEventListener(viaggiListener);
+    }
+
+
+
+    public boolean isOnline() {
+        ConnectivityManager connMgr = (ConnectivityManager)
+                mApplication.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        return (networkInfo != null && networkInfo.isConnected());
     }
 
 

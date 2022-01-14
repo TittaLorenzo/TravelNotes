@@ -51,6 +51,7 @@ import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
 
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
@@ -72,17 +73,14 @@ public class NewActivityEvent extends AppCompatActivity {
     private Button dataFineAttivitaButton;
     private Button oraInizioNuovaAttivita;
     private Button oraFineAttivitaButton;
-    private Button loadAttivita;
     private Button buttonSalva;
 
     private EditText campoNome;
     private EditText campoPosizione;
     private EditText campoDescrizione;
 
-    private Long idAttivitaI;
-    private Long idViaggioI;
-    private long attivitaId;
-    private long viaggioId = 0;
+    private String attivitaId;
+    private String viaggioId;
 
 
     @Override
@@ -98,7 +96,6 @@ public class NewActivityEvent extends AppCompatActivity {
         dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
         oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
         oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
-        loadAttivita = findViewById(R.id.loadCloud1);
 
         campoNome = findViewById(R.id.nomeAttivitaInput);
         campoPosizione = findViewById(R.id.posizionePartenzaNuovaAttivita);
@@ -145,22 +142,18 @@ public class NewActivityEvent extends AppCompatActivity {
 
         // Leggo valori passati come intent extra: se ci sono valori non nulli allora è una modifica a una attività, quindi bisogna
         try {
-            idAttivitaI = (Long) getIntent().getExtras().get("idAttivita");
+            attivitaId = (String) getIntent().getExtras().get("attivitaId");
         } catch (Exception e) {
-            idAttivitaI = null;
+            attivitaId = null;
         }
         try {
-            idViaggioI = (Long) getIntent().getExtras().get("viaggioId");
+            viaggioId = (String) getIntent().getExtras().get("viaggioId");
         } catch (Exception e) {
-            viaggioId = 0;
+            viaggioId = null;
         }
-        if (idAttivitaI != null) {
-            caricaDatiAttivita((long) idAttivitaI);
+        if (attivitaId != null) {
+            caricaDatiAttivita(attivitaId);
         }
-
-        loadAttivita.setOnClickListener(v -> {
-            caricaOnline();
-        });
 
         Button buttonMaps = findViewById(R.id.buttonMaps);
         buttonMaps.setOnClickListener(v -> {
@@ -169,12 +162,10 @@ public class NewActivityEvent extends AppCompatActivity {
 
         mNewActivityEventViewModel = new ViewModelProvider(this).get(NewActivityEventViewModel.class);
 
-        if (idAttivitaI != null) {
-            long attivitaId = (long) idAttivitaI;
+        if (attivitaId != null) {
             mNewActivityEventViewModel.setAttivitaId(attivitaId);
         }
-        if (idViaggioI != null) {
-            viaggioId = (long) idViaggioI;
+        if (viaggioId != null) {
             mNewActivityEventViewModel.setViaggioId(viaggioId);
         }
 
@@ -201,10 +192,8 @@ public class NewActivityEvent extends AppCompatActivity {
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
 
-                    SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    editor.putString(getString(R.string.shared_userid_key), null);
-                    editor.apply();
+                    SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+                    sharedPreferencesProvider.setSharedUserId(null);
 
                     //delateAll RoomDb
 
@@ -289,39 +278,13 @@ public class NewActivityEvent extends AppCompatActivity {
         new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
     }
 
-    /*@Nullable
-    @Override
-    public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-
-        final Observer<AttivitaResponse> observer = new Observer<AttivitaResponse>() {
-            @Override
-            public void onChanged(AttivitaResponse attivitaResponse) {
-                if (attivitaResponse.isError()) {
-                    //updateUIForFaliure(listaAttivitaResponse.getStatus());
-                }
-                if (attivitaResponse.getAttivita() != null && attivitaResponse.getTotalResults() != -1) {
-                    //mAttivitaViewModel.setTotalResult(attivitaResponse.getTotalResults());
-
-                    // updateUIForSuccess(attivitaResponse.getAttivita(), attivitaResponse.isLoading());
-
-                }
-                //mProgressBar.setVisibility(View.GONE);
-            }
-        };
-        //mNewActivityEventViewModel.getAttivita().observe(this, observer);
-
-        return super.onCreateView(name, context, attrs);
-    }*/
-
-    private void caricaDatiAttivita(long idAttivitaI) {
+    private void caricaDatiAttivita(String idAttivitaI) {
 
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
 
                 Attivita attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
-
-                viaggioId = attivitaSelezionata.getViaggioId();
 
                 TextView titoloNuovaAttivita = findViewById(R.id.titloloNuovaAttivitaId);
                 titoloNuovaAttivita.setText(R.string.titleModificaAttivita);
@@ -404,9 +367,9 @@ public class NewActivityEvent extends AppCompatActivity {
         a.setDataInizio(dataInizio);
         a.setDataFine(dataFine);
 
-        if (idAttivitaI != null) {
-            a.setAttivitaId((long) idAttivitaI);
-            a.setViaggioId((long) idViaggioI);
+        if (attivitaId != null) {
+            a.setAttivitaId(attivitaId);
+            a.setViaggioId(viaggioId);
 
             //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().aggiornaAttivita(a);
 
@@ -421,41 +384,6 @@ public class NewActivityEvent extends AppCompatActivity {
 
         Intent i = new Intent(getApplicationContext(), Activity_travel_view.class);
         startActivity(i);
-
-    }
-
-    public void caricaOnline() {
-
-        Log.v("MyLog", "CaricaOnline");
-
-        long idViaggio = 1;
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                ViaggioConAttivita listaAttivita = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().getViaggioConAttivita(idViaggio);
-
-                Gson gson = new Gson();
-                String viaggiCOnAttivitaJson = gson.toJson(listaAttivita);
-                Log.v("MyLog", viaggiCOnAttivitaJson);
-
-                //scrittura su cloud
-                mDatabase.child("prova").child("1").setValue(viaggiCOnAttivitaJson)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                //Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                //Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-            }
-        };
-        new Thread(runnable).start();
 
     }
 

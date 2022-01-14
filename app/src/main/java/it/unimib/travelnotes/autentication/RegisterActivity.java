@@ -35,12 +35,15 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText email;
     private EditText password;
     private EditText password2;
+    private EditText username;
     private Button register;
     private Button cancelButtonRegister;
     private TextView giaRegistrato;
 
     private TextInputLayout pw1TextInputLayout;
     private TextInputLayout pw2TextInputLayout;
+
+    private String txtUsername;
 
 
     @Override
@@ -53,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.email_register_edit_text);
         password = findViewById(R.id.password_register_edit_text);
         password2 = findViewById(R.id.password2_register_edit_text);
+        username = findViewById(R.id.username_register_edit_text);
         register = findViewById(R.id.registerButton);
         cancelButtonRegister = findViewById(R.id.cancel_button_register);
 
@@ -67,6 +71,7 @@ public class RegisterActivity extends AppCompatActivity {
                 String txtEmail = email.getText().toString().trim();
                 String txtPassword = password.getText().toString().trim();
                 String txtPassword2 = password2.getText().toString().trim();
+                txtUsername = username.getText().toString();
 
                 if (TextUtils.isEmpty(txtEmail) || TextUtils.isEmpty((txtPassword))) {
                     Toast.makeText(RegisterActivity.this, "Riempi i campi obbligatori", Toast.LENGTH_SHORT).show();
@@ -103,17 +108,11 @@ public class RegisterActivity extends AppCompatActivity {
                             Toast.makeText(RegisterActivity.this, "Registrazione avvenuta con successo!", Toast.LENGTH_SHORT).show();
 
                             String userId = mAuth.getCurrentUser().getUid();
-                            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString(getString(R.string.shared_userid_key), userId);
-                            editor.apply();
-
-                            /*String defaultValue = getResources().getString(R.string.shared_userid_key);
-                            String highScore = sharedPref.getString(getString(R.string.shared_userid_key), defaultValue);*/
 
                             Utente u = new Utente();
                             u.setUtenteId(userId);
                             u.setEmail(email);
+                            u.setUsername(txtUsername);
 
                             mITravelRepository.pushNuovoUtente(u);
 

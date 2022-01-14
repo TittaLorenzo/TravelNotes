@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,14 +18,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String defaultValue = getResources().getString(R.string.shared_userid_key);
-        String userId = sharedPref.getString(getString(R.string.shared_userid_key), defaultValue);
+        SharedPreferencesProvider mSharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+        String userId = mSharedPreferencesProvider.getSharedUserId();
+
         if (userId != null) {
             startActivity(new Intent(this, TravelList.class));
         }
+
+
+        setContentView(R.layout.activity_main);
 
 
         //bottone login che porta alla lista viaggi
@@ -45,8 +48,8 @@ public class MainActivity extends AppCompatActivity {
         final Button attivitaUno = findViewById(R.id.attivitaUno);
         attivitaUno.setOnClickListener(v -> {
             Intent i = new Intent(this, NewActivityEvent.class);
-            i.putExtra("idAttivita", 1);
-            i.putExtra("viaggioId", 1);
+            i.putExtra("viaggioId", "-MtA7mKtdZODJR98_3hH");
+            i.putExtra("attivitaId", "-MtABb5CDgpuMyffg8bd");
             startActivity(i);
         });
 

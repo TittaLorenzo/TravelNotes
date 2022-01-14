@@ -29,8 +29,8 @@ public interface AttivitaDao {
     public void cancellaAttivita(Attivita attivita);
 
     @Query("SELECT * FROM elenco_attivita WHERE attivitaId = :idAttivita")
-    public Attivita findAttivitaById(long idAttivita);
+    public Attivita findAttivitaById(String idAttivita);
 
     @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :viaggioId")
-    public ViaggioConAttivita getViaggioConAttivita(long viaggioId);
+    public ViaggioConAttivita getViaggioConAttivita(String viaggioId);
 }

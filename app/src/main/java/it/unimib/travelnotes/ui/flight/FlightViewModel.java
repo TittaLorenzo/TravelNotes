@@ -14,17 +14,17 @@ public class FlightViewModel extends AndroidViewModel {
     private final ITravelRepository mITravelRepository;
     private MutableLiveData<ViaggioResponse> mViaggioLiveData;
 
-    private long viaggioId;
+    private String viaggioId;
 
     private int currentResults;
     private int totalResult;
     private boolean isLoading;
 
-    public long getViaggioId() {
+    public String getViaggioId() {
         return viaggioId;
     }
 
-    public void setViaggioId(long viaggioId) {
+    public void setViaggioId(String viaggioId) {
         this.viaggioId = viaggioId;
     }
 
@@ -69,7 +69,7 @@ public class FlightViewModel extends AndroidViewModel {
     }
 
     private void fetchViaggioViewModel() {
-        mViaggioLiveData = mITravelRepository.fetchViaggio(viaggioId, false);
+        mViaggioLiveData = mITravelRepository.fetchViaggio(viaggioId);
     }
 
 }

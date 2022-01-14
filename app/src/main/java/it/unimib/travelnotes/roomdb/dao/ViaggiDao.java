@@ -30,15 +30,11 @@ public interface ViaggiDao {
     public void cancellaViaggio(Viaggio viaggio);
 
     @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio")
-    public Viaggio findViaggioById(long idViaggio);
-
-    @Query("SELECT * FROM elenco_viaggi WHERE viaggioOnlineId = :viaggioOnlineId")
-    public Viaggio findViaggioByOnlineId(String viaggioOnlineId);
-
+    public Viaggio findViaggioById(String idViaggio);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public long insertViaggioUtenteCrossRef(ViaggioUtenteCrossRef crossRef);
 
-    @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio")
-    public ViaggioConUtenti getViaggioConUtenti(long idViaggio);
+    @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :viaggioId")
+    public ViaggioConUtenti getViaggioConUtenti(String viaggioId);
 }

@@ -14,6 +14,7 @@ public class Utente {
     private String utenteId;
 
     private String email;
+    private String username;
     private String nome;
     private String cognome;
     private Date nascita;
@@ -49,6 +50,14 @@ public class Utente {
 
     public void setEmail(String emailU) {
         this.email = emailU;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Date getNascita() {

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="preference_file_key">shared_preference_file</string>
+    <string name="preferences_file_key">shared_preferences_file</string>
     <string name="shared_userid_key">UidKey</string>
+    <string name="shared_lastupdate_listaviaggi_key">lastUpdateListaViaggiKey</string>
+    <string name="shared_lastupdate_listaattivita_key">lastUpdateListaAttivitaKey</string>
+    <string name="shared_lastupdate_gruppoviaggio_key">lastUpdateGruppoViaggioKey</string>
+    <string name="shared_lastupdate_viaggio_key">lastUpdateViaggioKey</string>
+
     <string name="titleNuovaAttivita">Nuova attività</string>
     <string name="titleModificaAttivita">Modifica attività</string>
     <string name="attivitaNomeHint">Nome attività</string>

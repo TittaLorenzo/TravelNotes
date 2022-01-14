@@ -25,6 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.TravelList;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
@@ -137,13 +138,6 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Login effettuato", Toast.LENGTH_SHORT).show();
 
                             String userId = mAuth.getCurrentUser().getUid();
-                            SharedPreferences sharedPref = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            editor.putString(getString(R.string.shared_userid_key), userId);
-                            editor.apply();
-
-                            /*String defaultValue = getResources().getString(R.string.shared_userid_key);
-                            String highScore = sharedPref.getString(getString(R.string.shared_userid_key), defaultValue);*/
 
                             mITravelRepository.loadUtente(userId);
 
