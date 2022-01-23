@@ -39,7 +39,6 @@ public interface ViaggiDao {
     @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :viaggioId")
     ViaggioConUtenti getViaggioConUtenti(String viaggioId);
 
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertViaggioUtenteCrossRef(ViaggioUtenteCrossRef crossRef);
 

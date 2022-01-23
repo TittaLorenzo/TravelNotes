@@ -71,10 +71,13 @@ public class Utente {
     public Utente() {
     }
 
-    public Utente(String nomeI, String cognomeI, Date nascitaI, String emailU){
-        this.nome= nomeI;
-        this.cognome = cognomeI;
-        this.nascita = nascitaI;
-        this.email = emailU;
+    public Utente(@NonNull String utenteId, String email, String username){
+        this.utenteId = utenteId;
+        this.email = email;
+        this.username = username;
+    }
+    public Utente(String username, String email){
+        this.username = username;
+        this.email = email;
     }
 }

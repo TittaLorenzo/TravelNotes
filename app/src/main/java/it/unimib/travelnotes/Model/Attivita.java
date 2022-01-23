@@ -2,12 +2,19 @@ package it.unimib.travelnotes.Model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity (tableName = "elenco_attivita")
+@Entity (tableName = "elenco_attivita", foreignKeys = {
+        @ForeignKey(entity = Viaggio.class,
+        parentColumns = "viaggioId",
+        childColumns = "attivitaId",
+        onDelete = ForeignKey.CASCADE,
+        onUpdate = ForeignKey.CASCADE)
+})
 public class Attivita {
 
     @PrimaryKey

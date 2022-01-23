@@ -37,6 +37,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
@@ -50,6 +51,7 @@ import it.unimib.travelnotes.Activity_travel_view;
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
 
+import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.autentication.LoginActivity;
@@ -179,112 +181,6 @@ public class NewActivityEvent extends AppCompatActivity {
 
     }
 
-    // Oprions Menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logoutItemMenu:
-                FirebaseUser user = mAuth.getCurrentUser();
-                if (user != null) {
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
-
-                    SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
-                    sharedPreferencesProvider.setSharedUserId(null);
-
-                    //delateAll RoomDb
-
-                    startActivity(new Intent(this, LoginActivity.class));
-                } else {
-                    Toast.makeText(this, "Nessun utente loggato", Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            case R.id.changePwItemMenu:
-                EditText newPassword = new EditText(this);
-                AlertDialog.Builder changePwDialog = new AlertDialog.Builder(this);
-                changePwDialog.setTitle("Cambia password?");
-                changePwDialog.setMessage("Inserisci la tua nuova password.");
-                changePwDialog.setView(newPassword);
-
-                changePwDialog.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        String newPw = newPassword.getText().toString();
-                        mAuth.getCurrentUser().updatePassword(newPw).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(@NonNull Void unused) {
-                                Toast.makeText(NewActivityEvent.this, "La password è stata cambiata", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(NewActivityEvent.this, "Errore! Password non cambiata", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                changePwDialog.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // close Dialog
-                    }
-                });
-                changePwDialog.create().show();
-
-                break;
-
-            case R.id.RefreshItemMenu:
-                //refresh method
-                break;
-        }
-        return true;
-    }
-
-    private void showDatePickerDialog(final Button sceltaDateTime) {
-        final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR,year);
-                calendar.set(Calendar.MONTH,month);
-                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
-
-                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
-            }
-        };
-
-        new DatePickerDialog(NewActivityEvent.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
-
-    }
-
-    private void showTimePickerDialog(final Button sceltaDateTime) {
-        final Calendar calendar=Calendar.getInstance();
-
-        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                calendar.set(Calendar.MINUTE,minute);
-
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
-
-                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
-            }
-        };
-
-        new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
-    }
-
     private void caricaDatiAttivita(String idAttivitaI) {
 
         Runnable runnable = new Runnable() {
@@ -373,6 +269,147 @@ public class NewActivityEvent extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), Activity_travel_view.class);
         startActivity(i);
 
+    }
+
+
+    private void showDatePickerDialog(final Button sceltaDateTime) {
+        final Calendar calendar=Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH,month);
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
+
+                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        };
+
+        new DatePickerDialog(NewActivityEvent.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+
+    }
+
+    private void showTimePickerDialog(final Button sceltaDateTime) {
+        final Calendar calendar=Calendar.getInstance();
+
+        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                calendar.set(Calendar.MINUTE,minute);
+
+                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
+
+                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
+            }
+        };
+
+        new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+    }
+
+
+    // Oprions Menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.options, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.logoutItemMenu:
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user != null) {
+                    FirebaseAuth.getInstance().signOut();
+                    Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
+
+                    SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+                    sharedPreferencesProvider.setSharedUserId(null);
+
+                    //delateAll RoomDb
+
+                    startActivity(new Intent(this, LoginActivity.class));
+                } else {
+                    Toast.makeText(this, "Nessun utente loggato", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.changePwItemMenu:
+                EditText newPassword = new EditText(this);
+                AlertDialog.Builder changePwDialog = new AlertDialog.Builder(this);
+                changePwDialog.setTitle("Cambia password?");
+                changePwDialog.setMessage("Inserisci la tua nuova password.");
+                changePwDialog.setView(newPassword);
+
+                changePwDialog.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String newPw = newPassword.getText().toString();
+                        mAuth.getCurrentUser().updatePassword(newPw).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(@NonNull Void unused) {
+                                Toast.makeText(NewActivityEvent.this, "La password è stata cambiata", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(NewActivityEvent.this, "Errore! Password non cambiata", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                changePwDialog.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // close Dialog
+                    }
+                });
+                changePwDialog.create().show();
+
+                break;
+
+            case R.id.RefreshItemMenu:
+                //refresh method
+                break;
+
+            case R.id.chUsernamePwItemMenu:
+                EditText newUsername = new EditText(this);
+                AlertDialog.Builder changeUnDialog = new AlertDialog.Builder(this);
+                changeUnDialog.setTitle("Cambia username?");
+                changeUnDialog.setMessage("Inserisci il tuo nuovo username.");
+                changeUnDialog.setView(newUsername);
+
+                changeUnDialog.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String newUn = newUsername.getText().toString();
+
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(newUn)
+                                .build();
+                        assert user != null;
+                        user.updateProfile((profileUpdates));
+
+                        Utente u = new Utente(user.getUid(), user.getEmail(), newUn);
+                        mITravelRepository.pushNuovoUtente(u);
+                    }
+                });
+                changeUnDialog.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // close Dialog
+                    }
+                });
+                changeUnDialog.create().show();
+
+                break;
+        }
+        return true;
     }
 
     public void apriMappe (String posizione) {

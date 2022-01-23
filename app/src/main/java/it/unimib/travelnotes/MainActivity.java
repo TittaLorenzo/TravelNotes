@@ -24,35 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (userId != null) {
             startActivity(new Intent(this, TravelList.class));
+            finish();
         }
 
-
         setContentView(R.layout.activity_main);
-
-
-        //bottone login che porta alla lista viaggi
-        final Button mButtonNext = findViewById(R.id.L_button);
-        mButtonNext.setOnClickListener(v -> {
-            Intent intent = new Intent(this, TravelList.class);
-            startActivity(intent);
-        });
-
-        //bottone fittizio nuova attività che porta alla schermata di aggiunta attività
-        final Button nButtonNext = findViewById(R.id.iNuovaAttivitaButton);
-        nButtonNext.setOnClickListener(v -> {
-            Intent i = new Intent(this, NewActivityEvent.class);
-            startActivity(i);
-        });
-
-        //bottone fittizio nuova attività che porta alla schermata di aggiunta attività
-        final Button attivitaUno = findViewById(R.id.attivitaUno);
-        attivitaUno.setOnClickListener(v -> {
-            Intent i = new Intent(this, NewActivityEvent.class);
-            i.putExtra("viaggioId", "-MtA7mKtdZODJR98_3hH");
-            i.putExtra("attivitaId", "-MtABb5CDgpuMyffg8bd");
-            startActivity(i);
-        });
-
 
         //bottone fittizio schermata di login
         final Button loginPage = findViewById(R.id.loginPageButton);
