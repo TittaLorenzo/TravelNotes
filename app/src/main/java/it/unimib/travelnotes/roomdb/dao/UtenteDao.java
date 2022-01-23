@@ -17,7 +17,7 @@ import it.unimib.travelnotes.roomdb.relations.UtenteConViaggi;
 public interface UtenteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long nuovoUtente(Utente utente);
+    void nuovoUtente(Utente utente);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addAllUtenti(List<Utente> listaUtenti);

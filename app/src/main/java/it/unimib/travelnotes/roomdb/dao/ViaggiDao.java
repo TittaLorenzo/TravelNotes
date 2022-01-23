@@ -18,7 +18,7 @@ import it.unimib.travelnotes.roomdb.relations.ViaggioUtenteCrossRef;
 public interface ViaggiDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long nuovoViaggio(Viaggio viaggio);
+    void nuovoViaggio(Viaggio viaggio);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addAllViaggi(List<Viaggio> listViaggio);

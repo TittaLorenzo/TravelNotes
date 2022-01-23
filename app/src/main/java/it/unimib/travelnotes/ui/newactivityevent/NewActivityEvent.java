@@ -151,14 +151,17 @@ public class NewActivityEvent extends AppCompatActivity {
         } catch (Exception e) {
             viaggioId = null;
         }
+        //fittizio
+        viaggioId = "-MtA7mKtdZODJR98_3hH";
+
         if (attivitaId != null) {
             caricaDatiAttivita(attivitaId);
         }
 
-        Button buttonMaps = findViewById(R.id.buttonMaps);
+        /*Button buttonMaps = findViewById(R.id.buttonMaps);
         buttonMaps.setOnClickListener(v -> {
             apriMappe(campoPosizione.getText().toString());
-        });
+        });*/
 
         mNewActivityEventViewModel = new ViewModelProvider(this).get(NewActivityEventViewModel.class);
 
@@ -176,7 +179,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
     }
 
-    //menu logout
+    // Oprions Menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -187,7 +190,7 @@ public class NewActivityEvent extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logoutItemMenu:
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                FirebaseUser user = mAuth.getCurrentUser();
                 if (user != null) {
                     FirebaseAuth.getInstance().signOut();
                     Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
@@ -331,22 +334,6 @@ public class NewActivityEvent extends AppCompatActivity {
 
     public void salvaButtonNuovaAttivita() {
 
-        /*//scrittura su cloud
-        mDatabase.child("attivita").child(String.valueOf(attivita.getAttivitaId())).setValue(attivita)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-
-
         Date dataInizio = new Date();
         Date dataFine = new Date();
         try {
@@ -375,14 +362,11 @@ public class NewActivityEvent extends AppCompatActivity {
             a.setAttivitaId(attivitaId);
             a.setViaggioId(viaggioId);
 
-            //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().aggiornaAttivita(a);
-
             mITravelRepository.pushNuovaAttivita(a, true);
 
         } else {
-            mITravelRepository.pushNuovaAttivita(a, false);
 
-            //long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
+            mITravelRepository.pushNuovaAttivita(a, false);
         }
 
 

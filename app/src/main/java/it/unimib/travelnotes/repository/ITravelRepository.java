@@ -49,7 +49,7 @@ public interface ITravelRepository {
     //Delete
     void deleteViaggio(String viaggioId);
 
-    void deleteAttivita(String attivitaId);
+    void deleteAttivita(String attivitaId, String viaggioId);
 
     void deleteUtente(String utenteId);
 

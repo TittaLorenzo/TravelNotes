@@ -68,11 +68,12 @@ public class ListaAttivitaViewModel extends AndroidViewModel {
 
     public MutableLiveData<ListaAttivitaResponse> getlistaAttivita() {
         if (mListaAttivitaLiveData == null) {
-            // mListaAttivitaLiveData = new MutableLiveData<ListaAttivitaResponse>();
-            fetchListaAttivitaViewModel();
+            mListaAttivitaLiveData = new MutableLiveData<ListaAttivitaResponse>();
         } else {
             mListaAttivitaLiveData.getValue().setError(false);
         }
+        fetchListaAttivitaViewModel();
+
         return mListaAttivitaLiveData;
     }
 

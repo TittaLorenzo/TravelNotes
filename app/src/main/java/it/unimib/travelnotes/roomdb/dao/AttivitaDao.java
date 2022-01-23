@@ -17,7 +17,7 @@ import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
 public interface AttivitaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long nuovaAttivita(Attivita attivita);
+    void nuovaAttivita(Attivita attivita);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void addAllAttivita(List<Attivita> listaAttivita);

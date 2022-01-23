@@ -26,6 +26,16 @@ public class SharedPreferencesProvider {
         editor.apply();
     }
 
+    public String getSelectedViaggioId() {
+        return sharedPref.getString(mApplication.getString(R.string.shared_viaggio_key), null);
+    }
+
+    public void setSelectedViaggioId(String viaggioId) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(mApplication.getString(R.string.shared_viaggio_key), viaggioId);
+        editor.apply();
+    }
+
     public long getLastUpdateViaggio() {
         return sharedPref.getLong(mApplication.getString(R.string.shared_lastupdate_viaggio_key), 0);
     }

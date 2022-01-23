@@ -18,7 +18,7 @@ import it.unimib.travelnotes.roomdb.dao.UtenteDao;
 import it.unimib.travelnotes.roomdb.dao.ViaggiDao;
 import it.unimib.travelnotes.roomdb.relations.ViaggioUtenteCrossRef;
 
-@Database(entities = {Utente.class, Viaggio.class, Attivita.class, ViaggioUtenteCrossRef.class}, version = 7)
+@Database(entities = {Utente.class, Viaggio.class, Attivita.class, ViaggioUtenteCrossRef.class}, version = 8)
 @TypeConverters({Converters.class})
 public abstract class TravelDatabase extends RoomDatabase {
 

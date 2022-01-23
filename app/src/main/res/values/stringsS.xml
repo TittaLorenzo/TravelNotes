@@ -2,6 +2,7 @@
 <resources>
     <string name="preferences_file_key">shared_preferences_file</string>
     <string name="shared_userid_key">UidKey</string>
+    <string name="shared_viaggio_key">VidKey</string>
     <string name="shared_lastupdate_listaviaggi_key">lastUpdateListaViaggiKey</string>
     <string name="shared_lastupdate_listaattivita_key">lastUpdateListaAttivitaKey</string>
     <string name="shared_lastupdate_gruppoviaggio_key">lastUpdateGruppoViaggioKey</string>
