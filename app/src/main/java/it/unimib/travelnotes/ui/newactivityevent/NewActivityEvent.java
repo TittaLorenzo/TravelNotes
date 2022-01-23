@@ -331,7 +331,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
                     //delateAll RoomDb
 
-                    startActivity(new Intent(this, LoginActivity.class));
+                    startActivity(new Intent(this, MainActivity.class));
                 } else {
                     Toast.makeText(this, "Nessun utente loggato", Toast.LENGTH_SHORT).show();
                 }

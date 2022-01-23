@@ -4,6 +4,7 @@ import static android.content.ContentValues.TAG;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -18,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.response.AttivitaResponse;
 import it.unimib.travelnotes.Model.response.ViaggioResponse;
@@ -41,6 +45,7 @@ import it.unimib.travelnotes.Model.response.ListaViaggiResponse;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.SharedPreferencesProvider;
+import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 import it.unimib.travelnotes.roomdb.relations.UtenteConViaggi;
 import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
@@ -242,8 +247,7 @@ public class TravelRepository implements ITravelRepository {
 
             Viaggio viaggio = mLocalDatabase.getViaggioDao().findViaggioById(viaggioId);
 
-            mRtDatabase.child("utenti").orderByChild("datiutente/email").equalTo(email).limitToFirst(1)
-                    .addValueEventListener(new ValueEventListener() {
+            ValueEventListener findUtentiListener = new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -252,7 +256,6 @@ public class TravelRepository implements ITravelRepository {
 
                         userIdAdd = postSnapshot.getKey();
                     }
-                    //mRtDatabase.child("utenti").orderByChild("datiutente/email").equalTo(email).limitToFirst(1).removeEventListener();
 
                     if (userIdAdd != null) {
                         mRtDatabase.child("utenti").child(userIdAdd).child("datiutente").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -303,7 +306,11 @@ public class TravelRepository implements ITravelRepository {
                 public void onCancelled(@NonNull DatabaseError error) {
 
                 }
-            });
+            };
+            mRtDatabase.child("utenti").orderByChild("datiutente/email").equalTo(email).limitToFirst(1)
+                    .addValueEventListener(findUtentiListener);
+            mRtDatabase.child("utenti").orderByChild("datiutente/email").equalTo(email).limitToFirst(1)
+                    .removeEventListener(findUtentiListener);
         };
         new Thread(runnable).start();
     }
@@ -683,7 +690,34 @@ public class TravelRepository implements ITravelRepository {
 
     @Override
     public void deleteUtente(String utenteId) {
-        // TODO: elimina utente da -utenti -liste utenti dei viaggi -auth
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                List<Viaggio> listaViaggi = mLocalDatabase.getUtenteDao().getUtenteConViaggi(utenteId).viaggi;
+
+                for (Viaggio viaggio : listaViaggi) {
+                    mRtDatabase.child("viaggi").child(viaggio.getViaggioId()).child("listautenti").child(utenteId).removeValue();
+                }
+            }
+        };
+        new Thread(runnable).start();
+
+        mRtDatabase.child("utenti").child(utenteId).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+                            mApplication.startActivity(new Intent(mApplication.getApplicationContext(), MainActivity.class));
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override
