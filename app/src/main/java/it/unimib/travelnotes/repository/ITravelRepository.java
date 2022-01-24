@@ -15,15 +15,6 @@ import it.unimib.travelnotes.Model.Viaggio;
 
 public interface ITravelRepository {
 
-    // Push
-    void pushNuovoViaggio(Viaggio viaggio, boolean esiste);
-
-    void pushNuovaAttivita(Attivita attivita, boolean esiste);
-
-    void pushAggiungiAlGruppo(String email, String viaggioId);
-
-    void pushNuovoUtente(Utente utente);
-
     //Fetch
     MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(String viaggioId);
 
@@ -37,14 +28,16 @@ public interface ITravelRepository {
 
     void loadUtente(String utenteId);
 
-    //Listener
-    void addListaViaggiListener(String utenteId);
 
-    void addListaAttivitaListener(String viaggioId);
+    // Push
+    void pushNuovoViaggio(Viaggio viaggio, boolean esiste);
 
-    void addListaUtentiListener(String viaggioId);
+    void pushNuovaAttivita(Attivita attivita, boolean esiste);
 
-    void addViaggioListener(String viaggioId);
+    void pushAggiungiAlGruppo(String email, String viaggioId);
+
+    void pushNuovoUtente(Utente utente);
+
 
     //Delete
     void deleteViaggio(String viaggioId);

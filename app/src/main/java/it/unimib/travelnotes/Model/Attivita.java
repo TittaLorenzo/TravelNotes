@@ -8,13 +8,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity (tableName = "elenco_attivita", foreignKeys = {
-        @ForeignKey(entity = Viaggio.class,
-        parentColumns = "viaggioId",
-        childColumns = "attivitaId",
-        onDelete = ForeignKey.CASCADE,
-        onUpdate = ForeignKey.CASCADE)
-})
+@Entity (tableName = "elenco_attivita")
 public class Attivita {
 
     @PrimaryKey

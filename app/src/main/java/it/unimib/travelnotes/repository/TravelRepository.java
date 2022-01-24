@@ -71,6 +71,7 @@ public class TravelRepository implements ITravelRepository {
     public TravelRepository(Application application) {
         this.mApplication = application;
         mRtDatabase = FirebaseDatabase.getInstance(REALTIME_URL).getReference();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mLocalDatabase = TravelDatabase.getDatabase(mApplication.getApplicationContext());
         this.mListaAttivitaLiveData = new MutableLiveData<>();
         this.mListaUtentiLiveData = new MutableLiveData<>();
@@ -144,6 +145,32 @@ public class TravelRepository implements ITravelRepository {
         getAttivitaFromDatabase(attivitaId);
 
         return mAttivitaLiveData;
+    }
+
+    @Override
+    public void loadUtente(String utenteId) {
+
+        mSharedPreferencesProvider.setSharedUserId(utenteId);
+
+        mRtDatabase.child("utenti").child(utenteId).child("datiutente").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+
+                }
+                else {
+
+                    Utente utente = task.getResult().getValue(Utente.class);
+
+                    Runnable runnable = () -> {
+                        mLocalDatabase.getUtenteDao().nuovoUtente(utente);
+                    };
+                    new Thread(runnable).start();
+                }
+            }
+        });
+
     }
 
 
@@ -343,32 +370,6 @@ public class TravelRepository implements ITravelRepository {
 
     }
 
-    @Override
-    public void loadUtente(String utenteId) {
-
-        mSharedPreferencesProvider.setSharedUserId(utenteId);
-
-        mRtDatabase.child("utenti").child(utenteId).child("datiutente").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-
-                }
-                else {
-
-                    Utente utente = task.getResult().getValue(Utente.class);
-
-                    Runnable runnable = () -> {
-                        mLocalDatabase.getUtenteDao().nuovoUtente(utente);
-                    };
-                    new Thread(runnable).start();
-                }
-            }
-        });
-
-    }
-
 
     // Get From Database
     private void getElencoAttivitaFromDatabase(String viaggioId) {
@@ -504,7 +505,6 @@ public class TravelRepository implements ITravelRepository {
 
 
     // listener Realime Database
-    @Override
     public void addListaViaggiListener(String utenteId) {
 
         ValueEventListener listaViaggiListener = new ValueEventListener() {
@@ -539,7 +539,6 @@ public class TravelRepository implements ITravelRepository {
 
     }
 
-    @Override
     public void addListaAttivitaListener(String viaggioId) {
 
         ValueEventListener listaAttivitaListener = new ValueEventListener() {
@@ -574,7 +573,6 @@ public class TravelRepository implements ITravelRepository {
         orderAttivitaByDate.addValueEventListener(listaAttivitaListener);
     }
 
-    @Override
     public void addListaUtentiListener(String viaggioId) {
 
         ValueEventListener listaUtentiListener = new ValueEventListener() {
@@ -609,7 +607,6 @@ public class TravelRepository implements ITravelRepository {
         orderUtenteByDate.addValueEventListener(listaUtentiListener);
     }
 
-    @Override
     public void addViaggioListener(String viaggioId) {
 
         ValueEventListener viaggiListener = new ValueEventListener() {
