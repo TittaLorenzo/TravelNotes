@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/attivita_card"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="555dp"
     android:layout_margin="3pt"
     android:clickable="true"
     android:focusable="true"
@@ -14,14 +14,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="157dp"
+        android:layout_height="714dp"
         android:background="@color/primaryColor"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="406dp"
             android:orientation="vertical"
             android:padding="16dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,12 +41,13 @@
                     android:id="@+id/nome_attivita"
                     android:layout_width="219dp"
                     android:layout_height="48dp"
-                    android:textAppearance="?attr/textAppearanceHeadline6" /></LinearLayout>
+                    android:textAppearance="?attr/textAppearanceHeadline6" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/descrizione"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="344dp"
+                android:layout_height="486dp"
                 android:layout_marginTop="8dp"
                 android:textAppearance="?attr/textAppearanceBody2"
                 android:textColor="?android:attr/textColorSecondary" />
@@ -52,5 +55,5 @@
         </LinearLayout>
 
 
-
-    </LinearLayout></androidx.cardview.widget.CardView>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

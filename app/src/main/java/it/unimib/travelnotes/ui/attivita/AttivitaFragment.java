@@ -13,24 +13,13 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.List;
 
-import it.unimib.travelnotes.Activity_travel_view;
 import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.Model.TravelResponse;
-import it.unimib.travelnotes.NewActivityEvent;
 import it.unimib.travelnotes.R;
-import it.unimib.travelnotes.TravelAdapter;
-import it.unimib.travelnotes.TravelList;
+import it.unimib.travelnotes.MyAdapter;
 import it.unimib.travelnotes.databinding.FragmentAttivitaBinding;
-import it.unimib.travelnotes.databinding.FragmentFlightBinding;
-import com.google.gson.Gson;
+import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class AttivitaFragment extends Fragment  {
     private static final String TAG = "AttivitaFragment";
@@ -52,7 +41,7 @@ public class AttivitaFragment extends Fragment  {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         attivitaArray = new Attivita[]{
-                new Attivita("Degustazione", "degustazione nel culo con scappellamento a destra e salto mortale sulle palle del cameriere che poverino sta lavorando da 120 ore di fila"),
+                new Attivita("Degustazione", "degustazione nel culo con scappellamento a destra e salto mortale sulle palle del cameriere che poverino sta lavorando da 120 ore di fila, Giuliaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
                 new Attivita("Degustazione", "degustazione nel culo"),
                 new Attivita("Degustazione", "degustazione nel culo"),
                 new Attivita("Degustazione", "degustazione nel culo"),
