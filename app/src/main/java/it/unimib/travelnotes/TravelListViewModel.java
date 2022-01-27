@@ -69,20 +69,15 @@ public class TravelListViewModel extends AndroidViewModel {
 
     public MutableLiveData<ListaViaggiResponse> getlistaViaggi() {
         if (mListaViaggiLiveData == null) {
-            mListaViaggiLiveData = new MutableLiveData<ListaViaggiResponse>();
+            // mListaAttivitaLiveData = new MutableLiveData<ListaAttivitaResponse>();
+            fetchListaViaggiViewModel();
         } else {
             mListaViaggiLiveData.getValue().setError(false);
         }
-        fetchListaViaggiViewModel();
-
         return mListaViaggiLiveData;
     }
 
     private void fetchListaViaggiViewModel() {
-        mListaViaggiLiveData = mITravelRepository.fetchListaViaggi(utenteId);
-    }
-
-    public MutableLiveData<ListaViaggiResponse> getListaViaggiResponse() {
-        return mListaViaggiLiveData;
+        mListaViaggiLiveData = mITravelRepository.fetchListaViaggi(utenteId, false);
     }
 }

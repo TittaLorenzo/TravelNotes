@@ -1,21 +1,22 @@
 package it.unimib.travelnotes.Model;
 
-import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity (tableName = "elenco_attivita")
+@Entity (tableName = "elenco_attivita",
+        indices = {@Index(value = {"viaggioOnlineId"}, unique = true)})
 public class Attivita {
 
-    @PrimaryKey
-    @NonNull
-    private String attivitaId;
+    @PrimaryKey(autoGenerate = true)
+    private long attivitaId;
 
-    private String viaggioId;
+    private long viaggioId;
+
+    private String viaggioOnlineId;
+    private String attivitaOnlineId;
 
     private Date dataInizio;
     private Date dataFine;
@@ -23,21 +24,36 @@ public class Attivita {
     private String nome;
     private String descrizione;
 
-    @NonNull
-    public String getAttivitaId() {
+    public long getAttivitaId() {
         return attivitaId;
     }
 
-    public void setAttivitaId(@NonNull String attivitaId) {
+    public void setAttivitaId(long attivitaId) {
         this.attivitaId = attivitaId;
     }
 
-    public String getViaggioId() {
+    public long getViaggioId() {
         return viaggioId;
     }
 
-    public void setViaggioId(String viaggioId) {
+    public void setViaggioId(long viaggioId) {
         this.viaggioId = viaggioId;
+    }
+
+    public String getViaggioOnlineId() {
+        return viaggioOnlineId;
+    }
+
+    public void setViaggioOnlineId(String viaggioOnlineId) {
+        this.viaggioOnlineId = viaggioOnlineId;
+    }
+
+    public String getAttivitaOnlineId() {
+        return attivitaOnlineId;
+    }
+
+    public void setAttivitaOnlineId(String attivitaOnlineId) {
+        this.attivitaOnlineId = attivitaOnlineId;
     }
 
     public Date getDataInizio() {
@@ -82,13 +98,13 @@ public class Attivita {
 
     public Attivita() {}
 
-    public Attivita(String nome, String descrizione,String posizione, Date dataInizio, Date dataFine, String viaggioId){
-        this.nome= nome;
-        this.descrizione = descrizione;
+    public Attivita(String nomeI, String descrizioneI,String posizione, Date di, Date df, long IDu){
+        this.nome= nomeI;
+        this.descrizione = descrizioneI;
         this.posizione = posizione;
-        this.dataInizio = dataInizio;
-        this.dataFine = dataFine;
-        this.viaggioId = viaggioId;
+        this.dataInizio = di;
+        this.dataFine = df;
+        this.viaggioId = IDu;
     }
 
     public Attivita(String nomeI, String descrizioneI){
