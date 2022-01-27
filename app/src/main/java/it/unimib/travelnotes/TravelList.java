@@ -25,19 +25,103 @@ public class TravelList extends AppCompatActivity {
     DatabaseReference database;
     MyAdapter myAdapter;
     ArrayList<Viaggio> list;
+
     public static final String FIREBASE_DATABASE_URL = "https://travelnotes-334817-default-rtdb.europe-west1.firebasedatabase.app/";
+    private String utenteId;
+
+    public void listaViaggiListenerProva(String utenteId) {
+
+        ValueEventListener listaViaggiListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+
+                    Viaggio viaggio = postSnapshot.getValue(Viaggio.class);
+
+                    list.add(viaggio);
+                }
+
+                myAdapter = new MyAdapter(TravelList.this,list);
+                recyclerView.setAdapter(myAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference().child("utenti").child(utenteId).child("listaviaggi").addValueEventListener(listaViaggiListener);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_list);
+        list = new ArrayList<>();
+       // database = FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference("travel");
+
+        utenteId = "gvHD5XtoQWTOVecJ8mGohU1qbBy2";
+
+        listaViaggiListenerProva(utenteId);
+
+
+
+
+        /*ValueEventListener listaViaggiListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+
+                    Viaggio viaggio = postSnapshot.getValue(Viaggio.class);
+
+                    list.add(viaggio);
+                }
+
+                myAdapter = new MyAdapter(TravelList.this,list);
+                recyclerView.setAdapter(myAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        };
+        FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference().child("utenti").child("JTvnws61akaZyQYfzeubdzXgx2H3").child("listaviaggi").addValueEventListener(listaViaggiListener);
+        */
+
+
 
         recyclerView = findViewById(R.id.recyclerView);
-        database = FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference("travel");
+        /*
+        database.child("viaggi").child("-MtA7mKtdZODJR98_3hH").child("dettagliviaggio").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                /*int i = 0;
+                for (DataSnapshot parentIdSnapshot: task.getResult().getChildren()) {
+                    try {
+                        list.set(i, parentIdSnapshot.getValue(Viaggio.class));
+                    } catch (Exception e) {
+                        Log.e("MyLog", String.valueOf(task.getResult()));
+                    }
+                    i++;
+                }
+
+                if (!task.isSuccessful()) {
+                    Log.e("firebase", "Error getting data", task.getException());
+                }
+                else {
+                    Viaggio viaggio = task.getResult().getValue(Viaggio.class);
+                }
+            }
+
+        });*/
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        list = new ArrayList<>();
+
         myAdapter = new MyAdapter(this,list);
         recyclerView.setAdapter(myAdapter);
 
@@ -47,7 +131,7 @@ public class TravelList extends AppCompatActivity {
             startActivity(intent);
         });
 
-        database.addValueEventListener(new ValueEventListener() {
+        /*database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -66,10 +150,11 @@ public class TravelList extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        });
+        });*/
 
 
     }
+
 }
 
 
