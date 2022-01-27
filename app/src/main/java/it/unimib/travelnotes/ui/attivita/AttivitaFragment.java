@@ -24,7 +24,7 @@ import java.util.List;
 import it.unimib.travelnotes.Activity_travel_view;
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.TravelResponse;
-import it.unimib.travelnotes.NewActivityEvent;
+import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.MyAdapter;
 import it.unimib.travelnotes.TravelList;

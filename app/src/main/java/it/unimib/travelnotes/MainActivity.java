@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         //bottone login che porta alla lista viaggi
         final Button mButtonNext = findViewById(R.id.L_button);
         mButtonNext.setOnClickListener(v -> {
-            Intent intent = new Intent(this, TravelList.class);
+            Intent intent = new Intent(this, NewTravel.class);
             startActivity(intent);
         });
 

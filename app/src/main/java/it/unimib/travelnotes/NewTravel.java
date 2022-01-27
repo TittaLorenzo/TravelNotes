@@ -107,8 +107,11 @@ public class NewTravel extends AppCompatActivity {
                     diff = (arrivoR.getTime() - andataR.getTime());
                     long diffMinutesR = diff / (60 * 1000);
                     Viaggio viagg = new Viaggio(andataD, andataR, daA, aA, daR, aR, Double.longBitsToDouble(diffMinutesD), Double.longBitsToDouble(diffMinutesR));
-                    if(diffMinutesD <= 0 || diffMinutesR <= 0 || andataR.compareTo(andataD) <= 0 || arrivoR.compareTo(arrivoD) <= 0){
+                    if(diffMinutesD <= 0 || diffMinutesR <= 0 || andataR.compareTo(andataD) <= 0 || arrivoR.compareTo(arrivoD) <= 0 || andataR.compareTo(arrivoD) <= 0){
                         Toast.makeText(this, "Correggere le date", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(andataVDa.getText().toString().matches("") || andataVA.getText().toString().matches("") || ritornoVDa.getText().toString().matches("") || ritornoVA.getText().toString().matches("")){
+                        Toast.makeText(this, "Inserire città valide", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(this, "Viaggio creato", Toast.LENGTH_SHORT).show();
@@ -143,6 +146,9 @@ public class NewTravel extends AppCompatActivity {
                     Viaggio viagg = new Viaggio(andataD, daA, aA, Double.longBitsToDouble(diffMinutes));
                     if(diffMinutes <= 0){
                         Toast.makeText(this, "Correggere le date", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(andataVDa.getText().toString().matches("") || andataVA.getText().toString().matches("")){
+                        Toast.makeText(this, "Inserire città valide", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(this, "Viaggio creato", Toast.LENGTH_SHORT).show();
