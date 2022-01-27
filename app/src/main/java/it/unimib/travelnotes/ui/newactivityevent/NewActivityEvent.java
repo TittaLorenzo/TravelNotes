@@ -153,6 +153,8 @@ public class NewActivityEvent extends AppCompatActivity {
         } catch (Exception e) {
             viaggioId = null;
         }
+
+        // TODO: leggere e impostare il viaggioId passato come intent extra
         //fittizio
         viaggioId = "-MtA7mKtdZODJR98_3hH";
 

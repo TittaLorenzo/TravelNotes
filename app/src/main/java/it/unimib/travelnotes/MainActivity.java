@@ -29,14 +29,12 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        //bottone fittizio schermata di login
         final Button loginPage = findViewById(R.id.loginPageButton);
         loginPage.setOnClickListener(v -> {
             Intent i = new Intent(this, LoginActivity.class);
             startActivity(i);
         });
 
-        //bottone fittizio registrazione
         final Button registerPage = findViewById(R.id.registerPageButton);
         registerPage.setOnClickListener(v -> {
             Intent i = new Intent(this, RegisterActivity.class);
