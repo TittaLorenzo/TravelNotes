@@ -31,11 +31,11 @@ public class MyAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position){
         Viaggio viaggio = list.get(position);
-        if(viaggio.getPartenzaRitorno()==null){
-            return 0;
+        if(viaggio.getDurataRitorno() != 0 ){
+            return 1;
         }
         else
-            return 1;
+            return 0;
     }
 
     @NonNull
@@ -58,7 +58,7 @@ public class MyAdapter extends RecyclerView.Adapter {
 
         if(this.getItemViewType(position)==0){
             Viaggio viaggio = list.get(position);
-            TravelViewHolder viewHolder = (TravelViewHolder) holder;
+            TravelAViewHolder viewHolder = (TravelAViewHolder) holder;
             viewHolder.idViaggio= viaggio.getViaggioId();
             viewHolder.travelDeparture.setText(viaggio.getPartenzaAndata());
             viewHolder.travelDestination.setText(viaggio.getDestinazioneAndata());
