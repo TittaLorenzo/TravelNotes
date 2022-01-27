@@ -17,23 +17,20 @@ import it.unimib.travelnotes.roomdb.relations.UtenteConViaggi;
 public interface UtenteDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void nuovoUtente(Utente utente);
+    public long nuovoUtente(Utente utente);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addAllUtenti(List<Utente> listaUtenti);
+    public void addAllUtenti(List<Utente> listaUtenti);
 
     @Update
-    void aggiornaUtente(Utente utente);
+    public void aggiornaUtente(Utente utente);
 
     @Delete
-    void cancellaUtente(Utente utente);
-
-    @Query("DELETE FROM elenco_utenti WHERE utenteId = :utenteId")
-    void deleteUtenteById(String utenteId);
+    public void cancellaUtente(Utente utente);
 
     @Query("SELECT * FROM elenco_utenti WHERE utenteId = :utenteId")
-    Utente findUtenteById(String utenteId);
+    public Utente findUtenteById(String utenteId);
 
     @Query("SELECT * FROM elenco_utenti WHERE utenteId = :utenteId")
-    UtenteConViaggi getUtenteConViaggi(String utenteId);
+    public UtenteConViaggi getUtenteConViaggi(String utenteId);
 }

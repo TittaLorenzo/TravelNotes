@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="preferences_file_key">shared_preferences_file</string>
-    <string name="shared_userid_key">UidKey</string>
-    <string name="shared_viaggio_key">VidKey</string>
-
     <string name="titleNuovaAttivita">Nuova attività</string>
     <string name="titleModificaAttivita">Modifica attività</string>
     <string name="attivitaNomeHint">Nome attività</string>
@@ -17,7 +13,7 @@
     <string name="dataHintNuovaAttivita">aaaa-mm-gg</string>
     <string name="oraHintNuovaAttivita">mm-ss</string>
     <string name="logoutItemMenu">Logout</string>
-    <string name="chUsernameItemMenu">Cambia username</string>
+    <string name="impostazioniItemMenu">Impostazioni</string>
     <string name="changePwItemMenu">Cambia password</string>
     <string name="emailInputHint">Email</string>
     <string name="passwordInputHint">Password</string>
@@ -29,10 +25,4 @@
     <string name="registrati">registrati</string>
     <string name="giaRegistratoRegister">Già registrato? Effettua il Login qui</string>
     <string name="indietro">Indietro</string>
-    <string name="username">Username</string>
-    <string name="erroreLogin">Email o password errati</string>
-    <string name="pwNonCoincidonoError">Le password non coincidono</string>
-    <string name="pwCortaError">Password troppo corta</string>
-    <string name="refresh">Refresh</string>
-    <string name="register">Register</string>
 </resources>
