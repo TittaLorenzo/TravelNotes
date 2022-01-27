@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.autentication.RegisterActivity;
 import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;

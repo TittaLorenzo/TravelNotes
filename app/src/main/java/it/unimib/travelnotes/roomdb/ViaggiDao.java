@@ -19,10 +19,7 @@ public interface ViaggiDao {
     @Delete
     public void cancellaViaggio(Viaggio viaggio);
 
-    @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio")
-<<<<<<< HEAD
-=======
+    //@Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :idViaggio");
 
->>>>>>> soldati_schermataviaggio
     public Viaggio findViaggioById(Long idViaggio);
 }
