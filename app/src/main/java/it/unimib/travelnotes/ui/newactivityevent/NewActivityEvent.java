@@ -84,7 +84,7 @@ public class NewActivityEvent extends AppCompatActivity {
     private String attivitaId;
     private String viaggioId;
 
-
+    //cms
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
