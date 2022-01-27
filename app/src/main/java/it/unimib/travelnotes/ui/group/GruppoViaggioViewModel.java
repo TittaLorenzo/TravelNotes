@@ -14,11 +14,17 @@ public class GruppoViaggioViewModel extends AndroidViewModel {
     private final ITravelRepository mITravelRepository;
     private MutableLiveData<ListaUtentiResponse> mListaUtentiLiveData;
 
-    private long viaggioId;
+    private String viaggioId;
 
     private int currentResults;
     private int totalResult;
     private boolean isLoading;
+
+    public GruppoViaggioViewModel(Application application) {
+        super(application);
+
+        mITravelRepository = new TravelRepository(application);
+    }
 
     public MutableLiveData<ListaUtentiResponse> getmListaUtentiLiveData() {
         return mListaUtentiLiveData;
@@ -28,28 +34,12 @@ public class GruppoViaggioViewModel extends AndroidViewModel {
         this.mListaUtentiLiveData = mListaUtentiLiveData;
     }
 
-    public long getViaggioId() {
+    public String getViaggioId() {
         return viaggioId;
     }
 
-    public void setViaggioId(long viaggioId) {
+    public void setViaggioId(String viaggioId) {
         this.viaggioId = viaggioId;
-    }
-
-    public int getCurrentResults() {
-        return currentResults;
-    }
-
-    public void setCurrentResults(int currentResults) {
-        this.currentResults = currentResults;
-    }
-
-    public int getTotalResult() {
-        return totalResult;
-    }
-
-    public void setTotalResult(int totalResult) {
-        this.totalResult = totalResult;
     }
 
     public boolean isLoading() {
@@ -58,12 +48,6 @@ public class GruppoViaggioViewModel extends AndroidViewModel {
 
     public void setLoading(boolean loading) {
         isLoading = loading;
-    }
-
-    public GruppoViaggioViewModel(Application application) {
-        super(application);
-
-        mITravelRepository = new TravelRepository(application);
     }
 
     public MutableLiveData<ListaUtentiResponse> getListaUtenti() {
@@ -77,7 +61,11 @@ public class GruppoViaggioViewModel extends AndroidViewModel {
     }
 
     private void fetchListaUtentiViewModel() {
-        mListaUtentiLiveData = mITravelRepository.fetchGruppoViaggio(viaggioId, false);
+        mListaUtentiLiveData = mITravelRepository.fetchGruppoViaggio(viaggioId);
+    }
+
+    public void aggiungiAlGruppo(String email) {
+        mITravelRepository.pushAggiungiAlGruppo(email, viaggioId);
     }
 
 }
