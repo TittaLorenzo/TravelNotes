@@ -14,6 +14,7 @@ public class Utente {
     private String utenteId;
 
     private String email;
+    private String username;
     private String nome;
     private String cognome;
     private Date nascita;
@@ -51,6 +52,14 @@ public class Utente {
         this.email = emailU;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public Date getNascita() {
         return nascita;
     }
@@ -62,10 +71,13 @@ public class Utente {
     public Utente() {
     }
 
-    public Utente(String nomeI, String cognomeI, Date nascitaI, String emailU){
-        this.nome= nomeI;
-        this.cognome = cognomeI;
-        this.nascita = nascitaI;
-        this.email = emailU;
+    public Utente(@NonNull String utenteId, String email, String username){
+        this.utenteId = utenteId;
+        this.email = email;
+        this.username = username;
+    }
+    public Utente(String username, String email){
+        this.username = username;
+        this.email = email;
     }
 }

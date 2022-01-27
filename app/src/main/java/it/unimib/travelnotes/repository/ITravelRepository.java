@@ -15,24 +15,39 @@ import it.unimib.travelnotes.Model.Viaggio;
 
 public interface ITravelRepository {
 
+    //Fetch
+    MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(String viaggioId);
+
+    MutableLiveData<ListaUtentiResponse> fetchGruppoViaggio(String viaggioId);
+
+    MutableLiveData<ListaViaggiResponse> fetchListaViaggi(String userId);
+
+    MutableLiveData<ViaggioResponse> fetchViaggio(String viaggioId);
+
+    MutableLiveData<AttivitaResponse> fetchAttivita(String attivitaId, String viaggioId);
+
+    void loadUtente(String utenteId);
+
+
+    // Push
     void pushNuovoViaggio(Viaggio viaggio, boolean esiste);
 
     void pushNuovaAttivita(Attivita attivita, boolean esiste);
 
-    void pushAggiungiAlGruppo(String email, long viaggioId);
+    void pushAggiungiAlGruppo(String email, String viaggioId);
 
     void pushNuovoUtente(Utente utente);
 
-    void loadUtente(String utenteId);
 
-    MutableLiveData<ListaAttivitaResponse> fetchListaAttivita(long viaggioId, boolean refresh);
+    //Delete
+    void deleteViaggio(String viaggioId);
 
-    MutableLiveData<ListaUtentiResponse> fetchGruppoViaggio(long viaggioId, boolean refresh);
+    void deleteAttivita(String attivitaId, String viaggioId);
 
-    MutableLiveData<ListaViaggiResponse> fetchListaViaggi(String userId, boolean refresh);
+    void deleteUtente(String utenteId);
 
-    MutableLiveData<ViaggioResponse> fetchViaggio(long viaggioId, boolean refresh);
+    void rimuoviDalGruppo(String viaggioId, String utenteId);
 
-    MutableLiveData<AttivitaResponse> fetchAttivita(long attivitaId, boolean refresh);
+    void deleteAllLocal();
 
 }

@@ -16,8 +16,8 @@ public class NewActivityEventViewModel extends AndroidViewModel {
     private final ITravelRepository mITravelRepository;
     private MutableLiveData<AttivitaResponse> mAttivitaLiveData;
 
-    private long attivitaId;
-    private long viaggioId;
+    private String attivitaId;
+    private String viaggioId;
 
     private int currentResults;
     private int totalResult;
@@ -31,19 +31,19 @@ public class NewActivityEventViewModel extends AndroidViewModel {
         this.mAttivitaLiveData = mAttivitaLiveData;
     }
 
-    public long getAttivitaId() {
+    public String getAttivitaId() {
         return attivitaId;
     }
 
-    public void setAttivitaId(long attivitaId) {
+    public void setAttivitaId(String attivitaId) {
         this.attivitaId = attivitaId;
     }
 
-    public long getViaggioId() {
+    public String getViaggioId() {
         return viaggioId;
     }
 
-    public void setViaggioId(long viaggioId) {
+    public void setViaggioId(String viaggioId) {
         this.viaggioId = viaggioId;
     }
 
@@ -88,7 +88,7 @@ public class NewActivityEventViewModel extends AndroidViewModel {
     }
 
     private void fetchAttivitaViewModel() {
-        mAttivitaLiveData = mITravelRepository.fetchAttivita(attivitaId, false);
+        mAttivitaLiveData = mITravelRepository.fetchAttivita(attivitaId, viaggioId);
     }
 
 }
