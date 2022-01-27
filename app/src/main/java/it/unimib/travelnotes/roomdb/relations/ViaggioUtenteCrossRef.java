@@ -6,7 +6,7 @@ import androidx.room.Entity;
 @Entity(primaryKeys = {"viaggioId", "utenteId"})
 public class ViaggioUtenteCrossRef {
     @NonNull
-    public String viaggioId;
+    public long viaggioId;
     @NonNull
     public String utenteId;
 }

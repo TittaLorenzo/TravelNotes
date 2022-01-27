@@ -17,23 +17,20 @@ import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
 public interface AttivitaDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void nuovaAttivita(Attivita attivita);
+    public long nuovaAttivita(Attivita attivita);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void addAllAttivita(List<Attivita> listaAttivita);
+    public void addAllAttivita(List<Attivita> listaAttivita);
 
     @Update
-    void aggiornaAttivita(Attivita attivita);
+    public void aggiornaAttivita(Attivita attivita);
 
     @Delete
-    void cancellaAttivita(Attivita attivita);
+    public void cancellaAttivita(Attivita attivita);
 
-    @Query("DELETE FROM elenco_attivita WHERE attivitaId = :attivitaId")
-    void deleteAttivitaById(String attivitaId);
-
-    @Query("SELECT * FROM elenco_attivita WHERE attivitaId = :attivitaId")
-    Attivita findAttivitaById(String attivitaId);
+    @Query("SELECT * FROM elenco_attivita WHERE attivitaId = :idAttivita")
+    public Attivita findAttivitaById(long idAttivita);
 
     @Query("SELECT * FROM elenco_viaggi WHERE viaggioId = :viaggioId")
-    ViaggioConAttivita getViaggioConAttivita(String viaggioId);
+    public ViaggioConAttivita getViaggioConAttivita(long viaggioId);
 }
