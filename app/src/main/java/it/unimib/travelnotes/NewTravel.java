@@ -13,8 +13,11 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -30,7 +33,6 @@ import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewTravel extends AppCompatActivity {
 
-    ImageButton invio;
     Button partenzaAndataButton;
     Button arrivoAndataButton;
     Button partenzaRitornoButton;
@@ -39,7 +41,8 @@ public class NewTravel extends AppCompatActivity {
     EditText andataVA;
     EditText ritornoVDa;
     EditText ritornoVA;
-    CheckBox checkAR;
+    Switch checkAR;
+    FloatingActionButton salvaVolo;
     String s1, s2;
     Date data1, data2;
 
@@ -55,13 +58,13 @@ public class NewTravel extends AppCompatActivity {
         arrivoAndataButton = findViewById(R.id.NT_sceltaAndataR);
         partenzaRitornoButton = findViewById(R.id.NT_sceltaRitornoP);
         arrivoRitornoButton = findViewById(R.id.NT_sceltaRitornoA);
-        invio = findViewById(R.id.NT_newTravelButton);
         checkAR = findViewById(R.id.NT_checkAR);
         andataVDa = findViewById(R.id.NT_andataDa);
         andataVA = findViewById(R.id.NT_andataA);
         ritornoVDa = findViewById(R.id.NT_ritornoDa);
         ritornoVA = findViewById(R.id.NT_ritornoA);
         mITravelRepository = new TravelRepository(getApplication());
+        salvaVolo = findViewById(R.id.NT_floatingButton);
 
         partenzaAndataButton.setOnClickListener(v -> {
             showDateTimeDialog(partenzaAndataButton);
@@ -87,7 +90,7 @@ public class NewTravel extends AppCompatActivity {
             }
         });
 
-        invio.setOnClickListener(v -> {
+        salvaVolo.setOnClickListener(v -> {
             String daA = andataVDa.getText().toString();
             String aA = andataVA.getText().toString();
             String daR = ritornoVDa.getText().toString();
@@ -174,6 +177,7 @@ public class NewTravel extends AppCompatActivity {
                 }
             }
         });
+
     }
 
 
