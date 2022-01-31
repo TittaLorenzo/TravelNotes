@@ -18,6 +18,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -37,11 +39,11 @@ public class NewTravel extends AppCompatActivity {
     Button arrivoAndataButton;
     Button partenzaRitornoButton;
     Button arrivoRitornoButton;
-    EditText andataVDa;
-    EditText andataVA;
-    EditText ritornoVDa;
-    EditText ritornoVA;
-    Switch checkAR;
+    TextInputEditText andataVDa;
+    TextInputEditText andataVA;
+    TextInputEditText ritornoVDa;
+    TextInputEditText ritornoVA;
+    SwitchMaterial checkAR;
     FloatingActionButton salvaVolo;
     String s1, s2;
     Date data1, data2;
