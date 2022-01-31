@@ -22,26 +22,23 @@ import it.unimib.travelnotes.databinding.FragmentAttivitaBinding;
 import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class AttivitaFragment extends Fragment  {
+
     private static final String TAG = "AttivitaFragment";
-
     private Attivita[] attivitaArray ;
-
-
     private List<Attivita> AttivitaList;
     private FragmentAttivitaBinding binding;
-   
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         binding = FragmentAttivitaBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         RecyclerView recyclerView = root.findViewById(R.id.recycler_attivita);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        //TODO collegare con database
         attivitaArray = new Attivita[]{
-                new Attivita("Degustazione", "degustazione nel culo con scappellamento a destra e salto mortale sulle palle del cameriere che poverino sta lavorando da 120 ore di fila, Giuliaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"),
+                new Attivita("Degustazione", "degustazione nel culo con scappellamento a destra e salto mortale sulle palle del cameriere che poverino sta lavorando da 120 ore di fila"),
                 new Attivita("Degustazione", "degustazione nel culo"),
                 new Attivita("Degustazione", "degustazione nel culo"),
                 new Attivita("Degustazione", "degustazione nel culo"),
@@ -59,18 +56,15 @@ public class AttivitaFragment extends Fragment  {
                 new Attivita("Degustazione", "degustazione nel culo"),
                 new Attivita("Degustazione", "degustazione nel culo"),
                 new Attivita("Degustazione", "degustazione nel culo"),
-
-
-
-
-
         };
+
         for (int i = 0; i < attivitaArray.length; i++) {
             Log.d(TAG, "Gson: " + attivitaArray[i]);
         }
 
         Adapter_attivita adapter_Attivita = new Adapter_attivita(attivitaArray, AttivitaFragment.this);
         recyclerView.setAdapter(adapter_Attivita);
+
         Button button_n_attivita = (Button) root.findViewById(R.id.new_attivita);
         button_n_attivita.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,11 +73,6 @@ public class AttivitaFragment extends Fragment  {
                 startActivity(intent);
             }
         });
-
-
-
-
-
 
 
         return root;
