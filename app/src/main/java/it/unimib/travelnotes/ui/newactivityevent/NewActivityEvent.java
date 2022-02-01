@@ -43,6 +43,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,6 +55,7 @@ import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.SharedPreferencesProvider;
+import it.unimib.travelnotes.TravelList;
 import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
@@ -73,7 +75,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
     private Button dataInizioAttivitaButton;
     private Button dataFineAttivitaButton;
-    private Button oraInizioNuovaAttivita;
+    private Button oraInizioAttivitaButton;
     private Button oraFineAttivitaButton;
     private Button buttonSalva;
 
@@ -84,15 +86,6 @@ public class NewActivityEvent extends AppCompatActivity {
     private String attivitaId;
     private String viaggioId;
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-=======
->>>>>>> soldati_schermataviaggio:app/src/main/java/it/unimib/travelnotes/NewActivityEvent.java
-=======
-    //cms
->>>>>>> parent of d42a305... Merge remote-tracking branch 'origin/confa_schermataAttività' into confa_schermataAttività
->>>>>>> Stashed changes
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +97,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
         dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
         dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
-        oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
+        oraInizioAttivitaButton = findViewById(R.id.oraInizioNuovaAttivita);
         oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
 
         campoNome = findViewById(R.id.nomeAttivitaInput);
@@ -112,26 +105,22 @@ public class NewActivityEvent extends AppCompatActivity {
         campoDescrizione = findViewById(R.id.descrizioneNuovaAttivita);
         buttonSalva = findViewById(R.id.salvaBottoneNuovaAttivita);
 
-        Button dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
-        Button dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
-        Button oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
-        Button oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
         ImageButton backButtonNuovaAttivita = (ImageButton) findViewById(R.id.backButtonNuovaAttivita);
 
         dataInizioAttivitaButton.setOnClickListener(v -> {
-            showDatePickerDialog(dataInizioAttivitaButton);
+            showDatePickerDialog("StartDate");
         });
 
         dataFineAttivitaButton.setOnClickListener(v -> {
-            showDatePickerDialog(dataFineAttivitaButton);
+            showDatePickerDialog("EndDate");
         });
 
-        oraInizioNuovaAttivita.setOnClickListener(v -> {
-            showTimePickerDialog(oraInizioNuovaAttivita);
+        oraInizioAttivitaButton.setOnClickListener(v -> {
+            showTimePickerDialog("StartTime");
         });
 
         oraFineAttivitaButton.setOnClickListener(v -> {
-            showTimePickerDialog(oraFineAttivitaButton);
+            showTimePickerDialog("EndTime");
         });
 
         backButtonNuovaAttivita.setOnClickListener(v -> {
@@ -157,10 +146,14 @@ public class NewActivityEvent extends AppCompatActivity {
             attivitaId = null;
         }
         try {
-            viaggioId = (String) getIntent().getExtras().get("viaggioId");
+            SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+            viaggioId = sharedPreferencesProvider.getSelectedViaggioId();
         } catch (Exception e) {
             viaggioId = null;
         }
+        /*if (viaggioId == null) {
+            startActivity(new Intent(getApplicationContext(), TravelList.class));
+        }*/
 
         // TODO: leggere e impostare il viaggioId passato come intent extra
         //fittizio
@@ -246,12 +239,12 @@ public class NewActivityEvent extends AppCompatActivity {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
             dataInizio = formatter.parse(
-                    ((Button) findViewById(R.id.dataInizioNuovaAttivita)).getText().toString() +
-                            " " + ((Button) findViewById(R.id.oraInizioNuovaAttivita)).getText().toString());
+                    (dataInizioAttivitaButton.getText().toString() +
+                            " " + (oraInizioAttivitaButton.getText().toString())));
 
             dataFine = formatter.parse(
-                    ((Button) findViewById(R.id.dataFineNuovaAttivita)).getText().toString() +
-                            " " + ((Button) findViewById(R.id.oraFineNuovaAttivita)).getText().toString());
+                    (dataFineAttivitaButton.getText().toString() +
+                            " " + (oraFineAttivitaButton.getText().toString())));
         } catch (Exception e) {
             Log.v("MyLog", "parsing date fallito");
         }
@@ -282,18 +275,91 @@ public class NewActivityEvent extends AppCompatActivity {
     }
 
 
-    private void showDatePickerDialog(final Button sceltaDateTime) {
+    private void showDatePickerDialog(String dateButtonString) {
         final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 calendar.set(Calendar.YEAR,year);
                 calendar.set(Calendar.MONTH,month);
                 calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd");
 
-                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
+                if (dateButtonString == "StartDate") /*set inizio attivita date*/ {
+                    if (dataFineAttivitaButton.getText().toString() == null) {
+                        dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                        dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                    } else {
+                        Date dateI = calendar.getTime();
+                        Date dateF = new Date();
+                        try {
+                            dateF = simpleDateFormat.parse(dataFineAttivitaButton.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if (dateI.after(dateF)) {
+                            dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            dataFineAttivitaButton.setText(null);
+                            oraFineAttivitaButton.setText(null);
+                        } else {
+                            if (dateI.equals(dateF) && oraInizioAttivitaButton.getText().toString() != null && oraFineAttivitaButton.getText().toString() != null) {
+                                Date timeI = new Date();
+                                Date timeF = new Date();
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                                try {
+                                    timeI = timeFormat.parse(oraInizioAttivitaButton.getText().toString());
+                                    timeF = timeFormat.parse(oraFineAttivitaButton.getText().toString());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                if (timeI.after(timeF)) {
+                                    oraFineAttivitaButton.setText(null);
+                                } else {
+                                    dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                                }
+                            } else {
+                                dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        }
+                    }
+
+                } else /*set fine attivita date*/ {
+                    if (dataInizioAttivitaButton.getText().toString() == null) {
+                        dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                    } else {
+                        Date dateI = new Date();
+                        try {
+                            dateI = simpleDateFormat.parse(dataInizioAttivitaButton.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Date dateF = calendar.getTime();
+                        if (dateI.after(dateF)) {
+                            dataFineAttivitaButton.setText(null);
+                            Toast.makeText(NewActivityEvent.this, "Data di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (dateI.equals(dateF) && oraInizioAttivitaButton.getText().toString() != null && oraFineAttivitaButton.getText().toString() != null) {
+                                Date timeI = new Date();
+                                Date timeF = new Date();
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                                try {
+                                    timeI = timeFormat.parse(oraInizioAttivitaButton.getText().toString());
+                                    timeF = timeFormat.parse(oraFineAttivitaButton.getText().toString());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                if (timeI.after(timeF)) {
+                                    oraFineAttivitaButton.setText(null);
+                                } else {
+                                    dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                                }
+                            } else {
+                                dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        }
+                    }
+                }
             }
         };
 
@@ -301,7 +367,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
     }
 
-    private void showTimePickerDialog(final Button sceltaDateTime) {
+    private void showTimePickerDialog(String sceltaTimeString) {
         final Calendar calendar=Calendar.getInstance();
 
         TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
@@ -310,9 +376,52 @@ public class NewActivityEvent extends AppCompatActivity {
                 calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
                 calendar.set(Calendar.MINUTE,minute);
 
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
-                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
+                if (sceltaTimeString == "StartTime") /*set inizio attivita hour*/ {
+                    if (oraFineAttivitaButton.getText().toString() == null || dataFineAttivitaButton.getText().toString() == null || dataInizioAttivitaButton.getText().toString() == null) {
+                        oraInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                    } else {
+                        if (dataInizioAttivitaButton.getText().toString() == dataFineAttivitaButton.getText().toString()) {
+                            Date timeI = calendar.getTime();
+                            Date timeF = new Date();
+                            try {
+                                timeF = simpleDateFormat.parse(oraInizioAttivitaButton.getText().toString());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            if (timeI.after(timeF)) {
+                                oraFineAttivitaButton.setText(null);
+                                Toast.makeText(NewActivityEvent.this, "Ora di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
+                            } else {
+                                oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        } else {
+                            oraInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                        }
+                    }
+                } else /*set fine attivita hour*/ {
+                    if (oraInizioAttivitaButton.getText().toString() == null || dataFineAttivitaButton.getText().toString() == null || dataInizioAttivitaButton.getText().toString() == null) {
+                        oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                    } else {
+                        if (dataInizioAttivitaButton.getText().toString() == dataFineAttivitaButton.getText().toString()) {
+                            Date timeI = new Date();
+                            try {
+                                timeI = simpleDateFormat.parse(oraInizioAttivitaButton.getText().toString());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            Date timeF = calendar.getTime();
+                            if (timeI.after(timeF)) {
+                                oraFineAttivitaButton.setText(null);
+                                Toast.makeText(NewActivityEvent.this, "Ora di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
+                            } else {
+                                oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        }
+                    }
+                }
+
             }
         };
 

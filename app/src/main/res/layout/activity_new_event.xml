@@ -79,7 +79,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:hint="@string/attivitaNomeHint"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/nomeAttivitaInput"
@@ -211,7 +212,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:hint="@string/posizionePartenzaHint"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/posizionePartenzaNuovaAttivita"
@@ -256,7 +258,8 @@
                         android:layout_height="wrap_content"
                         android:hint="@string/descrizioneHint"
                         android:layout_weight="1"
-                        android:scrollbars="vertical" >
+                        android:scrollbars="vertical"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/descrizioneNuovaAttivita"
