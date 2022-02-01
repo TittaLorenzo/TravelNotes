@@ -6,19 +6,56 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
+import it.unimib.travelnotes.Model.Viaggio;
+import it.unimib.travelnotes.Model.response.ViaggioResponse;
 import it.unimib.travelnotes.NewTravel;
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.databinding.FragmentFlightBinding;
 import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class FlightFragment extends Fragment {
 
-
+    private String viaggioId;
+    private Viaggio viaggio;
     private FragmentFlightBinding binding;
+    private FlightViewModel mFlightViewModel;
+
+    TextView departures;
+    TextView destination;
+    TextView departureTime;
+    TextView time;
+    TextView departure2;
+    TextView destination2;
+    TextView departureTime2;
+    TextView time2;
+
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        mFlightViewModel = new ViewModelProvider(requireActivity()).get(FlightViewModel.class);
+
+
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getActivity().getApplication());
+        viaggioId = sharedPreferencesProvider.getSelectedViaggioId();;
+        mFlightViewModel.setViaggioId(viaggioId);
+
+        if (viaggio == null) {
+            viaggio = new Viaggio();
+        }
+    }
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -37,9 +74,26 @@ public class FlightFragment extends Fragment {
             }
         });
 
+        final Observer<ViaggioResponse> observer = new Observer<ViaggioResponse>() {
+            @Override
+            public void onChanged(ViaggioResponse viaggioResponse) {
+                if (viaggioResponse.isError()) {
+                    //updateUIForFaliure(viaggioResponse.getStatus());
+                }
+                if (viaggioResponse.getViaggio() != null) {
+
+                    viaggio = viaggioResponse.getViaggio();
+
+                    // TODO: scrivi dettagli viaggio nei campi
+                }
+            }
+        };
+        mFlightViewModel.getViaggio().observe(getViewLifecycleOwner(), observer);
+
 
         return root;
         }
+
 
 
     @Override

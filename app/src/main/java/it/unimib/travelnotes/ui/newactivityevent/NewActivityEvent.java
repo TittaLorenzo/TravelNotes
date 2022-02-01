@@ -77,10 +77,9 @@ public class NewActivityEvent extends AppCompatActivity {
     private EditText campoPosizione;
     private EditText campoDescrizione;
 
-    private Long idAttivitaI;
-    private Long idViaggioI;
-    private long attivitaId;
-    private long viaggioId = 0;
+
+    private String attivitaId;
+    private String viaggioId;
 
 
     @Override

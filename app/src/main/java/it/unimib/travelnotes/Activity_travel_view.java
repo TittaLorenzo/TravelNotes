@@ -1,5 +1,6 @@
 package it.unimib.travelnotes;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,11 +15,24 @@ import it.unimib.travelnotes.databinding.ActivityTravelView2Binding;
 
 public class Activity_travel_view extends AppCompatActivity {
 
+    private String viaggio_id ;
     private ActivityTravelView2Binding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        try{
+            viaggio_id = (String) getIntent().getExtras().get("viaggioId");
+        }catch (Exception e){
+            viaggio_id = null;
+        }
+        if(viaggio_id == null){
+            Intent intent = new Intent(getApplicationContext(), TravelList.class);
+        }
+
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+        sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
 
         binding = ActivityTravelView2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -32,6 +46,8 @@ public class Activity_travel_view extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_travel_view2);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
+
+
     }
 
 }
