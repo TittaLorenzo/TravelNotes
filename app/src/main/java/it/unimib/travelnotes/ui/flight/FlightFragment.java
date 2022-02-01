@@ -28,12 +28,13 @@ public class FlightFragment extends Fragment {
         View root = binding.getRoot();
         Button button_modifica_volo= (Button) root.findViewById(R.id.modify_volo);
         button_modifica_volo.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), NewTravel.class);
+                intent.putExtra("modifica_viaggio", true);
                 startActivity(intent);
             }
-
         });
 
 
