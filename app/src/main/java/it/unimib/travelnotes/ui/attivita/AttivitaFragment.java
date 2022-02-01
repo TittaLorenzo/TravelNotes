@@ -1,12 +1,14 @@
 package it.unimib.travelnotes.ui.attivita;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -65,13 +67,14 @@ public class AttivitaFragment extends Fragment  {
         Adapter_attivita adapter_Attivita = new Adapter_attivita(attivitaArray, AttivitaFragment.this);
         recyclerView.setAdapter(adapter_Attivita);
 
-        Button button_n_attivita = (Button) root.findViewById(R.id.new_attivita);
+        ImageButton button_n_attivita = (ImageButton) root.findViewById(R.id.new_attivita);
         button_n_attivita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), NewActivityEvent.class);
                 startActivity(intent);
             }
+
         });
 
 
