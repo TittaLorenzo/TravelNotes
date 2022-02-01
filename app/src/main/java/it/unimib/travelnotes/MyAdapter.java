@@ -20,8 +20,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.TravelViewHolder> 
 
     ArrayList<Viaggio> list;
 
-    String s1;
-
 
     public MyAdapter(Context context, ArrayList<Viaggio> list) {
         this.context = context;
@@ -30,17 +28,41 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.TravelViewHolder> 
 
     @NonNull
     @Override
-    public TravelViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.travel,parent,false);
-        return  new TravelViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if(this.getItemViewType(viewType)==1){
+            View view = LayoutInflater.from(context).inflate(R.layout.travel,parent,false);
+            TravelViewHolder holder = new TravelViewHolder(view);
+            return holder;
+        }
+        else{
+            View view = LayoutInflater.from(context).inflate(R.layout.travel_a,parent,false);
+            TravelAndataViewHolder holder = new TravelAndataViewHolder(view);
+            return holder;
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull TravelViewHolder holder, int position) {
 
-        Viaggio viaggio = list.get(position);
-        holder.travelDeparture.setText(viaggio.getPartenzaAndata());
-        holder.travelDestination.setText(viaggio.getDestinazioneAndata());
+        if(this.getItemViewType(position)==0){
+            Viaggio viaggio = list.get(position);
+            TravelAndataViewHolder viewHolder = (TravelAndataViewHolder) holder;
+            viewHolder.idViaggio= viaggio.getViaggioId();
+            viewHolder.travelDeparture.setText(viaggio.getPartenzaAndata());
+            viewHolder.travelDestination.setText(viaggio.getDestinazioneAndata());
+            viewHolder.departureTime.setText(viaggio.getDataAndata().toString());
+        }
+        else{
+            Viaggio viaggio = list.get(position);
+            TravelViewHolder viewHolder = (TravelViewHolder) holder;
+            viewHolder.idViaggio= viaggio.getViaggioId();
+            viewHolder.travelDeparture.setText(viaggio.getPartenzaAndata());
+            viewHolder.travelDestination.setText(viaggio.getDestinazioneAndata());
+            viewHolder.travelDepartureR.setText(viaggio.getPartenzaRitorno());
+            viewHolder.travelDestinationR.setText(viaggio.getDestinazioneRitorno());
+            viewHolder.departureTime.setText(viaggio.getDataAndata().toString());
+        }
+    }
 
 
 
@@ -54,6 +76,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.TravelViewHolder> 
     public class TravelViewHolder extends RecyclerView.ViewHolder{
 
         TextView travelDeparture, travelDestination;
+
+        TextView travelDeparture;
+        TextView travelDestination;
+        TextView travelDepartureR;
+        TextView travelDestinationR;
+        TextView departureTime;
+        TextView arrivalTime;
+        TextView departureTimeR;
+        TextView arrivalTimeR;
+        // TextView travelTime;
+
 
         public TravelViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -76,15 +109,21 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.TravelViewHolder> 
 
     public class TravelViewHolder extends RecyclerView.ViewHolder{
 
+
+    }
+
+    public class TravelAndataViewHolder extends RecyclerView.ViewHolder{
+
+        long idViaggio;
+
         TextView travelDeparture;
         TextView travelDestination;
-        String s1;
-        //TextView travelDepartureR;
-        //TextView travelDestinationR;
+        TextView departureTime;
+        TextView arrivalTime;
         // TextView travelTime;
 
 
-        public TravelViewHolder(@NonNull View itemView) {
+        public TravelAndataViewHolder(@NonNull View itemView) {
             super(itemView);
             travelDeparture = itemView.findViewById(R.id.departure);
             travelDestination = itemView.findViewById(R.id.destination);
@@ -110,8 +149,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.TravelViewHolder> 
             });
 
         }
-
-
 
     }
 
