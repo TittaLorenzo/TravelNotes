@@ -84,15 +84,7 @@ public class NewActivityEvent extends AppCompatActivity {
     private String attivitaId;
     private String viaggioId;
 
-<<<<<<< Updated upstream
-=======
-<<<<<<< HEAD
-=======
->>>>>>> soldati_schermataviaggio:app/src/main/java/it/unimib/travelnotes/NewActivityEvent.java
-=======
-    //cms
->>>>>>> parent of d42a305... Merge remote-tracking branch 'origin/confa_schermataAttività' into confa_schermataAttività
->>>>>>> Stashed changes
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
