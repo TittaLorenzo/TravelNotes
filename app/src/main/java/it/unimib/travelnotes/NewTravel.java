@@ -13,8 +13,13 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -30,16 +35,16 @@ import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewTravel extends AppCompatActivity {
 
-    ImageButton invio;
     Button partenzaAndataButton;
     Button arrivoAndataButton;
     Button partenzaRitornoButton;
     Button arrivoRitornoButton;
-    EditText andataVDa;
-    EditText andataVA;
-    EditText ritornoVDa;
-    EditText ritornoVA;
-    CheckBox checkAR;
+    TextInputEditText andataVDa;
+    TextInputEditText andataVA;
+    TextInputEditText ritornoVDa;
+    TextInputEditText ritornoVA;
+    SwitchMaterial checkAR;
+    FloatingActionButton salvaVolo;
     String s1, s2;
     Date data1, data2;
 
@@ -55,13 +60,13 @@ public class NewTravel extends AppCompatActivity {
         arrivoAndataButton = findViewById(R.id.NT_sceltaAndataR);
         partenzaRitornoButton = findViewById(R.id.NT_sceltaRitornoP);
         arrivoRitornoButton = findViewById(R.id.NT_sceltaRitornoA);
-        invio = findViewById(R.id.NT_newTravelButton);
         checkAR = findViewById(R.id.NT_checkAR);
         andataVDa = findViewById(R.id.NT_andataDa);
         andataVA = findViewById(R.id.NT_andataA);
         ritornoVDa = findViewById(R.id.NT_ritornoDa);
         ritornoVA = findViewById(R.id.NT_ritornoA);
         mITravelRepository = new TravelRepository(getApplication());
+        salvaVolo = findViewById(R.id.NT_floatingButton);
 
         mITravelRepository = new TravelRepository(getApplication());
 
@@ -89,7 +94,7 @@ public class NewTravel extends AppCompatActivity {
             }
         });
 
-        invio.setOnClickListener(v -> {
+        salvaVolo.setOnClickListener(v -> {
             String daA = andataVDa.getText().toString();
             String aA = andataVA.getText().toString();
             String daR = ritornoVDa.getText().toString();
@@ -109,8 +114,11 @@ public class NewTravel extends AppCompatActivity {
                     diff = (arrivoR.getTime() - andataR.getTime());
                     long diffMinutesR = diff / (60 * 1000);
                     Viaggio viagg = new Viaggio(andataD, andataR, daA, aA, daR, aR, Double.longBitsToDouble(diffMinutesD), Double.longBitsToDouble(diffMinutesR));
-                    if(diffMinutesD <= 0 || diffMinutesR <= 0 || andataR.compareTo(andataD) <= 0 || arrivoR.compareTo(arrivoD) <= 0){
+                    if(diffMinutesD <= 0 || diffMinutesR <= 0 || andataR.compareTo(andataD) <= 0 || arrivoR.compareTo(arrivoD) <= 0 || andataR.compareTo(arrivoD) <= 0){
                         Toast.makeText(this, "Correggere le date", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(andataVDa.getText().toString().matches("") || andataVA.getText().toString().matches("") || ritornoVDa.getText().toString().matches("") || ritornoVA.getText().toString().matches("")){
+                        Toast.makeText(this, "Inserire città valide", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(this, "Viaggio creato", Toast.LENGTH_SHORT).show();
@@ -146,6 +154,9 @@ public class NewTravel extends AppCompatActivity {
                     if(diffMinutes <= 0){
                         Toast.makeText(this, "Correggere le date", Toast.LENGTH_SHORT).show();
                     }
+                    else if(andataVDa.getText().toString().matches("") || andataVA.getText().toString().matches("")){
+                        Toast.makeText(this, "Inserire città valide", Toast.LENGTH_SHORT).show();
+                    }
                     else{
                         Toast.makeText(this, "Viaggio creato", Toast.LENGTH_SHORT).show();
                         //mITravelRepository.pushNuovoViaggio(viagg, false);
@@ -170,6 +181,7 @@ public class NewTravel extends AppCompatActivity {
                 }
             }
         });
+
     }
 
 

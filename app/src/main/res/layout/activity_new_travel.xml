@@ -34,11 +34,12 @@
                 android:layout_height="59dp"
                 android:orientation="horizontal">
 
-                <CheckBox
+                <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/NT_checkAR"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/AR" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/AR"/>
+
             </LinearLayout>
 
             <LinearLayout
@@ -79,17 +80,21 @@
                         android:layout_weight="0.1"
                         android:scrollbarSize="4dp" />
 
-                    <EditText
-                        android:id="@+id/NT_andataDa"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/NT_andataDa_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="215dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/NT_da"
-                        android:importantForAutofill="no"
-                        android:inputType="textPersonName"
-                        android:minHeight="48dp"
-                        android:textSize="14sp" />
+                        app:startIconDrawable="@drawable/ic_baseline_flight_takeoff_24"
+                        app:endIconMode="clear_text"
+                        android:hint="@string/NT_a">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/NT_andataDa"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -116,16 +121,21 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="0.1" />
 
-                    <EditText
-                        android:id="@+id/NT_andataA"
-                        android:layout_width="wrap_content"
-                        android:layout_height="54dp"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/NT_a"
-                        android:importantForAutofill="no"
-                        android:inputType="textPersonName"
-                        android:textSize="14sp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/NT_andataA_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="215dp"
+                        android:layout_height="wrap_content"
+                        app:startIconDrawable="@drawable/ic_baseline_flight_land_24"
+                        app:endIconMode="clear_text"
+                        android:hint="@string/NT_a">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/NT_andataA"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -179,16 +189,21 @@
                         android:layout_weight="0.1"
                         android:scrollbarSize="4dp" />
 
-                    <EditText
-                        android:id="@+id/NT_ritornoDa"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/NT_ritornoDa_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="215dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/NT_da"
-                        android:inputType="textPersonName"
-                        android:minHeight="48dp"
-                        android:textSize="14sp" />
+                        app:startIconDrawable="@drawable/ic_baseline_flight_takeoff_24"
+                        app:endIconMode="clear_text"
+                        android:hint="@string/NT_a">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/NT_ritornoDa"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
 
                 <Space
@@ -215,16 +230,21 @@
                         android:layout_weight="0.1"
                         android:scrollbarSize="4dp" />
 
-                    <EditText
-                        android:id="@+id/NT_ritornoA"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/NT_ritornoA_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="215dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:hint="@string/NT_a"
-                        android:inputType="textPersonName"
-                        android:minHeight="48dp"
-                        android:textSize="14sp" />
+                        app:startIconDrawable="@drawable/ic_baseline_flight_land_24"
+                        app:endIconMode="clear_text"
+                        android:hint="@string/NT_a">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/NT_ritornoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
 
@@ -241,19 +261,16 @@
                 android:gravity="center|right"
                 android:orientation="horizontal">
 
-                <ImageButton
-                    android:id="@+id/NT_newTravelButton"
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/NT_floatingButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:contentDescription="TODO"
-                    android:minWidth="60dp"
-                    android:minHeight="60dp"
-                    android:rotationX="0"
-                    android:scaleType="center"
-                    app:srcCompat="@drawable/ic_baseline_flight_takeoff_24"
-                    tools:ignore="SpeakableTextPresentCheck"
-                    tools:srcCompat="@drawable/ic_baseline_flight_takeoff_24" />
+                    android:layout_gravity="bottom|right"
+                    android:layout_margin="16dp"
+                    android:contentDescription="@string/volo"
+                    android:src="@drawable/ic_baseline_add_24"
+                    app:rippleColor="@color/secondaryColor" />
+
             </LinearLayout>
 
         </LinearLayout>
