@@ -14,17 +14,26 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-
-
-
     <Button
         android:id="@+id/new_attivita"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:layout_gravity="bottom|right"
-        android:text="@string/nuovaAttivita"
-        android:textColor="@color/white"
+
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+
+    <!--TODO aggiungere dipendenza material design in gradle-->
+    <!--<Button
+        android:id="@+id/elevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Elevated button"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        />-->
 </androidx.constraintlayout.widget.ConstraintLayout>
