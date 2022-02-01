@@ -17,6 +17,8 @@ import java.util.List;
 
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.MyAdapter;
+import it.unimib.travelnotes.TravelList;
 import it.unimib.travelnotes.databinding.FragmentAttivitaBinding;
 import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 

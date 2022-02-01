@@ -30,7 +30,8 @@
         </activity>
         <activity
             android:name=".NewTravel"
-            android:exported="true" />
+            android:exported="true"
+            android:parentActivityName=".TravelList"/>
         <activity
             android:name=".TravelList"
             android:exported="true" />
