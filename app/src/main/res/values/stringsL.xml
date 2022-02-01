@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="title_creaViaggio">Crea Viaggio</string>
+    <string name="title_modificaViaggio">Crea Viaggio</string>
     <string name="AR">Andata/Ritorno</string>
     <string name="NT_da">da</string>
     <string name="NT_a">a</string>
