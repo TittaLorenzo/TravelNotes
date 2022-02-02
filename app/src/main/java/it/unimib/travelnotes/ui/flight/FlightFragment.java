@@ -61,9 +61,8 @@ public class FlightFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
 
-        binding = FragmentFlightBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        Button button_modifica_volo= (Button) root.findViewById(R.id.modify_volo);
+        View view = inflater.inflate(R.layout.fragment_flight, container, false);
+        Button button_modifica_volo= (Button) view.findViewById(R.id.modify_volo);
         button_modifica_volo.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -91,7 +90,7 @@ public class FlightFragment extends Fragment {
         mFlightViewModel.getViaggio().observe(getViewLifecycleOwner(), observer);
 
 
-        return root;
+        return view;
         }
 
 
