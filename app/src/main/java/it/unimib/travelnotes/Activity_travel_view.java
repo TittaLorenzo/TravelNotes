@@ -18,7 +18,7 @@ import it.unimib.travelnotes.ui.flight.FlightViewModel;
 
 public class Activity_travel_view extends AppCompatActivity {
     private String viaggioId;
-    private String viaggio_id ;
+    private String viaggio_id = "-MtA7mKtdZODJR98_3hH" ;
     private ActivityTravelView2Binding binding;
     BottomNavigationView bottomNavigation;
     FlightViewModel mFlightViewModel;
@@ -31,18 +31,20 @@ public class Activity_travel_view extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_view2);
 
+
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+        sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
+
+
         //gestione del id viaggio provvisoria
         try{
-            viaggio_id = (String) getIntent().getExtras().get(viaggioId);
+            viaggio_id = (String) getIntent().getExtras().get(viaggio_id);
         }catch (Exception e){
             viaggio_id = null;
         }
         /*if(viaggio_id == null){
             Intent intent = new Intent(getApplicationContext(), TravelList.class);
         }*/
-        viaggio_id = "-MtA7mKtdZODJR98_3hH";
-        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
-        sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
 
         //Logic to intercept te Intent and its data
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -65,6 +67,9 @@ public class Activity_travel_view extends AppCompatActivity {
 
 
 
+    }
+    public String getDatiViaggio(){
+        return viaggio_id;
     }
 
 

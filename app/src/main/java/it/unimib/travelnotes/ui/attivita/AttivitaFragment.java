@@ -36,9 +36,8 @@ public class AttivitaFragment extends Fragment  {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentAttivitaBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        RecyclerView recyclerView = root.findViewById(R.id.recycler_attivita);
+        View view = inflater.inflate(R.layout.fragment_attivita, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler_attivita);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         //TODO collegare con database
@@ -70,7 +69,7 @@ public class AttivitaFragment extends Fragment  {
         Adapter_attivita adapter_Attivita = new Adapter_attivita(attivitaArray, AttivitaFragment.this);
         recyclerView.setAdapter(adapter_Attivita);
 
-        ImageButton button_n_attivita = (ImageButton) root.findViewById(R.id.new_attivita);
+        ImageButton button_n_attivita = (ImageButton) view.findViewById(R.id.new_attivita);
         button_n_attivita.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +80,7 @@ public class AttivitaFragment extends Fragment  {
         });
 
 
-        return root;
+        return view;
     }
 
     @Override

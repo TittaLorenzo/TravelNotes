@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import it.unimib.travelnotes.Activity_travel_view;
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.Model.response.ViaggioResponse;
 import it.unimib.travelnotes.NewTravel;
@@ -56,12 +57,13 @@ public class FlightFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Activity_travel_view activity_travel_view = (Activity_travel_view) getActivity();
         mFlightViewModel = new ViewModelProvider(requireActivity()).get(FlightViewModel.class);
+
+        viaggioId =activity_travel_view.getDatiViaggio() ;
 
 
         SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getActivity().getApplication());
-        viaggioId = sharedPreferencesProvider.getSelectedViaggioId();;
         mFlightViewModel.setViaggioId(viaggioId);
 
         if (viaggio == null) {
