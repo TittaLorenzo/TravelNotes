@@ -58,14 +58,15 @@
 
                 <TextView
                     android:id="@+id/departureTime"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:textColor="@color/whiteTextColor" />
 
                 <ImageView
                     android:id="@+id/timeImage"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:foregroundTint="@color/white"
@@ -74,7 +75,7 @@
 
                 <TextView
                     android:id="@+id/time"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -118,14 +119,15 @@
 
                 <TextView
                     android:id="@+id/departureTime2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:textColor="@color/whiteTextColor" />
 
                 <ImageView
                     android:id="@+id/timeImage2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:foregroundTint="@color/white"
@@ -134,7 +136,7 @@
 
                 <TextView
                     android:id="@+id/time2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:gravity="center"

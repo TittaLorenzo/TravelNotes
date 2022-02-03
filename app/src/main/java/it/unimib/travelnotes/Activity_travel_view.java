@@ -31,6 +31,7 @@ public class Activity_travel_view extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_view2);
 
+        //gestione del id viaggio provvisoria
         try{
             viaggio_id = (String) getIntent().getExtras().get(viaggioId);
         }catch (Exception e){

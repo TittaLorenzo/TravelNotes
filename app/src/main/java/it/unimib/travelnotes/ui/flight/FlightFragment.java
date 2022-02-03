@@ -2,6 +2,7 @@ package it.unimib.travelnotes.ui.flight;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.Model.response.ViaggioResponse;
@@ -38,6 +48,9 @@ public class FlightFragment extends Fragment {
     TextView departureTime2;
     TextView time2;
 
+    String pattern = "MM/dd/yyyy HH:mm:ss";
+    DateFormat df = new SimpleDateFormat(pattern);
+
 
 
     @Override
@@ -54,6 +67,8 @@ public class FlightFragment extends Fragment {
         if (viaggio == null) {
             viaggio = new Viaggio();
         }
+
+
     }
 
 
@@ -62,6 +77,21 @@ public class FlightFragment extends Fragment {
 
 
         View view = inflater.inflate(R.layout.fragment_flight, container, false);
+
+        departures = view.findViewById(R.id.departure);
+        destination = view.findViewById(R.id.destination);
+        departureTime = view.findViewById(R.id.departureTime);
+        time = view.findViewById(R.id.time);
+        departure2 = view.findViewById(R.id.departure2);
+        destination2 = view.findViewById(R.id.destination2);
+        departureTime2 = view.findViewById(R.id.departureTime2);
+        time2 = view.findViewById(R.id.time2);
+
+
+
+
+
+
         Button button_modifica_volo= (Button) view.findViewById(R.id.modify_volo);
         button_modifica_volo.setOnClickListener(new View.OnClickListener() {
 
@@ -82,16 +112,30 @@ public class FlightFragment extends Fragment {
                 if (viaggioResponse.getViaggio() != null) {
 
                     viaggio = viaggioResponse.getViaggio();
-                    // TODO: scrivi dettagli viaggio nei campi
-                    
+                    departures.setText(viaggio.getPartenzaAndata());
+                    destination.setText(viaggio.getDestinazioneAndata());
+                    String ora = Double.toString(viaggio.getDurataAndata())+ " ore";
+                    time.setText(ora);
+                    departure2.setText(viaggio.getPartenzaRitorno());
+                    destination2.setText(viaggio.getDestinazioneRitorno());
+                    String ora2 = Double.toString(viaggio.getDurataRitorno()) + " ore";
+                    time2.setText(ora2);
+                    Date dataAndata = viaggio.getDataAndata();
+                    String stringaDataAndata = df.format(dataAndata);
+                    departureTime.setText(stringaDataAndata);
+                    Date dataRitorno = viaggio.getDataRitorno();
+                    String stringaDataRitorno = df.format(dataRitorno);
+                    departureTime2.setText(stringaDataRitorno);
+
+
                 }
             }
         };
         mFlightViewModel.getViaggio().observe(getViewLifecycleOwner(), observer);
-
-
         return view;
         }
+
+
 
 
 
