@@ -82,8 +82,8 @@ public class FlightFragment extends Fragment {
                 if (viaggioResponse.getViaggio() != null) {
 
                     viaggio = viaggioResponse.getViaggio();
-
                     // TODO: scrivi dettagli viaggio nei campi
+                    
                 }
             }
         };

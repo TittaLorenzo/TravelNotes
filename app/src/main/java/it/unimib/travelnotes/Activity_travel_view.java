@@ -14,18 +14,34 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import it.unimib.travelnotes.databinding.ActivityTravelView2Binding;
+import it.unimib.travelnotes.ui.flight.FlightViewModel;
 
 public class Activity_travel_view extends AppCompatActivity {
     private String viaggioId;
     private String viaggio_id ;
     private ActivityTravelView2Binding binding;
     BottomNavigationView bottomNavigation;
+    FlightViewModel mFlightViewModel;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_view2);
+
+        try{
+            viaggio_id = (String) getIntent().getExtras().get(viaggioId);
+        }catch (Exception e){
+            viaggio_id = null;
+        }
+        /*if(viaggio_id == null){
+            Intent intent = new Intent(getApplicationContext(), TravelList.class);
+        }*/
+        viaggio_id = "-MtA7mKtdZODJR98_3hH";
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+        sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
 
         //Logic to intercept te Intent and its data
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -46,18 +62,6 @@ public class Activity_travel_view extends AppCompatActivity {
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.country_news, R.id.topic_news, R.id.favorites).build();*/
 
-       try{
-            viaggio_id = (String) getIntent().getExtras().get("viaggioId");
-        }catch (Exception e){
-            viaggio_id = null;
-        }
-        if(viaggio_id == null){
-            Intent intent = new Intent(getApplicationContext(), TravelList.class);
-        }
-
-        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
-        sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
-        
 
 
     }
