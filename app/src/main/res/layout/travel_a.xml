@@ -56,6 +56,14 @@
                 android:layout_height="75dp"
                 android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/departureTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="@color/white" />
+
                 <ImageView
                     android:id="@+id/timeImage"
                     android:layout_width="wrap_content"
@@ -66,15 +74,7 @@
                     app:tint="@color/white" />
 
                 <TextView
-                    android:id="@+id/departureTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="@color/white" />
-
-                <TextView
-                    android:id="@+id/time"
+                    android:id="@+id/arrivalTimeS"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"

@@ -10,15 +10,20 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import it.unimib.travelnotes.Model.Viaggio;
 
 public class MyAdapter extends RecyclerView.Adapter {
 
     Context context;
-
     ArrayList<Viaggio> list;
+
+    String dateTime;
+    Calendar calendar;
+    SimpleDateFormat simpleDateFormat;
 
 
     public MyAdapter(Context context, ArrayList<Viaggio> list) {
@@ -60,7 +65,17 @@ public class MyAdapter extends RecyclerView.Adapter {
             viewHolder.idViaggio= viaggio.getViaggioId();
             viewHolder.travelDeparture.setText(viaggio.getPartenzaAndata());
             viewHolder.travelDestination.setText(viaggio.getDestinazioneAndata());
-            viewHolder.travelDate.setText(viaggio.getDataAndata().toString());
+
+
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
+            viewHolder.travelDate.setText(dateTime);
+
+            simpleDateFormat = new SimpleDateFormat("HH:mm");
+            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
+            viewHolder.travelDateArrival.setText(dateTime);
+
+            //viewHolder.travelDate.setText(viaggio.getDataAndata().toString());
 
         }
         else{
@@ -71,9 +86,25 @@ public class MyAdapter extends RecyclerView.Adapter {
             viewHolder.travelDestination.setText(viaggio.getDestinazioneAndata());
             viewHolder.travelDepartureR.setText(viaggio.getPartenzaRitorno());
             viewHolder.travelDestinationR.setText(viaggio.getDestinazioneRitorno());
-            viewHolder.travelDate.setText(viaggio.getDataAndata().toString());
-            viewHolder.travelDateR.setText(viaggio.getDataAndata().toString());
 
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
+            viewHolder.travelDate.setText(dateTime);
+
+            simpleDateFormat = new SimpleDateFormat("HH:mm");
+            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
+            viewHolder.travelDateArrival.setText(dateTime);
+
+            //viewHolder.travelDate.setText(viaggio.getDataAndata().toString());
+
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
+            viewHolder.travelDateR.setText(dateTime);
+            //viewHolder.travelDateR.setText(viaggio.getDataAndata().toString());
+
+            simpleDateFormat = new SimpleDateFormat("HH:mm");
+            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
+            viewHolder.travelDateRArrival.setText(dateTime);
         }
     }
 
@@ -94,7 +125,9 @@ public class MyAdapter extends RecyclerView.Adapter {
         TextView travelDepartureR;
         TextView travelDestinationR;
         TextView travelDate;
+        TextView travelDateArrival;
         TextView travelDateR;
+        TextView travelDateRArrival;
         // TextView travelTime;
 
 
@@ -105,7 +138,9 @@ public class MyAdapter extends RecyclerView.Adapter {
             travelDepartureR = itemView.findViewById(R.id.departure2);
             travelDestinationR = itemView.findViewById(R.id.destination2);
             travelDate = itemView.findViewById(R.id.departureTime);
+            travelDateArrival= itemView.findViewById(R.id.arrivalTime);
             travelDateR = itemView.findViewById(R.id.departureTime2);
+            travelDateRArrival= itemView.findViewById(R.id.arrivalTime2);
             //travelTime = itemView.findViewById(R.id.time);
             /*MODIFICARE CON DATA E ORA
             textViewName = itemView.findViewById(R.id.date);
@@ -136,6 +171,7 @@ public class MyAdapter extends RecyclerView.Adapter {
         TextView travelDeparture;
         TextView travelDestination;
         TextView travelDate;
+        TextView travelDateArrival;
         // TextView travelTime;
 
 
@@ -144,6 +180,7 @@ public class MyAdapter extends RecyclerView.Adapter {
             travelDeparture = itemView.findViewById(R.id.departure);
             travelDestination = itemView.findViewById(R.id.destination);
             travelDate = itemView.findViewById(R.id.departureTime);
+            travelDateArrival= itemView.findViewById(R.id.arrivalTimeS);
             //travelTime = itemView.findViewById(R.id.time);
             /*MODIFICARE CON DATA E ORA
             textViewName = itemView.findViewById(R.id.date);

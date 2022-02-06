@@ -30,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.Viaggio;
@@ -161,6 +163,20 @@ public class TravelList extends AppCompatActivity {
                     list.add(viaggio);
 
                 }
+                //Ordinare lista viaggi
+
+                Collections.sort(list, new Comparator<Viaggio>() {
+                    @Override
+                    public int compare(Viaggio o1, Viaggio o2) {
+                        return o1.getDataAndata().compareTo(o2.getDataAndata());
+                    }
+                });
+
+                Collections.sort(list, new Comparator<Viaggio>() {
+                    public int compare(Viaggio o1, Viaggio o2) {
+                        return o1.getDataAndata().compareTo(o2.getDataAndata());
+                    }
+                });
 
                 myAdapter = new MyAdapter(TravelList.this,list);
                 recyclerView.setAdapter(myAdapter);
@@ -173,6 +189,15 @@ public class TravelList extends AppCompatActivity {
         };
         FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference().child("utenti").child(utenteId).child("listaviaggi").addValueEventListener(listaViaggiListener);
     }
+/*
+    public class CustomComparator implements Comparator<Viaggio> {
+        @Override
+        public int compare(Viaggio v1, Viaggio v2) {
+            return v1.getDataAndata().compareTo(v2.getDataAndata());
+        }
+    }*/
+
+
 
     // Oprions Menu
     @Override
