@@ -69,7 +69,6 @@ public class NewActivityEvent extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
-    private NewActivityEventViewModel mNewActivityEventViewModel;
     private ITravelRepository mITravelRepository;
     private Attivita attivita;
 
@@ -130,8 +129,13 @@ public class NewActivityEvent extends AppCompatActivity {
 
         buttonSalva.setOnClickListener(c -> {
 
-            if (TextUtils.isEmpty(campoNome.getText().toString())) {
+            /*if (TextUtils.isEmpty(campoNome.getText().toString())) {
                 Toast.makeText(this, "Devi inserire un nome attività", Toast.LENGTH_SHORT).show();
+            } else {
+                salvaButtonNuovaAttivita();
+            }*/
+            if (!checkCampi()) {
+                Toast.makeText(this, "Devi compilare tutti i campi", Toast.LENGTH_SHORT).show();
             } else {
                 salvaButtonNuovaAttivita();
             }
@@ -151,13 +155,11 @@ public class NewActivityEvent extends AppCompatActivity {
         } catch (Exception e) {
             viaggioId = null;
         }
-        /*if (viaggioId == null) {
-            startActivity(new Intent(getApplicationContext(), TravelList.class));
-        }*/
-
-        // TODO: leggere e impostare il viaggioId passato come intent extra
-        //fittizio
-        viaggioId = "-MtA7mKtdZODJR98_3hH";
+        if (viaggioId == null) {
+            //startActivity(new Intent(getApplicationContext(), TravelList.class));
+            //fittizio
+            viaggioId = "-MtA7mKtdZODJR98_3hH";
+        }
 
         if (attivitaId != null) {
             caricaDatiAttivita(attivitaId);
@@ -167,15 +169,6 @@ public class NewActivityEvent extends AppCompatActivity {
         buttonMaps.setOnClickListener(v -> {
             apriMappe(campoPosizione.getText().toString());
         });*/
-
-        mNewActivityEventViewModel = new ViewModelProvider(this).get(NewActivityEventViewModel.class);
-
-        if (attivitaId != null) {
-            mNewActivityEventViewModel.setAttivitaId(attivitaId);
-        }
-        if (viaggioId != null) {
-            mNewActivityEventViewModel.setViaggioId(viaggioId);
-        }
 
         if (attivita == null) {
             attivita = new Attivita();
@@ -272,6 +265,33 @@ public class NewActivityEvent extends AppCompatActivity {
         Intent i = new Intent(getApplicationContext(), Activity_travel_view.class);
         startActivity(i);
 
+    }
+
+    private boolean checkCampi() {
+        boolean compilato = true;
+
+        if (TextUtils.isEmpty(campoNome.getText().toString())) {
+            //error
+            compilato = false;
+        }
+        if (TextUtils.isEmpty(dataInizioAttivitaButton.getText().toString())) {
+            //error
+            compilato = false;
+        }
+        if (TextUtils.isEmpty(oraInizioAttivitaButton.getText().toString())) {
+            //error
+            compilato = false;
+        }
+        if (TextUtils.isEmpty(dataFineAttivitaButton.getText().toString())) {
+            //error
+            compilato = false;
+        }
+        if (TextUtils.isEmpty(oraFineAttivitaButton.getText().toString())) {
+            //error
+            compilato = false;
+        }
+
+        return compilato;
     }
 
 
