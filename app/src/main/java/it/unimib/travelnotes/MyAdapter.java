@@ -67,11 +67,11 @@ public class MyAdapter extends RecyclerView.Adapter {
             viewHolder.travelDestination.setText(viaggio.getDestinazioneAndata());
 
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDate.setText(dateTime);
 
-            simpleDateFormat = new SimpleDateFormat("HH:mm");
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDateArrival.setText(dateTime);
 
@@ -87,22 +87,22 @@ public class MyAdapter extends RecyclerView.Adapter {
             viewHolder.travelDepartureR.setText(viaggio.getPartenzaRitorno());
             viewHolder.travelDestinationR.setText(viaggio.getDestinazioneRitorno());
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDate.setText(dateTime);
 
-            simpleDateFormat = new SimpleDateFormat("HH:mm");
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDateArrival.setText(dateTime);
 
             //viewHolder.travelDate.setText(viaggio.getDataAndata().toString());
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDateR.setText(dateTime);
             //viewHolder.travelDateR.setText(viaggio.getDataAndata().toString());
 
-            simpleDateFormat = new SimpleDateFormat("HH:mm");
+            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDateRArrival.setText(dateTime);
         }

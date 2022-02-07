@@ -7,7 +7,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -75,36 +75,12 @@ public class TravelList extends AppCompatActivity {
         }
 
         listaViaggiListenerProva(utenteId);
-        /*ValueEventListener listaViaggiListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-
-                    Viaggio viaggio = postSnapshot.getValue(Viaggio.class);
-
-                    list.add(viaggio);
-                }
-
-                myAdapter = new MyAdapter(TravelList.this,list);
-                recyclerView.setAdapter(myAdapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        };
-        FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference().child("utenti").child("JTvnws61akaZyQYfzeubdzXgx2H3").child("listaviaggi").addValueEventListener(listaViaggiListener);
-        */
-
-
 
         //list = new ArrayList<>();
         myAdapter = new MyAdapter(this,list);
         recyclerView.setAdapter(myAdapter);
 
-        final ImageButton mButtonNext = findViewById(R.id.new_travel);
+        final FloatingActionButton mButtonNext = findViewById(R.id.new_travel);
         mButtonNext.setOnClickListener(v -> {
             Intent intent = new Intent(this, NewTravel.class);
             startActivity(intent);
@@ -125,26 +101,6 @@ public class TravelList extends AppCompatActivity {
             }
         };
         mTravelListViewModel.getlistaViaggi().observe(this, observer);
-        /*database.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-
-                    Viaggio viaggio = dataSnapshot.getValue(Viaggio.class);
-                    list.add(viaggio);
-
-
-                }
-                myAdapter.notifyDataSetChanged();
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });*/
 
 
     }
@@ -164,6 +120,13 @@ public class TravelList extends AppCompatActivity {
 
                 }
                 //Ordinare lista viaggi
+                /*
+                Collections.sort(list, new Comparator<Viaggio>() {
+                    @Override
+                    public int compare(Viaggio o1, Viaggio o2) {
+                        return o1.getDataAndata().compareTo(o2.getDataAndata());
+                    }
+                });*/
 
                 Collections.sort(list, new Comparator<Viaggio>() {
                     @Override
@@ -171,12 +134,7 @@ public class TravelList extends AppCompatActivity {
                         return o1.getDataAndata().compareTo(o2.getDataAndata());
                     }
                 });
-
-                Collections.sort(list, new Comparator<Viaggio>() {
-                    public int compare(Viaggio o1, Viaggio o2) {
-                        return o1.getDataAndata().compareTo(o2.getDataAndata());
-                    }
-                });
+                
 
                 myAdapter = new MyAdapter(TravelList.this,list);
                 recyclerView.setAdapter(myAdapter);
@@ -189,13 +147,7 @@ public class TravelList extends AppCompatActivity {
         };
         FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference().child("utenti").child(utenteId).child("listaviaggi").addValueEventListener(listaViaggiListener);
     }
-/*
-    public class CustomComparator implements Comparator<Viaggio> {
-        @Override
-        public int compare(Viaggio v1, Viaggio v2) {
-            return v1.getDataAndata().compareTo(v2.getDataAndata());
-        }
-    }*/
+
 
 
 
