@@ -37,6 +37,15 @@ public class GroupFragment extends Fragment {
     private GruppoViaggioViewModel mGruppoViaggioViewModel;
 
     @Override
+    public void onResume(){
+        super.onResume();
+        Button bottone_agg_user= getView().findViewById(R.id.new_user);
+        bottone_agg_user.setOnClickListener(v -> {
+            add_user_group();
+        });
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.activity_group_list,container,false);
         mGruppoViaggioViewModel=new ViewModelProvider(requireActivity()).get(GruppoViaggioViewModel.class);
@@ -55,10 +64,6 @@ public class GroupFragment extends Fragment {
             listaUtenti = new ArrayList<>();
         }
 
-        Button bottone_agg_user= getView().findViewById(R.id.new_user);
-        bottone_agg_user.setOnClickListener(v -> {
-            add_user_group();
-        });
 
         final Observer<ListaUtentiResponse> observer = new Observer<ListaUtentiResponse>() {
             @Override
