@@ -47,7 +47,7 @@ public class GroupFragment extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.activity_group_list,container,false);
+        View view=inflater.inflate(R.layout.fragment_group,container,false);
         mGruppoViaggioViewModel=new ViewModelProvider(requireActivity()).get(GruppoViaggioViewModel.class);
         recyclerView = view.findViewById(R.id.recycler_group);
         recyclerView.setHasFixedSize(true);
