@@ -24,13 +24,12 @@
             android:layout_height="80dp"
             android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="102dp"
+            <ImageButton
+                android:id="@+id/button_modifica_attivita"
+                android:layout_width="99dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                app:srcCompat="@drawable/ic_baseline_sports_basketball_24"
-                app:tint="@color/white" />
+                app:srcCompat="@drawable/ic_flat_style_circle_edit_icon_icons_com_66939" />
 
             <TextView
                 android:id="@+id/nome_attivita"

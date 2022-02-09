@@ -1,8 +1,10 @@
 package it.unimib.travelnotes.ui.attivita;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +14,7 @@ import java.util.List;
 
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.AttivitaViewHolder> {
     private List<Attivita> attivitaList;
@@ -68,11 +71,24 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
     public class AttivitaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView attivitaNome;
         TextView descrizione;
+        ImageButton modificaAttivita;
 
         public AttivitaViewHolder(@NonNull View itemView) {
             super(itemView);
             attivitaNome = itemView.findViewById(R.id.nome_attivita);
             descrizione = itemView.findViewById(R.id.descrizione);
+            modificaAttivita =  itemView.findViewById(R.id.button_modifica_attivita);
+            modificaAttivita.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = (new Intent(view.getContext(), NewActivityEvent.class));
+                    intent.putExtra("modifica_attivita", true);
+                    view.getContext().startActivity(intent);
+
+
+
+                }
+            });
         }
 
 
