@@ -1,27 +1,31 @@
 package it.unimib.travelnotes;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.databinding.ActivityTravelView2Binding;
 import it.unimib.travelnotes.ui.flight.FlightViewModel;
 
 public class Activity_travel_view extends AppCompatActivity {
     private String viaggioId;
-    private String viaggio_id = "-MtA7mKtdZODJR98_3hH" ;
+    private String viaggio_id = "-MtZ4XYo_IZa2DZ66eif" ;
     private ActivityTravelView2Binding binding;
     BottomNavigationView bottomNavigation;
     FlightViewModel mFlightViewModel;
+    private List<Attivita> attivitaList = new ArrayList<Attivita>();
+
+
 
 
 
@@ -34,6 +38,11 @@ public class Activity_travel_view extends AppCompatActivity {
 
         SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
         sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
+
+
+      //sharedPreferencesProvider2.se(attivitaList);
+
+
 
 
         //gestione del id viaggio provvisoria
@@ -67,10 +76,16 @@ public class Activity_travel_view extends AppCompatActivity {
 
 
 
+
+
+
     }
     public String getDatiViaggio(){
         return viaggio_id;
     }
+    //public List<Attivita> getAttivitaList(){return this.attivitaList; }
+    public void onChange (List<Attivita> lista){this.attivitaList = lista;}
+
 
 
 }

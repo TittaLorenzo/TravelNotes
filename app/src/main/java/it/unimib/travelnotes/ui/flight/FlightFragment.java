@@ -2,7 +2,6 @@ package it.unimib.travelnotes.ui.flight;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,13 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import it.unimib.travelnotes.Activity_travel_view;
@@ -31,7 +25,6 @@ import it.unimib.travelnotes.NewTravel;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.databinding.FragmentFlightBinding;
-import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class FlightFragment extends Fragment {
 
@@ -88,11 +81,6 @@ public class FlightFragment extends Fragment {
         destination2 = view.findViewById(R.id.destination2);
         departureTime2 = view.findViewById(R.id.departureTime2);
         time2 = view.findViewById(R.id.time2);
-
-
-
-
-
 
         Button button_modifica_volo= (Button) view.findViewById(R.id.modify_volo);
         button_modifica_volo.setOnClickListener(new View.OnClickListener() {

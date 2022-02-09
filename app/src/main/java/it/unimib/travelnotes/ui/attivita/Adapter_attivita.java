@@ -1,29 +1,28 @@
 package it.unimib.travelnotes.ui.attivita;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
 
 import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.R;
-import it.unimib.travelnotes.ui.attivita.AttivitaFragment;
 
 public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.AttivitaViewHolder> {
-    Attivita[] attivita;
-    AttivitaFragment context;
+    private List<Attivita> attivitaList;
+    private AttivitaFragment context;
+    private Attivita attivita;
 
-    public Adapter_attivita(Attivita[] attivita, AttivitaFragment activity) {
-        this.attivita= attivita;
+    public Adapter_attivita(List<Attivita> attivita, AttivitaFragment activity) {
+        this.attivitaList= attivita;
         this.context = activity;
     }
+
 
 
     @NonNull
@@ -38,18 +37,33 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
     @Override
     public void onBindViewHolder(@NonNull Adapter_attivita.AttivitaViewHolder holder, int position) {
         //AttivitaViewHolder.getTextView(localDataSet[position]);
-        final Attivita attivitaList = attivita[position];
-        holder.attivitaNome.setText(attivitaList.getNome());
-        holder.descrizione.setText(attivitaList.getDescrizione());
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
+        attivita = attivitaList.get(position);
+        holder.attivitaNome.setText(attivita.getNome());
+        holder.descrizione.setText(attivita.getDescrizione());
 
     }
+    public void removeItem(int position) {
+        attivitaList.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreItem(Attivita attivita, int position) {
+        attivitaList.add(attivita);
+        notifyItemInserted(position);
+    }
+
+    public List<Attivita> getData() {
+        return attivitaList ;
+    }
+    @Override
+    public int getItemCount() {
+        if (attivitaList != null){
+            return attivitaList.size();
+        }
+        return 0;
+
+    }
+
 
     public class AttivitaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView attivitaNome;
@@ -59,8 +73,6 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
             super(itemView);
             attivitaNome = itemView.findViewById(R.id.nome_attivita);
             descrizione = itemView.findViewById(R.id.descrizione);
-
-            itemView.setOnClickListener(this);
         }
 
 
@@ -69,13 +81,7 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
 
         }
     }
-    @Override
-    public int getItemCount() {
-        if (attivita != null){
-            return attivita.length;
-        }
-        return 0;
 
-    }
+
 }
 
