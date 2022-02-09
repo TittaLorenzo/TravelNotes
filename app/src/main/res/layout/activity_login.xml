@@ -17,7 +17,8 @@
         android:layout_marginEnd="4dp"
         android:layout_marginBottom="4dp"
         android:hint="@string/emailInputHint"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email_login_edit_text"
@@ -38,7 +39,8 @@
         android:layout_marginBottom="4dp"
         app:endIconMode="password_toggle"
         android:hint="@string/passwordInputHint"
-        app:errorEnabled="true">
+        app:errorEnabled="true"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password_login_edit_text"
