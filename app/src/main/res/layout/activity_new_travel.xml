@@ -69,7 +69,7 @@
                     <Button
                         android:id="@+id/NT_sceltaAndataP"
                         android:layout_width="118dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/NT_selPartenza"
                         android:textSize="12sp" />
@@ -87,12 +87,12 @@
                         android:layout_height="wrap_content"
                         app:startIconDrawable="@drawable/ic_baseline_flight_takeoff_24"
                         app:endIconMode="clear_text"
-                        android:hint="@string/NT_a">
+                        android:hint="@string/NT_da">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/NT_andataDa"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="match_parent" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -111,7 +111,7 @@
                     <Button
                         android:id="@+id/NT_sceltaAndataR"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/NT_selArrivo"
                         android:textSize="12sp" />
@@ -133,7 +133,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/NT_andataA"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="match_parent" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -178,7 +178,7 @@
                     <Button
                         android:id="@+id/NT_sceltaRitornoP"
                         android:layout_width="118dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/NT_selPartenza"
                         android:textSize="12sp" />
@@ -196,12 +196,12 @@
                         android:layout_height="wrap_content"
                         app:startIconDrawable="@drawable/ic_baseline_flight_takeoff_24"
                         app:endIconMode="clear_text"
-                        android:hint="@string/NT_a">
+                        android:hint="@string/NT_da">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/NT_ritornoDa"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="match_parent" />
 
                     </com.google.android.material.textfield.TextInputLayout>
                 </LinearLayout>
@@ -219,7 +219,7 @@
                     <Button
                         android:id="@+id/NT_sceltaRitornoA"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:text="@string/NT_selArrivo"
                         android:textSize="12sp" />
@@ -242,7 +242,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/NT_ritornoA"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="match_parent" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
