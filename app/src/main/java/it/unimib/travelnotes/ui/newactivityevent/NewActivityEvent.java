@@ -84,8 +84,7 @@ public class NewActivityEvent extends AppCompatActivity {
     private String attivitaId;
     private String viaggioId;
 
-    private String attivitaId;
-    private String viaggioId;
+
 
 
     @Override
