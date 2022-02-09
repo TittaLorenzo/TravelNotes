@@ -1,9 +1,11 @@
 package it.unimib.travelnotes;
 
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -26,12 +29,15 @@ import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.lang.Thread;
 
 import it.unimib.travelnotes.Model.Attivita;
+import it.unimib.travelnotes.roomdb.dao.ViaggiDao;
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
+
 
 public class NewTravel extends AppCompatActivity {
 
@@ -45,8 +51,10 @@ public class NewTravel extends AppCompatActivity {
     TextInputEditText ritornoVA;
     SwitchMaterial checkAR;
     FloatingActionButton salvaVolo;
-    String s1, s2;
-    Date data1, data2;
+    Boolean datoPassato = true;
+    TextView titolo;
+    String idProva = "-MupwdkEslROOOnQgYd3";
+
 
     private ITravelRepository mITravelRepository;
 
@@ -67,8 +75,14 @@ public class NewTravel extends AppCompatActivity {
         ritornoVA = findViewById(R.id.NT_ritornoA);
         mITravelRepository = new TravelRepository(getApplication());
         salvaVolo = findViewById(R.id.NT_floatingButton);
-
+        //datoPassato = getIntent().getExtras().getBoolean("modifica_viaggio");
         mITravelRepository = new TravelRepository(getApplication());
+        titolo = findViewById(R.id.NT_creaViaggioTV);
+
+        if(datoPassato){
+            titolo.setText(R.string.title_modificaViaggio);
+            caricaDatiAttivita(idProva);
+        }
 
         partenzaAndataButton.setOnClickListener(v -> {
             showDateTimeDialog(partenzaAndataButton);
@@ -117,12 +131,14 @@ public class NewTravel extends AppCompatActivity {
                     if(diffMinutesD <= 0 || diffMinutesR <= 0 || andataR.compareTo(andataD) <= 0 || arrivoR.compareTo(arrivoD) <= 0 || andataR.compareTo(arrivoD) <= 0){
                         Toast.makeText(this, "Correggere le date", Toast.LENGTH_SHORT).show();
                     }
-                    else if(andataVDa.getText().toString().matches("") || andataVA.getText().toString().matches("") || ritornoVDa.getText().toString().matches("") || ritornoVA.getText().toString().matches("")){
+                    else if(andataVDa.getText().toString().trim().matches("") || andataVA.getText().toString().trim().matches("") || ritornoVDa.getText().toString().trim().matches("") || ritornoVA.getText().toString().trim().matches("")){
                         Toast.makeText(this, "Inserire città valide", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(this, "Viaggio creato", Toast.LENGTH_SHORT).show();
-                        //mITravelRepository.pushNuovoViaggio(viagg, false);
+                        mITravelRepository.pushNuovoViaggio(viagg, false);
+                        startActivity(new Intent(this, TravelList.class));
+                        finish();
                     }
                     /*new AsyncTask<Void, Void, Void>() {
                         @Override
@@ -154,12 +170,14 @@ public class NewTravel extends AppCompatActivity {
                     if(diffMinutes <= 0){
                         Toast.makeText(this, "Correggere le date", Toast.LENGTH_SHORT).show();
                     }
-                    else if(andataVDa.getText().toString().matches("") || andataVA.getText().toString().matches("")){
+                    else if(andataVDa.getText().toString().trim().matches("") || andataVA.getText().toString().trim().matches("")){
                         Toast.makeText(this, "Inserire città valide", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(this, "Viaggio creato", Toast.LENGTH_SHORT).show();
-                        //mITravelRepository.pushNuovoViaggio(viagg, false);
+                        mITravelRepository.pushNuovoViaggio(viagg, false);
+                        startActivity(new Intent(this, TravelList.class));
+                        finish();
                     }
                     /*new AsyncTask<Void, Void, Void>() {
                         @Override
@@ -212,6 +230,30 @@ public class NewTravel extends AppCompatActivity {
 
         new DatePickerDialog(NewTravel.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
+    }
+
+    private void caricaDatiAttivita(String idAttivitaI) {
+        partenzaAndataButton = findViewById(R.id.NT_sceltaAndataP);
+        arrivoAndataButton = findViewById(R.id.NT_sceltaAndataR);
+        partenzaRitornoButton = findViewById(R.id.NT_sceltaRitornoP);
+        arrivoRitornoButton = findViewById(R.id.NT_sceltaRitornoA);
+        checkAR = findViewById(R.id.NT_checkAR);
+        andataVDa = findViewById(R.id.NT_andataDa);
+        andataVA = findViewById(R.id.NT_andataA);
+        ritornoVDa = findViewById(R.id.NT_ritornoDa);
+        ritornoVA = findViewById(R.id.NT_ritornoA);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Viaggio viaggoSelezionato = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().findViaggioById(idAttivitaI);
+                try {
+                    andataVDa.setText(viaggoSelezionato.getPartenzaAndata());
+                }catch (Exception e){
+                    Log.e("errore", e.toString());
+                }
+            }
+        };
+        new Thread(runnable).start();
     }
 
 }
