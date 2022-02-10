@@ -52,7 +52,7 @@ public class Utente {
         this.email = emailU;
     }
 
-    public static String getUsername() {
+    public String getUsername() {
         return username;
     }
 

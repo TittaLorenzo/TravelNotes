@@ -1,6 +1,5 @@
 package it.unimib.travelnotes;
 
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
@@ -11,11 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -24,15 +20,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.lang.Thread;
 
-import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.roomdb.dao.ViaggiDao;
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
@@ -51,7 +44,7 @@ public class NewTravel extends AppCompatActivity {
     TextInputEditText ritornoVA;
     SwitchMaterial checkAR;
     FloatingActionButton salvaVolo;
-    Boolean datoPassato = true;
+    Boolean datoPassato = false;
     TextView titolo;
     String idProva = "-MupwdkEslROOOnQgYd3";
 
@@ -233,7 +226,7 @@ public class NewTravel extends AppCompatActivity {
     }
 
     private void caricaDatiAttivita(String idAttivitaI) {
-        partenzaAndataButton = findViewById(R.id.NT_sceltaAndataP);
+        partenzaAndataButton = (Button) findViewById(R.id.NT_sceltaAndataP);
         arrivoAndataButton = findViewById(R.id.NT_sceltaAndataR);
         partenzaRitornoButton = findViewById(R.id.NT_sceltaRitornoP);
         arrivoRitornoButton = findViewById(R.id.NT_sceltaRitornoA);
@@ -246,11 +239,40 @@ public class NewTravel extends AppCompatActivity {
             @Override
             public void run() {
                 Viaggio viaggoSelezionato = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().findViaggioById(idAttivitaI);
-                try {
-                    andataVDa.setText(viaggoSelezionato.getPartenzaAndata());
-                }catch (Exception e){
-                    Log.e("errore", e.toString());
-                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(viaggoSelezionato.getDataRitorno() != null){
+                            andataVDa.setText(viaggoSelezionato.getPartenzaAndata());
+                            andataVA.setText(viaggoSelezionato.getDestinazioneAndata());
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(viaggoSelezionato.getDataAndata());
+                            SimpleDateFormat simpleDateFormat2=new SimpleDateFormat("yy-MM-dd HH:mm");
+                            partenzaAndataButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            calendar.add(Calendar.MINUTE, (int) viaggoSelezionato.getDurataAndata());
+                            arrivoAndataButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            ritornoVDa.setText(viaggoSelezionato.getPartenzaRitorno());
+                            ritornoVA.setText(viaggoSelezionato.getDestinazioneRitorno());
+                            calendar.setTime(viaggoSelezionato.getDataRitorno());
+                            partenzaRitornoButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            //
+                            calendar.add(Calendar.MINUTE, (int) viaggoSelezionato.getDurataRitorno());
+                            arrivoRitornoButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            //vedere andata ritorno
+                        }else{
+                            andataVDa.setText(viaggoSelezionato.getPartenzaAndata());
+                            andataVA.setText(viaggoSelezionato.getDestinazioneAndata());
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(viaggoSelezionato.getDataAndata());
+                            SimpleDateFormat simpleDateFormat2=new SimpleDateFormat("yy-MM-dd HH:mm");
+                            partenzaAndataButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            //
+                            calendar.add(Calendar.MINUTE, (int) viaggoSelezionato.getDurataAndata());
+                            arrivoAndataButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            //vedere andata ritorno
+                        }
+                    }
+                });
             }
         };
         new Thread(runnable).start();
