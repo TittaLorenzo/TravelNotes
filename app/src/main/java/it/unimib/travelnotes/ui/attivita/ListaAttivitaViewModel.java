@@ -77,6 +77,10 @@ public class ListaAttivitaViewModel extends AndroidViewModel {
         return mListaAttivitaLiveData;
     }
 
+    public void deleteAttivitaViewModel(String attivitaId) {
+        mITravelRepository.deleteAttivita(attivitaId, viaggioId);
+    }
+
     private void fetchListaAttivitaViewModel() {
         mListaAttivitaLiveData = mITravelRepository.fetchListaAttivita(viaggioId);
     }

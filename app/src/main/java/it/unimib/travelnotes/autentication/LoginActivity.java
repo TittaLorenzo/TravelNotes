@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ITravelRepository mITravelRepository;
+    private SharedPreferencesProvider mSharedPreferencesProvider;
 
     private EditText email;
     private EditText password;
@@ -52,6 +53,7 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mITravelRepository = new TravelRepository(getApplication());
+        mSharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
 
         email = findViewById(R.id.email_login_edit_text);
         password = findViewById(R.id.password_login_edit_text);
@@ -138,6 +140,9 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Login effettuato", Toast.LENGTH_SHORT).show();
 
                             String userId = mAuth.getCurrentUser().getUid();
+
+                            mSharedPreferencesProvider.setSharedUserId(userId);
+                            mSharedPreferencesProvider.setSharedUserEmail(email);
 
                             mITravelRepository.loadUtente(userId);
 

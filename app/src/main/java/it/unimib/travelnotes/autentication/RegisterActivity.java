@@ -25,6 +25,7 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
+import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.TravelList;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
@@ -33,6 +34,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ITravelRepository mITravelRepository;
+    private SharedPreferencesProvider mSharedPreferencesProvider;
 
     private EditText email;
     private EditText password;
@@ -52,6 +54,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mITravelRepository = new TravelRepository(getApplication());
+        mSharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
 
         email = findViewById(R.id.email_register_edit_text);
         password = findViewById(R.id.password_register_edit_text);
@@ -115,11 +118,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                             String userId = user.getUid();
 
+                            mSharedPreferencesProvider.setSharedUserId(userId);
+                            mSharedPreferencesProvider.setSharedUserEmail(email);
+
                             Utente u = new Utente();
                             u.setUtenteId(userId);
                             u.setEmail(email);
                             u.setUsername(txtUsername);
-
                             mITravelRepository.pushNuovoUtente(u);
 
                             startActivity(new Intent(RegisterActivity.this, TravelList.class));

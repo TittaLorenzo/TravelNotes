@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.unimib.travelnotes.Activity_travel_view;
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.response.AttivitaResponse;
@@ -149,8 +150,6 @@ public class TravelRepository implements ITravelRepository {
 
     @Override
     public void loadUtente(String utenteId) {
-
-        mSharedPreferencesProvider.setSharedUserId(utenteId);
 
         mRtDatabase.child("utenti").child(utenteId).child("datiutente").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -300,7 +299,7 @@ public class TravelRepository implements ITravelRepository {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
-                                                    Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                                                    //Toast.makeText(mApplication.getApplicationContext(), "Aggiunto al gruppo", Toast.LENGTH_SHORT).show();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -314,7 +313,7 @@ public class TravelRepository implements ITravelRepository {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
-                                                    Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mApplication.getApplicationContext(), "Aggiunto al gruppo", Toast.LENGTH_SHORT).show();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
