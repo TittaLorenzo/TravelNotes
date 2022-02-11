@@ -51,7 +51,7 @@ public class NewTravel extends AppCompatActivity {
     TextInputEditText ritornoVA;
     SwitchMaterial checkAR;
     FloatingActionButton salvaVolo;
-    Boolean datoPassato = true;
+    Boolean datoPassato = false;
     TextView titolo;
     String idProva = "-MupwdkEslROOOnQgYd3";
 
