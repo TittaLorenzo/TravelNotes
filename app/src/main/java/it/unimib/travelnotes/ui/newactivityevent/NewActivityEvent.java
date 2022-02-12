@@ -327,7 +327,7 @@ public class NewActivityEvent extends AppCompatActivity {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd");
 
                 if (dateButtonString == "StartDate") /*set inizio attivita date*/ {
-                    if (dataFineAttivitaButton.getText().toString() == null) {
+                    if (dataFineAttivitaButton.getText().toString().equals("")) {
                         dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                         dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                     } else {
@@ -343,7 +343,7 @@ public class NewActivityEvent extends AppCompatActivity {
                             dataFineAttivitaButton.setText(null);
                             oraFineAttivitaButton.setText(null);
                         } else {
-                            if (dateI.equals(dateF) && oraInizioAttivitaButton.getText().toString() != null && oraFineAttivitaButton.getText().toString() != null) {
+                            if (dateI.equals(dateF) && oraInizioAttivitaButton.getText().toString().equals("") && oraFineAttivitaButton.getText().toString().equals("")) {
                                 Date timeI = new Date();
                                 Date timeF = new Date();
                                 SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -365,7 +365,7 @@ public class NewActivityEvent extends AppCompatActivity {
                     }
 
                 } else /*set fine attivita date*/ {
-                    if (dataInizioAttivitaButton.getText().toString() == null) {
+                    if (dataInizioAttivitaButton.getText().toString().equals("")) {
                         dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                     } else {
                         Date dateI = new Date();
@@ -379,7 +379,7 @@ public class NewActivityEvent extends AppCompatActivity {
                             dataFineAttivitaButton.setText(null);
                             Toast.makeText(NewActivityEvent.this, "Data di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
                         } else {
-                            if (dateI.equals(dateF) && oraInizioAttivitaButton.getText().toString() != null && oraFineAttivitaButton.getText().toString() != null) {
+                            if (dateI.equals(dateF) && !oraInizioAttivitaButton.getText().toString().equals("") && !oraFineAttivitaButton.getText().toString().equals("")) {
                                 Date timeI = new Date();
                                 Date timeF = new Date();
                                 SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
@@ -419,7 +419,7 @@ public class NewActivityEvent extends AppCompatActivity {
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
                 if (sceltaTimeString == "StartTime") /*set inizio attivita hour*/ {
-                    if (oraFineAttivitaButton.getText().toString() == null || dataFineAttivitaButton.getText().toString() == null || dataInizioAttivitaButton.getText().toString() == null) {
+                    if (oraFineAttivitaButton.getText().toString().equals("") || dataFineAttivitaButton.getText().toString().equals("") || dataInizioAttivitaButton.getText().toString().equals("")) {
                         oraInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                     } else {
                         if (dataInizioAttivitaButton.getText().toString() == dataFineAttivitaButton.getText().toString()) {
@@ -441,7 +441,7 @@ public class NewActivityEvent extends AppCompatActivity {
                         }
                     }
                 } else /*set fine attivita hour*/ {
-                    if (oraInizioAttivitaButton.getText().toString() == null || dataFineAttivitaButton.getText().toString() == null || dataInizioAttivitaButton.getText().toString() == null) {
+                    if (oraInizioAttivitaButton.getText().toString().equals("") || dataFineAttivitaButton.getText().toString().equals("") || dataInizioAttivitaButton.getText().toString().equals("")) {
                         oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                     } else {
                         if (dataInizioAttivitaButton.getText().toString() == dataFineAttivitaButton.getText().toString()) {
