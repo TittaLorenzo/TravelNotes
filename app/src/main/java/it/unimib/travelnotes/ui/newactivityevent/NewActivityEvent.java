@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +11,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,24 +21,30 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import it.unimib.travelnotes.Activity_travel_view;
 import it.unimib.travelnotes.MainActivity;
@@ -47,22 +53,17 @@ import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.SharedPreferencesProvider;
-import it.unimib.travelnotes.TravelList;
-import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
-import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
 
 public class NewActivityEvent extends AppCompatActivity {
 
-    private static final String REALTIME_URL = "https://travelnotes-334817-default-rtdb.europe-west1.firebasedatabase.app/";
+    private String AUTOCOMPLETE_API_KEY = "AIzaSyAmaveq8N5RXhsJhELqQWYP-coB78I89NQ";
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
 
     private ITravelRepository mITravelRepository;
-    private Attivita attivita;
 
     private Button dataInizioAttivitaButton;
     private Button dataFineAttivitaButton;
@@ -86,7 +87,6 @@ public class NewActivityEvent extends AppCompatActivity {
         setContentView(R.layout.activity_new_event);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance(REALTIME_URL).getReference();
         mITravelRepository = new TravelRepository(getApplication());
 
         dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
@@ -100,6 +100,23 @@ public class NewActivityEvent extends AppCompatActivity {
         buttonSalva = findViewById(R.id.salvaBottoneNuovaAttivita);
 
         ImageButton backButtonNuovaAttivita = (ImageButton) findViewById(R.id.backButtonNuovaAttivita);
+
+
+        // Autocomplete Place API
+        // Initialize the SDK
+        Places.initialize(getApplicationContext(), AUTOCOMPLETE_API_KEY);
+
+        campoPosizione.setFocusable(false);
+        campoPosizione.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS/*, Place.Type.TRAIN_STATION, Place.Type.AIRPORT, Place.Field.NAME*/);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NewActivityEvent.this);
+                startActivityForResult(intent, 100);
+
+            }
+        });
 
         dataInizioAttivitaButton.setOnClickListener(v -> {
             showDatePickerDialog("StartDate");
@@ -165,11 +182,19 @@ public class NewActivityEvent extends AppCompatActivity {
             apriMappe(campoPosizione.getText().toString());
         });*/
 
-        if (attivita == null) {
-            attivita = new Attivita();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            campoPosizione.setText(place.getAddress());
+        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
         }
-
-
     }
 
     private void caricaDatiAttivita(String idAttivitaI) {

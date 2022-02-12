@@ -217,6 +217,7 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/posizionePartenzaNuovaAttivita"
+                            android:drawableLeft="@drawable/ic_baseline_location_on_24"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             />
@@ -272,19 +273,6 @@
                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <!--EditText
-                        android:id="@+id/descrizioneNuovaAttivita"
-                        android:layout_width="0dp"
-                        android:layout_height="150dp"
-                        android:layout_weight="1"
-                        android:ems="10"
-                        android:gravity="top|start"
-                        android:hint="@string/descrizioneHint"
-                        android:inputType="textMultiLine"
-                        android:lines="3"
-                        android:maxLines="5"
-                        android:scrollbars="vertical" /-->
 
                 </LinearLayout>
 
