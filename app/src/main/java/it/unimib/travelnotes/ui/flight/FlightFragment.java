@@ -33,6 +33,7 @@ public class FlightFragment extends Fragment {
     private Viaggio viaggio;
     private FragmentFlightBinding binding;
     private FlightViewModel mFlightViewModel;
+    private boolean a_r;
 
     TextView departures;
     TextView destination;
@@ -62,6 +63,7 @@ public class FlightFragment extends Fragment {
         if(viaggio_id == null){
             Intent intent = new Intent(getActivity().getApplicationContext(), TravelList.class);
         }
+        a_r = (boolean) getActivity().getIntent().getExtras().get("a_r");
 
         SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getActivity().getApplication());
         mFlightViewModel.setViaggioId(viaggio_id);
@@ -77,17 +79,21 @@ public class FlightFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-
-        View view = inflater.inflate(R.layout.fragment_flight, container, false);
-
+        View view;
+        if(a_r) {
+            view = inflater.inflate(R.layout.fragment_flight, container, false);
+            departure2 = view.findViewById(R.id.departure2);
+            destination2 = view.findViewById(R.id.destination2);
+            departureTime2 = view.findViewById(R.id.departureTime2);
+            time2 = view.findViewById(R.id.time2);
+        }else{
+             view = inflater.inflate(R.layout.flight_a, container, false);
+        }
         departures = view.findViewById(R.id.departure);
         destination = view.findViewById(R.id.destination);
         departureTime = view.findViewById(R.id.departureTime);
         time = view.findViewById(R.id.time);
-        departure2 = view.findViewById(R.id.departure2);
-        destination2 = view.findViewById(R.id.destination2);
-        departureTime2 = view.findViewById(R.id.departureTime2);
-        time2 = view.findViewById(R.id.time2);
+
 
         Button button_modifica_volo= (Button) view.findViewById(R.id.modify_volo);
         button_modifica_volo.setOnClickListener(new View.OnClickListener() {
@@ -113,16 +119,19 @@ public class FlightFragment extends Fragment {
                     destination.setText(viaggio.getDestinazioneAndata());
                     String ora = Double.toString(viaggio.getDurataAndata())+ " ore";
                     time.setText(ora);
-                    departure2.setText(viaggio.getPartenzaRitorno());
-                    destination2.setText(viaggio.getDestinazioneRitorno());
-                    String ora2 = Double.toString(viaggio.getDurataRitorno()) + " ore";
-                    time2.setText(ora2);
                     Date dataAndata = viaggio.getDataAndata();
                     String stringaDataAndata = df.format(dataAndata);
                     departureTime.setText(stringaDataAndata);
-                    Date dataRitorno = viaggio.getDataRitorno();
-                    String stringaDataRitorno = df.format(dataRitorno);
-                    departureTime2.setText(stringaDataRitorno);
+                    if(a_r) {
+                        String ora2 = Double.toString(viaggio.getDurataRitorno()) + " ore";
+                        Date dataRitorno = viaggio.getDataRitorno();
+                        String stringaDataRitorno = df.format(dataRitorno);
+                        departureTime2.setText(stringaDataRitorno);
+                        departure2.setText(viaggio.getPartenzaRitorno());
+                        destination2.setText(viaggio.getDestinazioneRitorno());
+                        time2.setText(ora2);
+                    }
+
 
 
                 }

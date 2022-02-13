@@ -157,6 +157,7 @@ public class MyAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent=new Intent(context, Activity_travel_view.class);
                     intent.putExtra("viaggioId", idViaggio);
+                    intent.putExtra("a_r", true);
                     //intent.putExtra("partenzaR", rDeparture[getAdapterPosition()]);
                     //intent.putExtra("arrivoR", rDestination[getAdapterPosition()]);
                     context.startActivity(intent);
@@ -197,6 +198,7 @@ public class MyAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent=new Intent(context, Activity_travel_view.class);
                     intent.putExtra("viaggioId", idViaggio);
+                    intent.putExtra("a_r", false);
                     //intent.putExtra("partenzaR", rDeparture[getAdapterPosition()]);
                     //intent.putExtra("arrivoR", rDestination[getAdapterPosition()]);
                     context.startActivity(intent);
