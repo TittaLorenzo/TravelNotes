@@ -1,10 +1,9 @@
 package it.unimib.travelnotes.Model;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
-import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
 import java.util.Date;
-import java.util.List;
 
 @Entity (tableName = "elenco_utenti")
 public class Utente {
@@ -52,7 +51,7 @@ public class Utente {
         this.email = emailU;
     }
 
-    public static String getUsername() {
+    public String getUsername() {
         return username;
     }
 

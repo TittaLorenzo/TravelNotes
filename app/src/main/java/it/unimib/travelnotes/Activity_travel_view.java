@@ -1,5 +1,6 @@
 package it.unimib.travelnotes;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,15 +16,17 @@ import java.util.List;
 
 import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.databinding.ActivityTravelView2Binding;
+import it.unimib.travelnotes.ui.flight.FlightFragment;
 import it.unimib.travelnotes.ui.flight.FlightViewModel;
 
 public class Activity_travel_view extends AppCompatActivity {
     private String viaggioId;
-    private String viaggio_id = "-MtZ4XYo_IZa2DZ66eif" ;
+    private String viaggio_id; ;
     private ActivityTravelView2Binding binding;
     BottomNavigationView bottomNavigation;
     FlightViewModel mFlightViewModel;
     private List<Attivita> attivitaList = new ArrayList<Attivita>();
+    private FlightFragment flightFragment = new FlightFragment();
 
 
 
@@ -35,25 +38,18 @@ public class Activity_travel_view extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel_view2);
 
-
-        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
-        sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
-
-
-      //sharedPreferencesProvider2.se(attivitaList);
-
-
-
-
         //gestione del id viaggio provvisoria
         try{
-            viaggio_id = (String) getIntent().getExtras().get(viaggio_id);
+            viaggio_id = (String) getIntent().getExtras().get("viaggioId");
         }catch (Exception e){
             viaggio_id = null;
         }
-        /*if(viaggio_id == null){
+        if(viaggio_id == null){
             Intent intent = new Intent(getApplicationContext(), TravelList.class);
-        }*/
+        }
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+        sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
+
 
         //Logic to intercept te Intent and its data
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -73,16 +69,13 @@ public class Activity_travel_view extends AppCompatActivity {
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.country_news, R.id.topic_news, R.id.favorites).build();*/
-
-
-
-
+        Bundle bundle = new Bundle();
+        bundle.putString("viaggioId", viaggio_id);
+        flightFragment.setArguments(bundle);
 
 
     }
-    public String getDatiViaggio(){
-        return viaggio_id;
-    }
+
     //public List<Attivita> getAttivitaList(){return this.attivitaList; }
     public void onChange (List<Attivita> lista){this.attivitaList = lista;}
 

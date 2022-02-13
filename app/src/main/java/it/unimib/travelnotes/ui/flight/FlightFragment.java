@@ -24,11 +24,12 @@ import it.unimib.travelnotes.Model.response.ViaggioResponse;
 import it.unimib.travelnotes.NewTravel;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.SharedPreferencesProvider;
+import it.unimib.travelnotes.TravelList;
 import it.unimib.travelnotes.databinding.FragmentFlightBinding;
 
 public class FlightFragment extends Fragment {
 
-    private String viaggioId;
+    private String viaggio_id;
     private Viaggio viaggio;
     private FragmentFlightBinding binding;
     private FlightViewModel mFlightViewModel;
@@ -53,11 +54,17 @@ public class FlightFragment extends Fragment {
         Activity_travel_view activity_travel_view = (Activity_travel_view) getActivity();
         mFlightViewModel = new ViewModelProvider(requireActivity()).get(FlightViewModel.class);
 
-        viaggioId =activity_travel_view.getDatiViaggio() ;
-
+        try{
+            viaggio_id = (String) getActivity().getIntent().getExtras().get("viaggioId");
+        }catch (Exception e){
+            viaggio_id = null;
+        }
+        if(viaggio_id == null){
+            Intent intent = new Intent(getActivity().getApplicationContext(), TravelList.class);
+        }
 
         SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getActivity().getApplication());
-        mFlightViewModel.setViaggioId(viaggioId);
+        mFlightViewModel.setViaggioId(viaggio_id);
 
         if (viaggio == null) {
             viaggio = new Viaggio();

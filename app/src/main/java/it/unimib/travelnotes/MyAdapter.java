@@ -33,7 +33,12 @@ public class MyAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position){
-        Viaggio viaggio = list.get(position);
+        Viaggio viaggio;
+       if (list.size() == 1) {
+             viaggio = list.get(0);
+        }else{
+        viaggio = list.get(position);
+        }
         if(viaggio.getDurataRitorno() != 0 ){
             return 1;
         }
