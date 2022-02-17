@@ -42,6 +42,7 @@ public class AttivitaFragment extends Fragment  {
     private String viaggio_id;
     private Viaggio viaggio;
     private ListaAttivitaViewModel mListaAttivitaViewModel;
+    private boolean d;
 
 
 
@@ -74,7 +75,7 @@ public class AttivitaFragment extends Fragment  {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
+        d=true;
         View view = inflater.inflate(R.layout.fragment_attivita, container, false);
         recyclerView = view.findViewById(R.id.recycler_attivita);
         adapter_attivita = new Adapter_attivita(attivitaList, AttivitaFragment.this);
@@ -86,27 +87,25 @@ public class AttivitaFragment extends Fragment  {
             SwipeToDeleteCallBack swipeToDeleteCallback = new SwipeToDeleteCallBack(getContext()) {
                 @Override
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
-
-
                     final int position = viewHolder.getAdapterPosition();
                     final Attivita item = attivitaList.get(position);
 
+
                     adapter_attivita.removeItem(position);
                     activity_travel_view.onChange(attivitaList);
-
-
                    Snackbar snackbar = Snackbar
                            .make(view.findViewById(R.id.recycler_attivita), "Item was removed from the list.", Snackbar.LENGTH_LONG);
                     snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            d = false;
                             adapter_attivita.restoreItem(item, position);
                             recyclerView.scrollToPosition(position);
                         }
                     });
-
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
+                    if(d){mListaAttivitaViewModel.deleteAttivitaViewModel(item.getAttivitaId());}
 
                 }
             };
