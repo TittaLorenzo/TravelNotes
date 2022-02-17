@@ -49,7 +49,7 @@ public class MyAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(this.getItemViewType(viewType)==1){
+        if(viewType==1){
             View view = LayoutInflater.from(context).inflate(R.layout.travel,parent,false);
             TravelViewHolder holder = new TravelViewHolder(view);
             return holder;

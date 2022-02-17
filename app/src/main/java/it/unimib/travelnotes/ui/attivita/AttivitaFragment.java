@@ -43,6 +43,7 @@ public class AttivitaFragment extends Fragment  {
     private Viaggio viaggio;
     private ListaAttivitaViewModel mListaAttivitaViewModel;
     private boolean d;
+    private Attivita temp;
 
 
 
@@ -75,7 +76,6 @@ public class AttivitaFragment extends Fragment  {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        d=true;
         View view = inflater.inflate(R.layout.fragment_attivita, container, false);
         recyclerView = view.findViewById(R.id.recycler_attivita);
         adapter_attivita = new Adapter_attivita(attivitaList, AttivitaFragment.this);
@@ -89,8 +89,8 @@ public class AttivitaFragment extends Fragment  {
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
                     final int position = viewHolder.getAdapterPosition();
                     final Attivita item = attivitaList.get(position);
-
-
+                    d=true;
+                    temp = item;
                     adapter_attivita.removeItem(position);
                     activity_travel_view.onChange(attivitaList);
                    Snackbar snackbar = Snackbar
@@ -98,16 +98,33 @@ public class AttivitaFragment extends Fragment  {
                     snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            d = false;
+                            d=false;
                             adapter_attivita.restoreItem(item, position);
                             recyclerView.scrollToPosition(position);
                         }
+
                     });
+
                     snackbar.setActionTextColor(Color.YELLOW);
                     snackbar.show();
-                    if(d){mListaAttivitaViewModel.deleteAttivitaViewModel(item.getAttivitaId());}
+                    snackbar.addCallback(new Snackbar.Callback() {
 
+                        @Override
+                        public void onDismissed(Snackbar snackbar, int event) {
+                            if(d){
+                                mListaAttivitaViewModel.deleteAttivitaViewModel(item.getAttivitaId());
+                            }
+
+                        }
+
+                        @Override
+                        public void onShown(Snackbar snackbar) {
+
+                        }
+                    });
                 }
+
+
             };
 
             ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
