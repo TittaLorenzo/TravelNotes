@@ -24,7 +24,7 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
     private AttivitaFragment context;
     private Attivita attivita;
 
-    String pattern = "MM/dd/yy HH:mm:ss";
+    String pattern = "MM/dd/yyyy \n HH:mm";
     DateFormat df = new SimpleDateFormat(pattern);
 
 
@@ -64,8 +64,8 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Attivita attivita, int position) {
-        attivitaList.add(attivita);
+    public void restoreItem(Attivita att, int position) {
+        attivitaList.add(position, att);
         notifyItemInserted(position);
     }
 
