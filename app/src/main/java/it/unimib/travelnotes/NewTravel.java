@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,15 +15,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.lang.Thread;
+import java.util.Date;
 
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.repository.ITravelRepository;

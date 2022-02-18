@@ -34,10 +34,10 @@ public class MyAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position){
         Viaggio viaggio;
-        if (list.size() == 1) {
-            viaggio = list.get(0);
+       if (list.size() == 1) {
+             viaggio = list.get(0);
         }else{
-            viaggio = list.get(position);
+        viaggio = list.get(position);
         }
         if(viaggio.getDurataRitorno() != 0 ){
             return 1;
@@ -49,7 +49,7 @@ public class MyAdapter extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if(this.getItemViewType(viewType)==1){
+        if(viewType==1){
             View view = LayoutInflater.from(context).inflate(R.layout.travel,parent,false);
             TravelViewHolder holder = new TravelViewHolder(view);
             return holder;
@@ -157,6 +157,7 @@ public class MyAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent=new Intent(context, Activity_travel_view.class);
                     intent.putExtra("viaggioId", idViaggio);
+                    intent.putExtra("a_r", true);
                     //intent.putExtra("partenzaR", rDeparture[getAdapterPosition()]);
                     //intent.putExtra("arrivoR", rDestination[getAdapterPosition()]);
                     context.startActivity(intent);
@@ -197,6 +198,7 @@ public class MyAdapter extends RecyclerView.Adapter {
                 public void onClick(View v) {
                     Intent intent=new Intent(context, Activity_travel_view.class);
                     intent.putExtra("viaggioId", idViaggio);
+                    intent.putExtra("a_r", false);
                     //intent.putExtra("partenzaR", rDeparture[getAdapterPosition()]);
                     //intent.putExtra("arrivoR", rDestination[getAdapterPosition()]);
                     context.startActivity(intent);

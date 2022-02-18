@@ -10,6 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import it.unimib.travelnotes.Model.Attivita;
@@ -20,6 +23,10 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
     private List<Attivita> attivitaList;
     private AttivitaFragment context;
     private Attivita attivita;
+
+    String pattern = "MM/dd/yyyy \n HH:mm";
+    DateFormat df = new SimpleDateFormat(pattern);
+
 
     public Adapter_attivita(List<Attivita> attivita, AttivitaFragment activity) {
         this.attivitaList= attivita;
@@ -41,8 +48,15 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
     public void onBindViewHolder(@NonNull Adapter_attivita.AttivitaViewHolder holder, int position) {
         //AttivitaViewHolder.getTextView(localDataSet[position]);
         attivita = attivitaList.get(position);
+        Date dataInizio = attivita.getDataInizio();
+        String stringaDataInizio = df.format(dataInizio);
+        holder.dataInizio.setText(stringaDataInizio);
+        Date dataFine = attivita.getDataFine();
+        String stringaDataFine = df.format(dataFine);
+        holder.dataFine.setText(stringaDataFine);
         holder.attivitaNome.setText(attivita.getNome());
         holder.descrizione.setText(attivita.getDescrizione());
+        holder.posizione.setText(attivita.getPosizione());
 
     }
     public void removeItem(int position) {
@@ -50,8 +64,8 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
         notifyItemRemoved(position);
     }
 
-    public void restoreItem(Attivita attivita, int position) {
-        attivitaList.add(attivita);
+    public void restoreItem(Attivita att, int position) {
+        attivitaList.add(position, att);
         notifyItemInserted(position);
     }
 
@@ -71,12 +85,20 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
     public class AttivitaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView attivitaNome;
         TextView descrizione;
+        TextView dataInizio;
+        TextView dataFine;
+        TextView posizione;
         ImageButton modificaAttivita;
+
 
         public AttivitaViewHolder(@NonNull View itemView) {
             super(itemView);
             attivitaNome = itemView.findViewById(R.id.nome_attivita);
             descrizione = itemView.findViewById(R.id.descrizione);
+            posizione= itemView.findViewById(R.id.pozione);
+            dataInizio = itemView.findViewById(R.id.data_inizio);
+            dataFine = itemView.findViewById(R.id.data_fine);
+
             modificaAttivita =  itemView.findViewById(R.id.button_modifica_attivita);
             modificaAttivita.setOnClickListener(new View.OnClickListener() {
                 @Override
