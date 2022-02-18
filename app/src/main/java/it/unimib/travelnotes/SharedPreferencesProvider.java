@@ -24,6 +24,16 @@ public class SharedPreferencesProvider {
         editor.apply();
     }
 
+    public String getSharedUserEmail() {
+        return sharedPref.getString(mApplication.getString(R.string.shared_useremail_key), null);
+    }
+
+    public void setSharedUserEmail(String email) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(mApplication.getString(R.string.shared_useremail_key), email);
+        editor.apply();
+    }
+
     public String getSelectedViaggioId() {
         return sharedPref.getString(mApplication.getString(R.string.shared_viaggio_key), null);
     }

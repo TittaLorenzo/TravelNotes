@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".ui.attivita.AttivitaFragment">
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/lattivita_progress_i"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/lattivita_bar"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:hideAnimationBehavior="inward"
+        app:indicatorColor="@color/secondaryDarkColor"
+        app:minHideDelay="500"
+        app:showAnimationBehavior="inward"
+        app:trackColor="@color/secondaryLightColor" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_attivita"

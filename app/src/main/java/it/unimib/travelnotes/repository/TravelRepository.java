@@ -12,7 +12,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -21,23 +20,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.Model.response.AttivitaResponse;
 import it.unimib.travelnotes.Model.response.ViaggioResponse;
 import it.unimib.travelnotes.Model.response.ListaAttivitaResponse;
 import it.unimib.travelnotes.Model.response.ListaUtentiResponse;
@@ -45,7 +39,6 @@ import it.unimib.travelnotes.Model.response.ListaViaggiResponse;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.SharedPreferencesProvider;
-import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 import it.unimib.travelnotes.roomdb.relations.UtenteConViaggi;
 import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
@@ -66,7 +59,6 @@ public class TravelRepository implements ITravelRepository {
     private final MutableLiveData<ListaUtentiResponse> mListaUtentiLiveData;
     private final MutableLiveData<ListaViaggiResponse> mListaViaggiLiveData;
     private final MutableLiveData<ViaggioResponse> mViaggioLiveData;
-    private final MutableLiveData<AttivitaResponse> mAttivitaLiveData;
 
     public TravelRepository(Application application) {
         this.mApplication = application;
@@ -78,7 +70,6 @@ public class TravelRepository implements ITravelRepository {
         this.mListaViaggiLiveData = new MutableLiveData<>();
         this.mViaggioLiveData = new MutableLiveData<>();
         mSharedPreferencesProvider = new SharedPreferencesProvider(mApplication);
-        this.mAttivitaLiveData = new MutableLiveData<>();
     }
 
 
@@ -110,10 +101,7 @@ public class TravelRepository implements ITravelRepository {
     @Override
     public MutableLiveData<ListaUtentiResponse> fetchGruppoViaggio(String viaggioId) {
 
-        /*long currentTime = System.currentTimeMillis();
-        long lastUpdate = mSharedPreferencesProvider.getLastUpdateGruppoViaggio();*/
-
-        if (isOnline() /*&& currentTime - lastUpdate > FRESH_TIMEOUT*/) {
+        if (isOnline()) {
             addListaUtentiListener(viaggioId);
         } else {
             getElencoUtentiFromDatabase(viaggioId);
@@ -135,22 +123,7 @@ public class TravelRepository implements ITravelRepository {
     }
 
     @Override
-    public MutableLiveData<AttivitaResponse> fetchAttivita(String attivitaId, String viaggioId) {
-
-        /*if (isOnline()) {
-            // getAttivitaSingleCall(attivitaId, viaggioId);
-        } else {
-            getAttivitaFromDatabase(attivitaId);
-        }*/
-        getAttivitaFromDatabase(attivitaId);
-
-        return mAttivitaLiveData;
-    }
-
-    @Override
     public void loadUtente(String utenteId) {
-
-        mSharedPreferencesProvider.setSharedUserId(utenteId);
 
         mRtDatabase.child("utenti").child(utenteId).child("datiutente").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
@@ -300,7 +273,7 @@ public class TravelRepository implements ITravelRepository {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
-                                                    Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                                                    //Toast.makeText(mApplication.getApplicationContext(), "Aggiunto al gruppo", Toast.LENGTH_SHORT).show();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -314,7 +287,7 @@ public class TravelRepository implements ITravelRepository {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
-                                                    Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(mApplication.getApplicationContext(), "Aggiunto al gruppo", Toast.LENGTH_SHORT).show();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
@@ -383,16 +356,13 @@ public class TravelRepository implements ITravelRepository {
 
             ViaggioConAttivita elencoAttivita = mLocalDatabase.getAttivitaDao().getViaggioConAttivita(viaggioId);
 
-            //listaAttivitaResponse.setElencoAttivita(elencoAttivita.activities);
-            listaAttivitaResponse.setViaggio(elencoAttivita.viaggio);
-            //listaAttivitaResponse....
-
             List<Attivita> la = elencoAttivita.activities;
             //if (errorMessage != null)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 la.sort((d1,d2) -> d1.getDataInizio().compareTo(d2.getDataInizio()));
             }
             listaAttivitaResponse.setElencoAttivita(la);
+            listaAttivitaResponse.setViaggio(elencoAttivita.viaggio);
 
             mListaAttivitaLiveData.postValue(listaAttivitaResponse);
         };
@@ -411,16 +381,12 @@ public class TravelRepository implements ITravelRepository {
 
             ViaggioConUtenti elencoUtenti = mLocalDatabase.getViaggioDao().getViaggioConUtenti(viaggioId);
 
-            //listaUtentiResponse.setElencoUtenti(elencoUtenti.gruppoViaggio);
-            listaUtentiResponse.setViaggio(elencoUtenti.viaggio);
-            //listaUtentiResponse...
-
             List<Utente> lu = elencoUtenti.gruppoViaggio;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 lu.sort((d1,d2) -> d1.getEmail().compareTo(d2.getEmail()));
             }
             listaUtentiResponse.setElencoUtenti(lu);
-
+            listaUtentiResponse.setViaggio(elencoUtenti.viaggio);
             //if (errorMessage != null)
 
             mListaUtentiLiveData.postValue(listaUtentiResponse);
@@ -439,17 +405,12 @@ public class TravelRepository implements ITravelRepository {
 
             UtenteConViaggi elencoViaggi = mLocalDatabase.getUtenteDao().getUtenteConViaggi(utenteId);
 
-            //listaViaggiResponse.setElencoViaggi(elencoViaggi.viaggi);
-            listaViaggiResponse.setUtente(elencoViaggi.utente);
-            //listaViaggiResponse...
-
             List<Viaggio> lv = elencoViaggi.viaggi;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 lv.sort((d1,d2) -> d1.getDataAndata().compareTo(d2.getDataAndata()));
             }
             listaViaggiResponse.setElencoViaggi(lv);
-
-            //if (errorMessage != null)
+            listaViaggiResponse.setUtente(elencoViaggi.utente);
 
             mListaViaggiLiveData.postValue(listaViaggiResponse);
         };
@@ -469,34 +430,9 @@ public class TravelRepository implements ITravelRepository {
             Viaggio viaggio = mLocalDatabase.getViaggioDao().findViaggioById(viaggioId);
 
             viaggioResponse.setViaggio(viaggio);
-            //viaggioResponse...
-
             //if (errorMessage != null)
 
             mViaggioLiveData.postValue(viaggioResponse);
-        };
-        new Thread(runnable).start();
-
-    }
-
-    private void getAttivitaFromDatabase(String attivitaId) {
-
-        Runnable runnable = () -> {
-
-            AttivitaResponse attivitaResponse = mAttivitaLiveData.getValue();
-
-            if (attivitaResponse == null) {
-                attivitaResponse = new AttivitaResponse();
-            }
-
-            Attivita attivita = mLocalDatabase.getAttivitaDao().findAttivitaById(attivitaId);
-
-            attivitaResponse.setAttivita(attivita);
-            //attivitaResponse...
-
-            //if (errorMessage != null)
-
-            mAttivitaLiveData.postValue(attivitaResponse);
         };
         new Thread(runnable).start();
 
@@ -750,7 +686,7 @@ public class TravelRepository implements ITravelRepository {
         ConnectivityManager connMgr = (ConnectivityManager)
                 mApplication.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
+        return (networkInfo != null && networkInfo.isConnectedOrConnecting());
     }
 
 }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ public class AttivitaFragment extends Fragment  {
     private FragmentAttivitaBinding binding;
     private Adapter_attivita adapter_attivita;
     private RecyclerView recyclerView;
+    private ProgressBar mProgressBar;
     private Activity_travel_view activity_travel_view = new Activity_travel_view();
     private String viaggio_id;
     private Viaggio viaggio;
@@ -79,6 +81,7 @@ public class AttivitaFragment extends Fragment  {
         View view = inflater.inflate(R.layout.fragment_attivita, container, false);
         recyclerView = view.findViewById(R.id.recycler_attivita);
         adapter_attivita = new Adapter_attivita(attivitaList, AttivitaFragment.this);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.lattivita_progress_i);
         recyclerView.setAdapter(adapter_attivita);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

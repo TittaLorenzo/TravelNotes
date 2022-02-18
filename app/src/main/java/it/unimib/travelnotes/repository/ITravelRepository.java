@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData;
 
 
 import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.Model.response.AttivitaResponse;
 import it.unimib.travelnotes.Model.response.ViaggioResponse;
 import it.unimib.travelnotes.Model.response.ListaAttivitaResponse;
 import it.unimib.travelnotes.Model.response.ListaUtentiResponse;
@@ -23,8 +22,6 @@ public interface ITravelRepository {
     MutableLiveData<ListaViaggiResponse> fetchListaViaggi(String userId);
 
     MutableLiveData<ViaggioResponse> fetchViaggio(String viaggioId);
-
-    MutableLiveData<AttivitaResponse> fetchAttivita(String attivitaId, String viaggioId);
 
     void loadUtente(String utenteId);
 

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +35,10 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private ITravelRepository mITravelRepository;
+    private SharedPreferencesProvider mSharedPreferencesProvider;
 
-    private EditText email;
-    private EditText password;
+    private EditText emailField;
+    private EditText passwordField;
     private Button login;
     private Button cancelButton;
     private TextView registrati;
@@ -44,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private TextInputLayout emailTextInputLayout;
     private TextInputLayout passwordTextInputLayout;
+    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,14 +55,16 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mITravelRepository = new TravelRepository(getApplication());
+        mSharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
 
-        email = findViewById(R.id.email_login_edit_text);
-        password = findViewById(R.id.password_login_edit_text);
+        emailField = findViewById(R.id.email_login_edit_text);
+        passwordField = findViewById(R.id.password_login_edit_text);
         login = findViewById(R.id.loginButton);
         cancelButton = findViewById(R.id.cancel_button);
 
         emailTextInputLayout = (TextInputLayout) findViewById(R.id.emailLoginTextInputLayout);
         passwordTextInputLayout = (TextInputLayout) findViewById(R.id.password_login_text_input);
+        mProgressBar = (ProgressBar) findViewById(R.id.login_progress_i);
 
         registrati = findViewById(R.id.registratiTv);
         pwDimenticataLink = findViewById(R.id.pwLostLink);
@@ -67,8 +72,16 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String txtEmail = email.getText().toString().trim();
-                String txtPassword = password.getText().toString().trim();
+                String txtEmail = emailField.getText().toString().trim();
+                String txtPassword = passwordField.getText().toString().trim();
+
+                login.setEnabled(false);
+                login.setBackgroundColor(getResources().getColor(R.color.primaryLightColor));
+                emailField.setFocusable(false);
+                passwordField.setFocusable(false);
+                registrati.setLinksClickable(false);
+                pwDimenticataLink.setLinksClickable(false);
+                mProgressBar.setVisibility(View.VISIBLE);
 
                 loginUser(txtEmail, txtPassword);
             }
@@ -139,7 +152,12 @@ public class LoginActivity extends AppCompatActivity {
 
                             String userId = mAuth.getCurrentUser().getUid();
 
+                            mSharedPreferencesProvider.setSharedUserId(userId);
+                            mSharedPreferencesProvider.setSharedUserEmail(email);
+
                             mITravelRepository.loadUtente(userId);
+
+                            mProgressBar.setVisibility(View.GONE);
 
                             startActivity(new Intent(LoginActivity.this, TravelList.class));
                             finish();
@@ -147,6 +165,14 @@ public class LoginActivity extends AppCompatActivity {
                             Toast.makeText(LoginActivity.this, "Login fallito", Toast.LENGTH_SHORT).show();
                             emailTextInputLayout.setError(getString(R.string.erroreLogin));
                             passwordTextInputLayout.setError(getString(R.string.erroreLogin));
+
+                            mProgressBar.setVisibility(View.GONE);
+                            login.setEnabled(true);
+                            login.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+                            emailField.setFocusable(true);
+                            passwordField.setFocusable(true);
+                            registrati.setLinksClickable(true);
+                            pwDimenticataLink.setLinksClickable(true);
                         }
                     }
                 });

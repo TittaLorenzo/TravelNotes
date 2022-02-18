@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,6 +47,7 @@ public class TravelList extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private TravelListViewModel mTravelListViewModel;
     private String utenteId;
+    private ProgressBar mProgressBar;
 
     RecyclerView recyclerView;
     DatabaseReference database;
@@ -64,6 +67,7 @@ public class TravelList extends AppCompatActivity {
         utenteId = sharedPreferencesProvider.getSharedUserId();
         mTravelListViewModel = new ViewModelProvider(this).get(TravelListViewModel.class);
         mTravelListViewModel.setUtenteId(utenteId);
+        mProgressBar = (ProgressBar) findViewById(R.id.travellist_progress_i);
 
         recyclerView = findViewById(R.id.recyclerView);
         database = FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference("travel");
@@ -97,12 +101,16 @@ public class TravelList extends AppCompatActivity {
 
                     list.clear();
                     list.addAll(listaViaggiResponse.getElencoViaggi());
+
+                    mProgressBar.setVisibility(View.GONE);
+
                     myAdapter.notifyDataSetChanged();
                 }
             }
         };
         mTravelListViewModel.getlistaViaggi().observe(this, observer);
 
+        mProgressBar.setVisibility(View.VISIBLE);
 
     }
 
@@ -173,7 +181,7 @@ public class TravelList extends AppCompatActivity {
                     SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
                     sharedPreferencesProvider.setSharedUserId(null);
 
-                    //delateAll RoomDb
+                    mTravelListViewModel.delateAll();
 
                     startActivity(new Intent(this, LoginActivity.class));
                 } else {

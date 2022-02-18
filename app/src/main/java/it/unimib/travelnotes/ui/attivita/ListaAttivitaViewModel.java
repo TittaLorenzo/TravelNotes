@@ -16,40 +16,12 @@ public class ListaAttivitaViewModel extends AndroidViewModel {
 
     private String viaggioId;
 
-    private int currentResults;
-    private int totalResult;
-    private boolean isLoading;
-
     public String getViaggioId() {
         return viaggioId;
     }
 
     public void setViaggioId(String viaggioId) {
         this.viaggioId = viaggioId;
-    }
-
-    public int getCurrentResults() {
-        return currentResults;
-    }
-
-    public void setCurrentResults(int currentResults) {
-        this.currentResults = currentResults;
-    }
-
-    public int getTotalResult() {
-        return totalResult;
-    }
-
-    public void setTotalResult(int totalResult) {
-        this.totalResult = totalResult;
-    }
-
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setLoading(boolean loading) {
-        isLoading = loading;
     }
 
     public MutableLiveData<ListaAttivitaResponse> getListaAttivitaLiveData() {
@@ -76,9 +48,11 @@ public class ListaAttivitaViewModel extends AndroidViewModel {
 
         return mListaAttivitaLiveData;
     }
-    public void deleteAttivitaViewModel(String attivitaId){
+
+    public void deleteAttivitaViewModel(String attivitaId) {
         mITravelRepository.deleteAttivita(attivitaId, viaggioId);
     }
+
     private void fetchListaAttivitaViewModel() {
         mListaAttivitaLiveData = mITravelRepository.fetchListaAttivita(viaggioId);
     }
