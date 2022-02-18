@@ -83,12 +83,10 @@ public class GroupFragment extends Fragment {
 
                     listaUtenti.clear();
                     listaUtenti.addAll(listaUtentiResponse.getElencoUtenti());
-                    // TODO: notifica cambiamenti all'adapter
                     UserAdapter.notifyDataSetChanged();
 
-                    mProgressBar.setVisibility(View.GONE);
                 }
-                //mProgressBar.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
             }
         };
         mGruppoViaggioViewModel.getListaUtenti().observe(getViewLifecycleOwner(), observer);

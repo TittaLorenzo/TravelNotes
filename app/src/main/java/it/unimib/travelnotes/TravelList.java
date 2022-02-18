@@ -102,10 +102,9 @@ public class TravelList extends AppCompatActivity {
                     list.clear();
                     list.addAll(listaViaggiResponse.getElencoViaggi());
 
-                    mProgressBar.setVisibility(View.GONE);
-
                     myAdapter.notifyDataSetChanged();
                 }
+                mProgressBar.setVisibility(View.GONE);
             }
         };
         mTravelListViewModel.getlistaViaggi().observe(this, observer);

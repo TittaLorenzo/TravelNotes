@@ -156,7 +156,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
         // Leggo valori passati come intent extra: se ci sono valori non nulli allora è una modifica a una attività, quindi bisogna
         try {
-            attivitaId = (String) getIntent().getExtras().get("attivitaId");
+            attivitaId = (String) getIntent().getExtras().get("idAttivita");
         } catch (Exception e) {
             attivitaId = null;
         }
@@ -169,7 +169,7 @@ public class NewActivityEvent extends AppCompatActivity {
         if (viaggioId == null) {
             //startActivity(new Intent(getApplicationContext(), TravelList.class));
             //fittizio
-            viaggioId = "-MtA7mKtdZODJR98_3hH";
+            viaggioId = "-Mu6oqj3vibywB7EjgGG";
         }
 
         if (attivitaId != null) {
@@ -214,50 +214,64 @@ public class NewActivityEvent extends AppCompatActivity {
 
                 Attivita attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
 
-                TextView titoloNuovaAttivita = findViewById(R.id.titloloNuovaAttivitaId);
-                titoloNuovaAttivita.setText(R.string.titleModificaAttivita);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        TextView titoloNuovaAttivita = findViewById(R.id.titloloNuovaAttivitaId);
+                        titoloNuovaAttivita.setText(R.string.titleModificaAttivita);
 
-                EditText nomeAttivitaInput = (EditText) findViewById(R.id.nomeAttivitaInput);
-                nomeAttivitaInput.setText(attivitaSelezionata.getNome());
+                        if (attivitaSelezionata.getNome() != null) {
+                            EditText nomeAttivitaInput = (EditText) findViewById(R.id.nomeAttivitaInput);
+                            nomeAttivitaInput.setText(attivitaSelezionata.getNome());
+                        }
 
-                EditText posizionePartenzaNuovaAttivita = (EditText) findViewById(R.id.posizionePartenzaNuovaAttivita);
-                posizionePartenzaNuovaAttivita.setText(attivitaSelezionata.getPosizione());
+                        if (attivitaSelezionata.getDataInizio() != null) {
+                            EditText posizionePartenzaNuovaAttivita = (EditText) findViewById(R.id.posizionePartenzaNuovaAttivita);
+                            posizionePartenzaNuovaAttivita.setText(attivitaSelezionata.getPosizione());
+                        }
 
-                EditText descrizioneNuovaAttivita = (EditText) findViewById(R.id.descrizioneNuovaAttivita);
-                descrizioneNuovaAttivita.setText(attivitaSelezionata.getDescrizione());
-
-
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
-                SimpleDateFormat simpleHourFormat=new SimpleDateFormat("HH:mm");
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(attivitaSelezionata.getDataInizio());
-
-                Button dataInizioNuovaAttivita = (Button) findViewById(R.id.dataInizioNuovaAttivita);
-                dataInizioNuovaAttivita.setText(simpleDateFormat.format(calendar.getTime()));
-
-                Button oraInizioNuovaAttivita = (Button) findViewById(R.id.oraInizioNuovaAttivita);
-                oraInizioNuovaAttivita.setText(simpleHourFormat.format(calendar.getTime()));
+                        if (attivitaSelezionata.getDataInizio() != null) {
+                            EditText descrizioneNuovaAttivita = (EditText) findViewById(R.id.descrizioneNuovaAttivita);
+                            descrizioneNuovaAttivita.setText(attivitaSelezionata.getDescrizione());
+                        }
 
 
-                calendar.setTime(attivitaSelezionata.getDataFine());
+                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat simpleHourFormat=new SimpleDateFormat("HH:mm");
 
-                Button dataFineNuovaAttivita = (Button) findViewById(R.id.dataFineNuovaAttivita);
-                dataFineNuovaAttivita.setText(simpleDateFormat.format(calendar.getTime()));
+                        Calendar calendar = Calendar.getInstance();
+                        if (attivitaSelezionata.getDataInizio() != null) {
+                            calendar.setTime(attivitaSelezionata.getDataInizio());
 
-                Button oraFineNuovaAttivita = (Button) findViewById(R.id.oraFineNuovaAttivita);
-                oraFineNuovaAttivita.setText(simpleHourFormat.format(calendar.getTime()));
+                            Button dataInizioNuovaAttivita = (Button) findViewById(R.id.dataInizioNuovaAttivita);
+                            dataInizioNuovaAttivita.setText(simpleDateFormat.format(calendar.getTime()));
 
-                buttonSalva.setEnabled(true);
-                buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryColor));
-                campoNome.setFocusable(true);
-                campoPosizione.setClickable(true);
-                campoDescrizione.setFocusable(true);
-                dataInizioAttivitaButton.setEnabled(true);
-                dataFineAttivitaButton.setEnabled(true);
-                oraInizioAttivitaButton.setEnabled(true);
-                oraFineAttivitaButton.setEnabled(true);
-                mProgressBar.setVisibility(View.GONE);
+                            Button oraInizioNuovaAttivita = (Button) findViewById(R.id.oraInizioNuovaAttivita);
+                            oraInizioNuovaAttivita.setText(simpleHourFormat.format(calendar.getTime()));
+                        }
+
+                        if (attivitaSelezionata.getDataInizio() != null) {
+                            calendar.setTime(attivitaSelezionata.getDataFine());
+
+                            Button dataFineNuovaAttivita = (Button) findViewById(R.id.dataFineNuovaAttivita);
+                            dataFineNuovaAttivita.setText(simpleDateFormat.format(calendar.getTime()));
+
+                            Button oraFineNuovaAttivita = (Button) findViewById(R.id.oraFineNuovaAttivita);
+                            oraFineNuovaAttivita.setText(simpleHourFormat.format(calendar.getTime()));
+                        }
+
+                        buttonSalva.setEnabled(true);
+                        buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+                        campoNome.setFocusable(true);
+                        campoPosizione.setClickable(true);
+                        campoDescrizione.setFocusable(true);
+                        dataInizioAttivitaButton.setEnabled(true);
+                        dataFineAttivitaButton.setEnabled(true);
+                        oraInizioAttivitaButton.setEnabled(true);
+                        oraFineAttivitaButton.setEnabled(true);
+                        mProgressBar.setVisibility(View.GONE);
+                    }
+                });
             }
         };
         new Thread(runnable).start();

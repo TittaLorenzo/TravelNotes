@@ -274,20 +274,19 @@ public class TravelRepository implements ITravelRepository {
                                                 @Override
                                                 public void onSuccess(Void unused) {
                                                     //Toast.makeText(mApplication.getApplicationContext(), "Aggiunto al gruppo", Toast.LENGTH_SHORT).show();
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-
-                                    mRtDatabase.child("viaggi").child(viaggio.getViaggioId()).child("listautenti").child(utente.getUtenteId()).setValue(utente)
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Toast.makeText(mApplication.getApplicationContext(), "Aggiunto al gruppo", Toast.LENGTH_SHORT).show();
+                                                    mRtDatabase.child("viaggi").child(viaggio.getViaggioId()).child("listautenti").child(utente.getUtenteId()).setValue(utente)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    Toast.makeText(mApplication.getApplicationContext(), "Aggiunto al gruppo", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            })
+                                                            .addOnFailureListener(new OnFailureListener() {
+                                                                @Override
+                                                                public void onFailure(@NonNull Exception e) {
+                                                                    Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
+                                                                }
+                                                            });
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
