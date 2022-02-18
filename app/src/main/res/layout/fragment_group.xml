@@ -7,14 +7,20 @@
     tools:context=".ui.group.GroupFragment">
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
-        android:id="@+id/group_progress_i"
+        android:id="@+id/flight_progress_i"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/group_bar"
+        android:layout_marginEnd="411dp"
+        android:layout_marginBottom="731dp"
+        android:contentDescription="@string/flight_bar"
         android:indeterminate="true"
         android:visibility="gone"
         app:hideAnimationBehavior="inward"
         app:indicatorColor="@color/secondaryDarkColor"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:minHideDelay="500"
         app:showAnimationBehavior="inward"
         app:trackColor="@color/secondaryLightColor" />

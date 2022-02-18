@@ -82,14 +82,18 @@ public class FlightFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view;
+
         if(a_r) {
             view = inflater.inflate(R.layout.fragment_flight, container, false);
             departure2 = view.findViewById(R.id.departure2);
             destination2 = view.findViewById(R.id.destination2);
             departureTime2 = view.findViewById(R.id.departureTime2);
             time2 = view.findViewById(R.id.time2);
+            mProgressBar = (ProgressBar) view.findViewById(R.id.flight_progress_i);
         }else{
              view = inflater.inflate(R.layout.flight_a, container, false);
+             mProgressBar = (ProgressBar) view.findViewById(R.id.flight_progress_a);
+
         }
         departures = view.findViewById(R.id.departure);
         destination = view.findViewById(R.id.destination);
@@ -99,7 +103,7 @@ public class FlightFragment extends Fragment {
         destination2 = view.findViewById(R.id.destination2);
         departureTime2 = view.findViewById(R.id.departureTime2);
         time2 = view.findViewById(R.id.time2);
-        mProgressBar = (ProgressBar) view.findViewById(R.id.flight_progress_i);
+
 
 
         Button button_modifica_volo= (Button) view.findViewById(R.id.modify_volo);
@@ -109,6 +113,7 @@ public class FlightFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), NewTravel.class);
                 intent.putExtra("modifica_viaggio", true);
+                intent.putExtra("viaggio_id", viaggio_id);
                 startActivity(intent);
             }
         });
@@ -139,8 +144,9 @@ public class FlightFragment extends Fragment {
                         time2.setText(ora2);
                     }
 
-                    mProgressBar.setVisibility(View.GONE);
+
                 }
+                mProgressBar.setVisibility(View.GONE);
             }
         };
         mFlightViewModel.getViaggio().observe(getViewLifecycleOwner(), observer);

@@ -1,7 +1,5 @@
 package it.unimib.travelnotes;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
@@ -10,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -46,9 +43,8 @@ public class NewTravel extends AppCompatActivity {
     FloatingActionButton salvaVolo;
     Boolean datoPassato;
     TextView titolo;
-    String idProva = "-Mw1t0DF3fhKyEqBTtrI";
-    String idProva2 = "-Mw1sqayw-igEvEfPrGh";
-    String idPorova3 = "-MupwdkEslROOOnQgYd3";
+    String idProva ;
+
     static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
 
 
@@ -75,6 +71,7 @@ public class NewTravel extends AppCompatActivity {
         titolo = findViewById(R.id.NT_creaViaggioTV);
 
         datoPassato = getIntent().getExtras().getBoolean("modifica_viaggio");
+        idProva = getIntent().getExtras().getString("viaggio_id");
 
         if(datoPassato){
             titolo.setText(R.string.title_modificaViaggio);

@@ -55,6 +55,7 @@ public class GroupFragment extends Fragment {
         recyclerView.setAdapter(UserAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mProgressBar = (ProgressBar) view.findViewById(R.id.flight_progress_i);
 
 
         for (int i = 0; i < listaUtenti.size(); i++) {
