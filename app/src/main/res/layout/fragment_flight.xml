@@ -166,7 +166,7 @@
                     android:id="@+id/modify_volo"
                     android:layout_width="200dp"
                     android:layout_height="match_parent"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="@color/secondaryColor"
                     android:text="@string/modificavolo"
                     app:cornerRadius="30dp" />
             </LinearLayout>
