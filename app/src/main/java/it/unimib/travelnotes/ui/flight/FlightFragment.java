@@ -113,6 +113,7 @@ public class FlightFragment extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), NewTravel.class);
                 intent.putExtra("modifica_viaggio", true);
+                intent.putExtra("viaggio_id", viaggio_id);
                 startActivity(intent);
             }
         });
