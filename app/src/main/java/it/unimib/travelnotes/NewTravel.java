@@ -1,38 +1,28 @@
 package it.unimib.travelnotes;
 
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.lang.Thread;
+import java.util.Date;
 
-import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.roomdb.dao.ViaggiDao;
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
@@ -51,7 +41,7 @@ public class NewTravel extends AppCompatActivity {
     TextInputEditText ritornoVA;
     SwitchMaterial checkAR;
     FloatingActionButton salvaVolo;
-    Boolean datoPassato = true;
+    Boolean datoPassato = false;
     TextView titolo;
     String idProva = "-MupwdkEslROOOnQgYd3";
 
@@ -74,7 +64,7 @@ public class NewTravel extends AppCompatActivity {
         ritornoVDa = findViewById(R.id.NT_ritornoDa);
         ritornoVA = findViewById(R.id.NT_ritornoA);
         mITravelRepository = new TravelRepository(getApplication());
-        salvaVolo = findViewById(R.id.NT_floatingButton);
+        salvaVolo = findViewById(R.id.new_travel);
         //datoPassato = getIntent().getExtras().getBoolean("modifica_viaggio");
         mITravelRepository = new TravelRepository(getApplication());
         titolo = findViewById(R.id.NT_creaViaggioTV);
