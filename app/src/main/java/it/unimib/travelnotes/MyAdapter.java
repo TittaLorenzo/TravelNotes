@@ -77,7 +77,7 @@ public class MyAdapter extends RecyclerView.Adapter {
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDate.setText(dateTime);
 
-            String ora = Double.toString(viaggio.getDurataAndata())+ " minuti";
+            String ora = ((int)viaggio.getDurataAndata())+ " minuti";
             viewHolder.travelDateArrival.setText(ora);
 
 
@@ -99,7 +99,7 @@ public class MyAdapter extends RecyclerView.Adapter {
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDate.setText(dateTime);
 
-            String ora = Double.toString(viaggio.getDurataAndata())+ " minuti";
+            String ora = ((int)viaggio.getDurataAndata())+ " minuti";
             viewHolder.travelDateArrival.setText(ora);
 
 
@@ -110,7 +110,7 @@ public class MyAdapter extends RecyclerView.Adapter {
             //viewHolder.travelDateR.setText(viaggio.getDataAndata().toString());
 
 
-            String ora2 = Double.toString(viaggio.getDurataRitorno())+ " minuti";
+            String ora2 = ((int)viaggio.getDurataRitorno())+ " minuti";
             viewHolder.travelDateRArrival.setText(ora2);
         }
     }
