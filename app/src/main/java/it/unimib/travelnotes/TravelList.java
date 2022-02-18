@@ -83,6 +83,7 @@ public class TravelList extends AppCompatActivity {
         final FloatingActionButton mButtonNext = findViewById(R.id.new_travel);
         mButtonNext.setOnClickListener(v -> {
             Intent intent = new Intent(this, NewTravel.class);
+            intent.putExtra("modifica_viaggio", false);
             startActivity(intent);
         });
 
