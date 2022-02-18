@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ public class GroupFragment extends Fragment {
     private UserAdapter UserAdapter;
     private List<Utente> listaUtenti;
     private String viaggioId;
+    private ProgressBar mProgressBar;
 
     private GruppoViaggioViewModel mGruppoViaggioViewModel;
 
@@ -50,6 +52,7 @@ public class GroupFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_group,container,false);
         mGruppoViaggioViewModel=new ViewModelProvider(requireActivity()).get(GruppoViaggioViewModel.class);
         recyclerView = view.findViewById(R.id.recycler_group);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.group_progress_i);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getApplicationContext()));
 
@@ -76,10 +79,15 @@ public class GroupFragment extends Fragment {
                     listaUtenti.clear();
                     listaUtenti.addAll(listaUtentiResponse.getElencoUtenti());
                     UserAdapter.notifyDataSetChanged();
+
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         };
         mGruppoViaggioViewModel.getListaUtenti().observe(getViewLifecycleOwner(), observer);
+
+        mProgressBar.setVisibility(View.VISIBLE);
+
         return view;
     }
     //inserimento mail per aggiunta utente

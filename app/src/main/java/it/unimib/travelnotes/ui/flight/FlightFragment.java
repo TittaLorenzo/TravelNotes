@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -32,6 +33,7 @@ public class FlightFragment extends Fragment {
     private Viaggio viaggio;
     private FragmentFlightBinding binding;
     private FlightViewModel mFlightViewModel;
+    private ProgressBar mProgressBar;
 
     TextView departures;
     TextView destination;
@@ -81,6 +83,7 @@ public class FlightFragment extends Fragment {
         destination2 = view.findViewById(R.id.destination2);
         departureTime2 = view.findViewById(R.id.departureTime2);
         time2 = view.findViewById(R.id.time2);
+        mProgressBar = (ProgressBar) view.findViewById(R.id.flight_progress_i);
 
         Button button_modifica_volo= (Button) view.findViewById(R.id.modify_volo);
         button_modifica_volo.setOnClickListener(new View.OnClickListener() {
@@ -117,11 +120,14 @@ public class FlightFragment extends Fragment {
                     String stringaDataRitorno = df.format(dataRitorno);
                     departureTime2.setText(stringaDataRitorno);
 
-
+                    mProgressBar.setVisibility(View.GONE);
                 }
             }
         };
         mFlightViewModel.getViaggio().observe(getViewLifecycleOwner(), observer);
+
+        mProgressBar.setVisibility(View.VISIBLE);
+
         return view;
         }
 
