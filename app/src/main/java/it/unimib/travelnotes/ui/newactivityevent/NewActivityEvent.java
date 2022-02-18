@@ -140,13 +140,6 @@ public class NewActivityEvent extends AppCompatActivity {
             } else {
                 buttonSalva.setEnabled(false);
                 buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryLightColor));
-                campoNome.setFocusable(false);
-                campoPosizione.setClickable(false);
-                campoDescrizione.setFocusable(false);
-                dataInizioAttivitaButton.setEnabled(false);
-                dataFineAttivitaButton.setEnabled(false);
-                oraInizioAttivitaButton.setEnabled(false);
-                oraFineAttivitaButton.setEnabled(false);
                 mProgressBar.setVisibility(View.VISIBLE);
 
                 salvaButtonNuovaAttivita();
@@ -175,13 +168,6 @@ public class NewActivityEvent extends AppCompatActivity {
         if (attivitaId != null) {
             buttonSalva.setEnabled(false);
             buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryLightColor));
-            campoNome.setFocusable(false);
-            campoPosizione.setClickable(false);
-            campoDescrizione.setFocusable(false);
-            dataInizioAttivitaButton.setEnabled(false);
-            dataFineAttivitaButton.setEnabled(false);
-            oraInizioAttivitaButton.setEnabled(false);
-            oraFineAttivitaButton.setEnabled(false);
             mProgressBar.setVisibility(View.VISIBLE);
 
             caricaDatiAttivita(attivitaId);
@@ -262,13 +248,6 @@ public class NewActivityEvent extends AppCompatActivity {
 
                         buttonSalva.setEnabled(true);
                         buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryColor));
-                        campoNome.setFocusable(true);
-                        campoPosizione.setClickable(true);
-                        campoDescrizione.setFocusable(true);
-                        dataInizioAttivitaButton.setEnabled(true);
-                        dataFineAttivitaButton.setEnabled(true);
-                        oraInizioAttivitaButton.setEnabled(true);
-                        oraFineAttivitaButton.setEnabled(true);
                         mProgressBar.setVisibility(View.GONE);
                     }
                 });
