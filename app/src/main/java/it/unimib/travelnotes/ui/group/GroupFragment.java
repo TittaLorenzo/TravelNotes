@@ -1,37 +1,28 @@
 package it.unimib.travelnotes.ui.group;
 
-import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-
-
 import java.util.ArrayList;
 import java.util.List;
-
 
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.response.ListaUtentiResponse;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.SharedPreferencesProvider;
-import it.unimib.travelnotes.databinding.FragmentAttivitaBinding;
 import it.unimib.travelnotes.databinding.FragmentGroupBinding;
-import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 
 public class GroupFragment extends Fragment {

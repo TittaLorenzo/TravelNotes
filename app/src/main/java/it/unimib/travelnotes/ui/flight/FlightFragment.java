@@ -36,7 +36,7 @@ public class FlightFragment extends Fragment {
     private FlightViewModel mFlightViewModel;
     private ProgressBar mProgressBar;
     private boolean a_r;
-    
+
     TextView departures;
     TextView destination;
     TextView departureTime;
