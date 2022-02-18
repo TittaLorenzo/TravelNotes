@@ -56,6 +56,9 @@ public class GruppoViaggioViewModel extends AndroidViewModel {
     private void fetchListaUtentiViewModel() {
         mListaUtentiLiveData = mITravelRepository.fetchGruppoViaggio(viaggioId);
     }
+    public void deleteUserViewModel(String utenteId) {
+        mITravelRepository.rimuoviDalGruppo(this.viaggioId, utenteId);
+    }
 
     public void aggiungiAlGruppo(String email) {
         mITravelRepository.pushAggiungiAlGruppo(email, viaggioId);

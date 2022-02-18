@@ -1,5 +1,6 @@
 package it.unimib.travelnotes.ui.group;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,8 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +27,7 @@ import it.unimib.travelnotes.Model.response.ListaUtentiResponse;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.databinding.FragmentGroupBinding;
+import it.unimib.travelnotes.ui.attivita.SwipeToDeleteCallBack;
 
 
 public class GroupFragment extends Fragment {
@@ -35,6 +40,9 @@ public class GroupFragment extends Fragment {
     private RecyclerView recyclerView;
     private String viaggioId;
     private ProgressBar mProgressBar;
+    private Boolean d;
+    private Utente temp;
+    private UserAdapter userAdapter;
 
     private GruppoViaggioViewModel mGruppoViaggioViewModel;
 
@@ -51,10 +59,57 @@ public class GroupFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_group, container, false);
         recyclerView = view.findViewById(R.id.recycler_group);
-        UserAdapter = new UserAdapter(listaUtenti, GroupFragment.this);
-        recyclerView.setAdapter(UserAdapter);
+        userAdapter = new UserAdapter(listaUtenti, GroupFragment.this);
+        recyclerView.setAdapter(userAdapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        SwipeToDeleteCallBack swipeToDeleteCallback = new SwipeToDeleteCallBack(getContext()) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final int position = viewHolder.getAdapterPosition();
+                final Utente item = listaUtenti.get(position);
+                d=true;
+                temp = item;
+                userAdapter.removeItem(position);
+                Snackbar snackbar = Snackbar
+                        .make(view.findViewById(R.id.recycler_group), "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d=false;
+                        userAdapter.restoreItem(item, position);
+                        recyclerView.scrollToPosition(position);
+                    }
+
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+                snackbar.addCallback(new Snackbar.Callback() {
+
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        if(d){
+                            mGruppoViaggioViewModel.deleteUserViewModel(item.getUtenteId());
+                        }
+
+                    }
+
+                    @Override
+                    public void onShown(Snackbar snackbar) {
+
+                    }
+                });
+            }
+
+
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
+
+
         mProgressBar = (ProgressBar) view.findViewById(R.id.flight_progress_i);
 
 
@@ -83,7 +138,7 @@ public class GroupFragment extends Fragment {
 
                     listaUtenti.clear();
                     listaUtenti.addAll(listaUtentiResponse.getElencoUtenti());
-                    UserAdapter.notifyDataSetChanged();
+                    userAdapter.notifyDataSetChanged();
 
                 }
                 mProgressBar.setVisibility(View.GONE);
