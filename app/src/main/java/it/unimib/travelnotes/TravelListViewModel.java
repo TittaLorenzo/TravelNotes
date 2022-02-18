@@ -1,9 +1,12 @@
 package it.unimib.travelnotes;
 
 import android.app.Application;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.RecyclerView;
 
 import it.unimib.travelnotes.Model.response.ListaAttivitaResponse;
 import it.unimib.travelnotes.Model.response.ListaViaggiResponse;
@@ -16,10 +19,6 @@ public class TravelListViewModel extends AndroidViewModel {
     private MutableLiveData<ListaViaggiResponse> mListaViaggiLiveData;
 
     private String utenteId;
-
-    private int currentResults;
-    private int totalResult;
-    private boolean isLoading;
 
     public MutableLiveData<ListaViaggiResponse> getmListaViaggiLiveData() {
         return mListaViaggiLiveData;
@@ -35,30 +34,6 @@ public class TravelListViewModel extends AndroidViewModel {
 
     public void setUtenteId(String utenteId) {
         this.utenteId = utenteId;
-    }
-
-    public int getCurrentResults() {
-        return currentResults;
-    }
-
-    public void setCurrentResults(int currentResults) {
-        this.currentResults = currentResults;
-    }
-
-    public int getTotalResult() {
-        return totalResult;
-    }
-
-    public void setTotalResult(int totalResult) {
-        this.totalResult = totalResult;
-    }
-
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setLoading(boolean loading) {
-        isLoading = loading;
     }
 
     public TravelListViewModel(Application application) {
@@ -84,5 +59,9 @@ public class TravelListViewModel extends AndroidViewModel {
 
     public MutableLiveData<ListaViaggiResponse> getListaViaggiResponse() {
         return mListaViaggiLiveData;
+    }
+
+    public void delateAll() {
+        mITravelRepository.deleteAllLocal();
     }
 }

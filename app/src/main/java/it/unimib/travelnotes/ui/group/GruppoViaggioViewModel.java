@@ -21,10 +21,6 @@ public class GruppoViaggioViewModel extends AndroidViewModel {
 
     private String viaggioId;
 
-    private int currentResults;
-    private int totalResult;
-    private boolean isLoading;
-
     public GruppoViaggioViewModel(Application application) {
         super(application);
 
@@ -45,14 +41,6 @@ public class GruppoViaggioViewModel extends AndroidViewModel {
 
     public void setViaggioId(String viaggioId) {
         this.viaggioId = viaggioId;
-    }
-
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setLoading(boolean loading) {
-        isLoading = loading;
     }
 
     public MutableLiveData<ListaUtentiResponse> getListaUtenti() {

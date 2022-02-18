@@ -5,54 +5,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".autentication.RegisterActivity"
-    android:padding="20dp">
+    android:layout_centerHorizontal="true">
+
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/register_progress_i"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/register_bar"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:hideAnimationBehavior="inward"
+        app:indicatorColor="@color/secondaryDarkColor"
+        app:minHideDelay="500"
+        app:showAnimationBehavior="inward"
+        app:trackColor="@color/secondaryLightColor" />
 
     <Space
         android:id="@+id/spaceRegister"
         android:layout_width="match_parent"
         android:layout_height="40dp" />
 
-    <!--com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/nomeRegisterTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
-        android:hint="Nome"
-        app:errorEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/nome_register_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/cognomeRegisterTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/nomeRegisterTextInputLayout"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginBottom="4dp"
-        android:hint="Cognome"
-        app:errorEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cognome_register_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:maxLines="1" />
-    </com.google.android.material.textfield.TextInputLayout-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/usernamelRegisterTextInputLayout"
+        android:paddingHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/spaceRegister"
@@ -74,6 +49,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailRegisterTextInputLayout"
+        android:paddingHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/usernamelRegisterTextInputLayout"
@@ -95,6 +71,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password_register_text_input"
+        android:paddingHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/emailRegisterTextInputLayout"
@@ -116,6 +93,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password2_register_text_input"
+        android:paddingHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/password_register_text_input"
@@ -134,36 +112,9 @@
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--EditText
-        android:id="@+id/emailRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:hint="email"
-        android:minHeight="48dp" />
-
-    <EditText
-        android:id="@+id/passwordRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/emailRegister"
-        android:layout_marginTop="20dp"
-        android:hint="password"
-        android:inputType="textPassword"
-        android:minHeight="48dp" />
-
-    <EditText
-        android:id="@+id/passwordRegister2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/passwordRegister"
-        android:layout_marginTop="20dp"
-        android:hint="Ripeti password"
-        android:inputType="textPassword"
-        android:minHeight="48dp" /-->
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/registerButton"
+        android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/password2_register_text_input"
@@ -174,6 +125,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/cancel_button_register"
         style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_marginHorizontal="20dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -184,6 +136,7 @@
         android:id="@+id/giaRegistratoTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/cancel_button_register"
         android:layout_marginTop="20dp"

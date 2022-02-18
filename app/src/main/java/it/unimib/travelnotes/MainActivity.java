@@ -66,8 +66,8 @@ public class MainActivity extends AppCompatActivity {
                         // Get deep link from result (may be null if no link is found)
                         Uri deepLink = null;
 
-                        if (userId != null) {
-                            if (pendingDynamicLinkData != null) {
+                        if (pendingDynamicLinkData != null) {
+                            if (userId != null) {
                                 deepLink = pendingDynamicLinkData.getLink();
 
                                 String viaggioId = deepLink.getQueryParameter("viaggioId");
@@ -75,9 +75,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 ITravelRepository mITravelRepository = new TravelRepository(getApplication());
                                 mITravelRepository.pushAggiungiAlGruppo(email, viaggioId);
+                            } else {
+                                Toast.makeText(MainActivity.this, "Loggati o Registrati per aprire il link", Toast.LENGTH_SHORT).show();
                             }
-                        } else {
-                            Toast.makeText(MainActivity.this, "Loggati o Registrati per aprire il link", Toast.LENGTH_SHORT).show();
                         }
                     }
                 })

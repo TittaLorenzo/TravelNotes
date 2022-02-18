@@ -36,4 +36,11 @@
     <string name="pwCortaError">Password troppo corta</string>
     <string name="refresh">Refresh</string>
     <string name="register">Register</string>
+    <string name="login_bar">login_bar</string>
+    <string name="register_bar">register_bar</string>
+    <string name="travellist_bar">travellist_bar</string>
+    <string name="newactivity_bar">newactivity_bar</string>
+    <string name="lattivita_bar">lattivita_bar</string>
+    <string name="flight_bar">flight_bar</string>
+    <string name="group_bar">group_bar</string>
 </resources>

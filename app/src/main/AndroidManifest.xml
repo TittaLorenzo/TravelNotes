@@ -14,13 +14,16 @@
         android:theme="@style/Theme.TravelNotes">
         <activity
             android:name=".autentication.RegisterActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".autentication.LoginActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".ui.newactivityevent.NewActivityEvent"
-            android:exported="true" >
+            android:exported="true"
+            android:parentActivityName=".Activity_travel_view">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <data android:scheme="geo" />
@@ -38,7 +41,8 @@
         <activity
         android:name=".Activity_travel_view"
         android:exported="false"
-        android:label="@string/title_activity_travel_view" />
+        android:label="@string/title_activity_travel_view"
+        android:parentActivityName=".TravelList"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

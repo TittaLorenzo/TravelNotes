@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -74,6 +75,7 @@ public class NewActivityEvent extends AppCompatActivity {
     private EditText campoNome;
     private EditText campoPosizione;
     private EditText campoDescrizione;
+    private ProgressBar mProgressBar;
 
     private String attivitaId;
     private String viaggioId;
@@ -98,9 +100,7 @@ public class NewActivityEvent extends AppCompatActivity {
         campoPosizione = findViewById(R.id.posizionePartenzaNuovaAttivita);
         campoDescrizione = findViewById(R.id.descrizioneNuovaAttivita);
         buttonSalva = findViewById(R.id.salvaBottoneNuovaAttivita);
-
-        ImageButton backButtonNuovaAttivita = (ImageButton) findViewById(R.id.backButtonNuovaAttivita);
-
+        mProgressBar = (ProgressBar) findViewById(R.id.newactivity_progress_i);
 
         // Autocomplete Place API
         // Initialize the SDK
@@ -134,24 +134,23 @@ public class NewActivityEvent extends AppCompatActivity {
             showTimePickerDialog("EndTime");
         });
 
-        backButtonNuovaAttivita.setOnClickListener(v -> {
-            Intent intent = new Intent(this, Activity_travel_view.class);
-            startActivity(intent);
-        });
-
         buttonSalva.setOnClickListener(c -> {
-
-            /*if (TextUtils.isEmpty(campoNome.getText().toString())) {
-                Toast.makeText(this, "Devi inserire un nome attività", Toast.LENGTH_SHORT).show();
-            } else {
-                salvaButtonNuovaAttivita();
-            }*/
             if (!checkCampi()) {
                 Toast.makeText(this, "Devi compilare tutti i campi", Toast.LENGTH_SHORT).show();
             } else {
+                buttonSalva.setEnabled(false);
+                buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryLightColor));
+                campoNome.setFocusable(false);
+                campoPosizione.setClickable(false);
+                campoDescrizione.setFocusable(false);
+                dataInizioAttivitaButton.setEnabled(false);
+                dataFineAttivitaButton.setEnabled(false);
+                oraInizioAttivitaButton.setEnabled(false);
+                oraFineAttivitaButton.setEnabled(false);
+                mProgressBar.setVisibility(View.VISIBLE);
+
                 salvaButtonNuovaAttivita();
             }
-
         });
 
 
@@ -174,6 +173,17 @@ public class NewActivityEvent extends AppCompatActivity {
         }
 
         if (attivitaId != null) {
+            buttonSalva.setEnabled(false);
+            buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryLightColor));
+            campoNome.setFocusable(false);
+            campoPosizione.setClickable(false);
+            campoDescrizione.setFocusable(false);
+            dataInizioAttivitaButton.setEnabled(false);
+            dataFineAttivitaButton.setEnabled(false);
+            oraInizioAttivitaButton.setEnabled(false);
+            oraFineAttivitaButton.setEnabled(false);
+            mProgressBar.setVisibility(View.VISIBLE);
+
             caricaDatiAttivita(attivitaId);
         }
 
@@ -181,7 +191,6 @@ public class NewActivityEvent extends AppCompatActivity {
         buttonMaps.setOnClickListener(v -> {
             apriMappe(campoPosizione.getText().toString());
         });*/
-
     }
 
     @Override
@@ -239,6 +248,16 @@ public class NewActivityEvent extends AppCompatActivity {
                 Button oraFineNuovaAttivita = (Button) findViewById(R.id.oraFineNuovaAttivita);
                 oraFineNuovaAttivita.setText(simpleHourFormat.format(calendar.getTime()));
 
+                buttonSalva.setEnabled(true);
+                buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+                campoNome.setFocusable(true);
+                campoPosizione.setClickable(true);
+                campoDescrizione.setFocusable(true);
+                dataInizioAttivitaButton.setEnabled(true);
+                dataFineAttivitaButton.setEnabled(true);
+                oraInizioAttivitaButton.setEnabled(true);
+                oraFineAttivitaButton.setEnabled(true);
+                mProgressBar.setVisibility(View.GONE);
             }
         };
         new Thread(runnable).start();
@@ -281,10 +300,9 @@ public class NewActivityEvent extends AppCompatActivity {
             mITravelRepository.pushNuovaAttivita(a, false);
         }
 
-
         Intent i = new Intent(getApplicationContext(), Activity_travel_view.class);
         startActivity(i);
-
+        finish();
     }
 
     private boolean checkCampi() {
@@ -314,7 +332,6 @@ public class NewActivityEvent extends AppCompatActivity {
         return compilato;
     }
 
-
     private void showDatePickerDialog(String dateButtonString) {
         final Calendar calendar=Calendar.getInstance();
         DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -326,7 +343,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd");
 
-                if (dateButtonString == "StartDate") /*set inizio attivita date*/ {
+                if (dateButtonString.equals("StartDate")) /*set inizio attivita date*/ {
                     if (dataFineAttivitaButton.getText().toString().equals("")) {
                         dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                         dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
@@ -353,7 +370,7 @@ public class NewActivityEvent extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                if (timeI.after(timeF)) {
+                                if (timeI != null && timeF != null && timeI.getHours() > timeF.getHours() && timeI.getMinutes() > timeF.getMinutes()) {
                                     oraFineAttivitaButton.setText(null);
                                 } else {
                                     dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
@@ -375,7 +392,7 @@ public class NewActivityEvent extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         Date dateF = calendar.getTime();
-                        if (dateI.after(dateF)) {
+                        if (dateI != null && dateI.getYear() > dateF.getYear() && dateI.getMonth() > dateF.getMonth() && dateI.getDay() > dateF.getDay()) {
                             dataFineAttivitaButton.setText(null);
                             Toast.makeText(NewActivityEvent.this, "Data di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
                         } else {
@@ -389,7 +406,7 @@ public class NewActivityEvent extends AppCompatActivity {
                                 } catch (ParseException e) {
                                     e.printStackTrace();
                                 }
-                                if (timeI.after(timeF)) {
+                                if (timeI != null && timeF != null && timeI.getHours() > timeF.getHours() && timeI.getMinutes() > timeF.getMinutes()) {
                                     oraFineAttivitaButton.setText(null);
                                 } else {
                                     dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
@@ -402,7 +419,6 @@ public class NewActivityEvent extends AppCompatActivity {
                 }
             }
         };
-
         new DatePickerDialog(NewActivityEvent.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
@@ -418,11 +434,11 @@ public class NewActivityEvent extends AppCompatActivity {
 
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
-                if (sceltaTimeString == "StartTime") /*set inizio attivita hour*/ {
+                if (sceltaTimeString.equals("StartTime")) /*set inizio attivita hour*/ {
                     if (oraFineAttivitaButton.getText().toString().equals("") || dataFineAttivitaButton.getText().toString().equals("") || dataInizioAttivitaButton.getText().toString().equals("")) {
                         oraInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                     } else {
-                        if (dataInizioAttivitaButton.getText().toString() == dataFineAttivitaButton.getText().toString()) {
+                        if (dataInizioAttivitaButton.getText().toString().equals(dataFineAttivitaButton.getText().toString())) {
                             Date timeI = calendar.getTime();
                             Date timeF = new Date();
                             try {
@@ -430,7 +446,8 @@ public class NewActivityEvent extends AppCompatActivity {
                             } catch (ParseException e) {
                                 e.printStackTrace();
                             }
-                            if (timeI.after(timeF)) {
+                            //if (timeI.after(timeF)) {
+                            if (timeF != null && timeI.getHours() > timeF.getHours() && timeI.getMinutes() > timeF.getMinutes()) {
                                 oraFineAttivitaButton.setText(null);
                                 Toast.makeText(NewActivityEvent.this, "Ora di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
                             } else {
@@ -444,7 +461,7 @@ public class NewActivityEvent extends AppCompatActivity {
                     if (oraInizioAttivitaButton.getText().toString().equals("") || dataFineAttivitaButton.getText().toString().equals("") || dataInizioAttivitaButton.getText().toString().equals("")) {
                         oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                     } else {
-                        if (dataInizioAttivitaButton.getText().toString() == dataFineAttivitaButton.getText().toString()) {
+                        if (dataInizioAttivitaButton.getText().toString().equals(dataFineAttivitaButton.getText().toString())) {
                             Date timeI = new Date();
                             try {
                                 timeI = simpleDateFormat.parse(oraInizioAttivitaButton.getText().toString());
@@ -452,123 +469,21 @@ public class NewActivityEvent extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                             Date timeF = calendar.getTime();
-                            if (timeI.after(timeF)) {
+                            if (timeI != null && timeI.getHours() > timeF.getHours() && timeI.getMinutes() > timeF.getMinutes()) {
                                 oraFineAttivitaButton.setText(null);
-                                Toast.makeText(NewActivityEvent.this, "Ora di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(NewActivityEvent.this, "Ora di inizio dopo la fine", Toast.LENGTH_SHORT).show();
                             } else {
                                 oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                             }
+                        } else {
+                            oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                         }
                     }
                 }
 
             }
         };
-
         new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
-    }
-
-
-    // Oprions Menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logoutItemMenu:
-                FirebaseUser user = mAuth.getCurrentUser();
-                if (user != null) {
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
-
-                    SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
-                    sharedPreferencesProvider.setSharedUserId(null);
-
-                    //delateAll RoomDb
-
-                    startActivity(new Intent(this, MainActivity.class));
-                } else {
-                    Toast.makeText(this, "Nessun utente loggato", Toast.LENGTH_SHORT).show();
-                }
-                break;
-
-            case R.id.changePwItemMenu:
-                EditText newPassword = new EditText(this);
-                AlertDialog.Builder changePwDialog = new AlertDialog.Builder(this);
-                changePwDialog.setTitle("Cambia password?");
-                changePwDialog.setMessage("Inserisci la tua nuova password.");
-                changePwDialog.setView(newPassword);
-
-                changePwDialog.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        String newPw = newPassword.getText().toString();
-                        mAuth.getCurrentUser().updatePassword(newPw).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(@NonNull Void unused) {
-                                Toast.makeText(NewActivityEvent.this, "La password è stata cambiata", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(NewActivityEvent.this, "Errore! Password non cambiata", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                changePwDialog.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // close Dialog
-                    }
-                });
-                changePwDialog.create().show();
-
-                break;
-
-            case R.id.RefreshItemMenu:
-                //refresh method
-                break;
-
-            case R.id.chUsernamePwItemMenu:
-                EditText newUsername = new EditText(this);
-                AlertDialog.Builder changeUnDialog = new AlertDialog.Builder(this);
-                changeUnDialog.setTitle("Cambia username?");
-                changeUnDialog.setMessage("Inserisci il tuo nuovo username.");
-                changeUnDialog.setView(newUsername);
-
-                changeUnDialog.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String newUn = newUsername.getText().toString();
-
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(newUn)
-                                .build();
-                        assert user != null;
-                        user.updateProfile((profileUpdates));
-
-                        Utente u = new Utente(user.getUid(), user.getEmail(), newUn);
-                        mITravelRepository.pushNuovoUtente(u);
-                    }
-                });
-                changeUnDialog.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // close Dialog
-                    }
-                });
-                changeUnDialog.create().show();
-
-                break;
-        }
-        return true;
     }
 
     public void apriMappe (String posizione) {

@@ -27,33 +27,30 @@
             android:minHeight="50dp"
             android:orientation="horizontal">
 
-            <ImageButton
-                android:contentDescription="@string/indietro"
-                android:id="@+id/backButtonNuovaAttivita"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/transparent"
-                android:layerType="none"
-                android:minHeight="50dp"
-                app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
-
             <TextView
                 android:id="@+id/titloloNuovaAttivitaId"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:text="@string/titleNuovaAttivita"
                 android:textAlignment="center"
                 android:textColor="@color/primaryColor"
                 android:textSize="30sp" />
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
         </LinearLayout>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/newactivity_progress_i"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/newactivity_bar"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:hideAnimationBehavior="inward"
+            app:indicatorColor="@color/secondaryDarkColor"
+            app:minHideDelay="500"
+            app:showAnimationBehavior="inward"
+            app:trackColor="@color/secondaryLightColor" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -124,7 +121,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="5"
                             android:hint="@string/dataHintNuovaAttivita"
-                            android:text=""
                             android:textSize="20sp"
                             app:icon="@drawable/ic_baseline_calendar_today_24"
                             app:strokeColor="@color/primaryColor"
