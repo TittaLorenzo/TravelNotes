@@ -308,8 +308,6 @@ public class TravelRepository implements ITravelRepository {
             };
             mRtDatabase.child("utenti").orderByChild("datiutente/email").equalTo(email).limitToFirst(1)
                     .addValueEventListener(findUtentiListener);
-            mRtDatabase.child("utenti").orderByChild("datiutente/email").equalTo(email).limitToFirst(1)
-                    .removeEventListener(findUtentiListener);
         };
         new Thread(runnable).start();
     }
