@@ -1,24 +1,12 @@
 package it.unimib.travelnotes.ui.newactivityevent;
 
-import static it.unimib.travelnotes.roomdb.TravelDatabase.getDatabase;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,300 +16,203 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.Gson;
+import com.google.firebase.auth.UserProfileChangeRequest;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import it.unimib.travelnotes.Activity_travel_view;
 import it.unimib.travelnotes.MainActivity;
 import it.unimib.travelnotes.Model.Attivita;
 
+import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
-import it.unimib.travelnotes.autentication.LoginActivity;
+import it.unimib.travelnotes.SharedPreferencesProvider;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
-import it.unimib.travelnotes.roomdb.relations.ViaggioConAttivita;
 
 public class NewActivityEvent extends AppCompatActivity {
 
-    private static final String REALTIME_URL = "https://travelnotes-334817-default-rtdb.europe-west1.firebasedatabase.app/";
+    private String AUTOCOMPLETE_API_KEY = "AIzaSyAmaveq8N5RXhsJhELqQWYP-coB78I89NQ";
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
 
-    private NewActivityEventViewModel mNewActivityEventViewModel;
     private ITravelRepository mITravelRepository;
-    private Attivita attivita;
 
     private Button dataInizioAttivitaButton;
     private Button dataFineAttivitaButton;
-    private Button oraInizioNuovaAttivita;
+    private Button oraInizioAttivitaButton;
     private Button oraFineAttivitaButton;
-    private Button loadAttivita;
     private Button buttonSalva;
 
     private EditText campoNome;
     private EditText campoPosizione;
     private EditText campoDescrizione;
+    private ProgressBar mProgressBar;
 
-    private Long idAttivitaI;
-    private Long idViaggioI;
-    private long attivitaId;
-    private long viaggioId = 0;
+    private String attivitaId;
+    private String viaggioId;
 
-    //cms
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_event);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance(REALTIME_URL).getReference();
         mITravelRepository = new TravelRepository(getApplication());
 
         dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
         dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
-        oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
+        oraInizioAttivitaButton = findViewById(R.id.oraInizioNuovaAttivita);
         oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
-        loadAttivita = findViewById(R.id.loadCloud1);
 
         campoNome = findViewById(R.id.nomeAttivitaInput);
         campoPosizione = findViewById(R.id.posizionePartenzaNuovaAttivita);
         campoDescrizione = findViewById(R.id.descrizioneNuovaAttivita);
         buttonSalva = findViewById(R.id.salvaBottoneNuovaAttivita);
+        mProgressBar = (ProgressBar) findViewById(R.id.newactivity_progress_i);
 
-        Button dataInizioAttivitaButton = findViewById(R.id.dataInizioNuovaAttivita);
-        Button dataFineAttivitaButton = findViewById(R.id.dataFineNuovaAttivita);
-        Button oraInizioNuovaAttivita = findViewById(R.id.oraInizioNuovaAttivita);
-        Button oraFineAttivitaButton = findViewById(R.id.oraFineNuovaAttivita);
-        ImageButton backButtonNuovaAttivita = (ImageButton) findViewById(R.id.backButtonNuovaAttivita);
+        // Autocomplete Place API
+        // Initialize the SDK
+        Places.initialize(getApplicationContext(), AUTOCOMPLETE_API_KEY);
+
+        campoPosizione.setFocusable(false);
+        campoPosizione.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.ADDRESS/*, Place.Type.TRAIN_STATION, Place.Type.AIRPORT, Place.Field.NAME*/);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NewActivityEvent.this);
+                startActivityForResult(intent, 100);
+
+            }
+        });
 
         dataInizioAttivitaButton.setOnClickListener(v -> {
-            showDatePickerDialog(dataInizioAttivitaButton);
+            showDatePickerDialog("StartDate");
         });
 
         dataFineAttivitaButton.setOnClickListener(v -> {
-            showDatePickerDialog(dataFineAttivitaButton);
+            showDatePickerDialog("EndDate");
         });
 
-        oraInizioNuovaAttivita.setOnClickListener(v -> {
-            showTimePickerDialog(oraInizioNuovaAttivita);
+        oraInizioAttivitaButton.setOnClickListener(v -> {
+            showTimePickerDialog("StartTime");
         });
 
         oraFineAttivitaButton.setOnClickListener(v -> {
-            showTimePickerDialog(oraFineAttivitaButton);
-        });
-
-        backButtonNuovaAttivita.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            showTimePickerDialog("EndTime");
         });
 
         buttonSalva.setOnClickListener(c -> {
-
-            if (TextUtils.isEmpty(campoNome.getText().toString())) {
-                Toast.makeText(this, "Devi inserire un nome attività", Toast.LENGTH_SHORT).show();
+            if (!checkCampi()) {
+                Toast.makeText(this, "Devi compilare tutti i campi", Toast.LENGTH_SHORT).show();
             } else {
+                buttonSalva.setEnabled(false);
+                buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryLightColor));
+                campoNome.setFocusable(false);
+                campoPosizione.setClickable(false);
+                campoDescrizione.setFocusable(false);
+                dataInizioAttivitaButton.setEnabled(false);
+                dataFineAttivitaButton.setEnabled(false);
+                oraInizioAttivitaButton.setEnabled(false);
+                oraFineAttivitaButton.setEnabled(false);
+                mProgressBar.setVisibility(View.VISIBLE);
+
                 salvaButtonNuovaAttivita();
             }
-
         });
 
 
         // Leggo valori passati come intent extra: se ci sono valori non nulli allora è una modifica a una attività, quindi bisogna
         try {
-            idAttivitaI = (Long) getIntent().getExtras().get("idAttivita");
+            attivitaId = (String) getIntent().getExtras().get("attivitaId");
         } catch (Exception e) {
-            idAttivitaI = null;
+            attivitaId = null;
         }
         try {
-            idViaggioI = (Long) getIntent().getExtras().get("viaggioId");
+            SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+            viaggioId = sharedPreferencesProvider.getSelectedViaggioId();
         } catch (Exception e) {
-            viaggioId = 0;
+            viaggioId = null;
         }
-        if (idAttivitaI != null) {
-            caricaDatiAttivita((long) idAttivitaI);
+        if (viaggioId == null) {
+            //startActivity(new Intent(getApplicationContext(), TravelList.class));
+            //fittizio
+            viaggioId = "-MtA7mKtdZODJR98_3hH";
         }
 
-        loadAttivita.setOnClickListener(v -> {
-            caricaOnline();
-        });
+        if (attivitaId != null) {
+            buttonSalva.setEnabled(false);
+            buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryLightColor));
+            campoNome.setFocusable(false);
+            campoPosizione.setClickable(false);
+            campoDescrizione.setFocusable(false);
+            dataInizioAttivitaButton.setEnabled(false);
+            dataFineAttivitaButton.setEnabled(false);
+            oraInizioAttivitaButton.setEnabled(false);
+            oraFineAttivitaButton.setEnabled(false);
+            mProgressBar.setVisibility(View.VISIBLE);
 
-        Button buttonMaps = findViewById(R.id.buttonMaps);
+            caricaDatiAttivita(attivitaId);
+        }
+
+        /*Button buttonMaps = findViewById(R.id.buttonMaps);
         buttonMaps.setOnClickListener(v -> {
             apriMappe(campoPosizione.getText().toString());
-        });
-
-        mNewActivityEventViewModel = new ViewModelProvider(this).get(NewActivityEventViewModel.class);
-
-        if (idAttivitaI != null) {
-            long attivitaId = (long) idAttivitaI;
-            mNewActivityEventViewModel.setAttivitaId(attivitaId);
-        }
-        if (idViaggioI != null) {
-            viaggioId = (long) idViaggioI;
-            mNewActivityEventViewModel.setViaggioId(viaggioId);
-        }
-
-        if (attivita == null) {
-            attivita = new Attivita();
-        }
-
-
+        });*/
     }
 
-    //menu logout
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logoutItemMenu:
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) {
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(this, "Logout effettuato", Toast.LENGTH_SHORT).show();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-                    /*Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            //TravelDatabase.getDatabase(getApplicationContext()).getUtenteDao().deleteAllUtenti();
-                            //TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().deleteAllViaggio();
-                            //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().deleteAllAttivita();
-                        }
-                    };*/
-
-                    startActivity(new Intent(this, LoginActivity.class));
-                } else {
-                    Toast.makeText(this, "Nessun utente loggato", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.changePwItemMenu:
-                EditText newPassword = new EditText(this);
-                AlertDialog.Builder changePwDialog = new AlertDialog.Builder(this);
-                changePwDialog.setTitle("Cambia password?");
-                changePwDialog.setMessage("Inserisci la tua nuova password.");
-                changePwDialog.setView(newPassword);
-
-                changePwDialog.setPositiveButton("Invia", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        String newPw = newPassword.getText().toString();
-                        mAuth.getCurrentUser().updatePassword(newPw).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(@NonNull Void unused) {
-                                Toast.makeText(NewActivityEvent.this, "La password è stata cambiata", Toast.LENGTH_SHORT).show();
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(NewActivityEvent.this, "Errore! Password non cambiata", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
-                changePwDialog.setNegativeButton("Chiudi", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // close Dialog
-                    }
-                });
-
-                changePwDialog.create().show();
-
-                break;
+        if (requestCode == 100 && resultCode == RESULT_OK) {
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            campoPosizione.setText(place.getAddress());
+        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
         }
-        return true;
     }
 
-    private void showDatePickerDialog(final Button sceltaDateTime) {
-        final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR,year);
-                calendar.set(Calendar.MONTH,month);
-                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
-
-                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
-            }
-        };
-
-        new DatePickerDialog(NewActivityEvent.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
-
-    }
-
-    private void showTimePickerDialog(final Button sceltaDateTime) {
-        final Calendar calendar=Calendar.getInstance();
-
-        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                calendar.set(Calendar.MINUTE,minute);
-
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
-
-                sceltaDateTime.setText(simpleDateFormat.format(calendar.getTime()));
-            }
-        };
-
-        new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
-    }
-
-    /*@Nullable
-    @Override
-    public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
-
-        final Observer<AttivitaResponse> observer = new Observer<AttivitaResponse>() {
-            @Override
-            public void onChanged(AttivitaResponse attivitaResponse) {
-                if (attivitaResponse.isError()) {
-                    //updateUIForFaliure(listaAttivitaResponse.getStatus());
-                }
-                if (attivitaResponse.getAttivita() != null && attivitaResponse.getTotalResults() != -1) {
-                    //mAttivitaViewModel.setTotalResult(attivitaResponse.getTotalResults());
-
-                    // updateUIForSuccess(attivitaResponse.getAttivita(), attivitaResponse.isLoading());
-
-                }
-                //mProgressBar.setVisibility(View.GONE);
-            }
-        };
-        //mNewActivityEventViewModel.getAttivita().observe(this, observer);
-
-        return super.onCreateView(name, context, attrs);
-    }*/
-
-    private void caricaDatiAttivita(long idAttivitaI) {
+    private void caricaDatiAttivita(String idAttivitaI) {
 
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
 
                 Attivita attivitaSelezionata = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().findAttivitaById(idAttivitaI);
-
-                viaggioId = attivitaSelezionata.getViaggioId();
 
                 TextView titoloNuovaAttivita = findViewById(R.id.titloloNuovaAttivitaId);
                 titoloNuovaAttivita.setText(R.string.titleModificaAttivita);
@@ -357,6 +248,16 @@ public class NewActivityEvent extends AppCompatActivity {
                 Button oraFineNuovaAttivita = (Button) findViewById(R.id.oraFineNuovaAttivita);
                 oraFineNuovaAttivita.setText(simpleHourFormat.format(calendar.getTime()));
 
+                buttonSalva.setEnabled(true);
+                buttonSalva.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+                campoNome.setFocusable(true);
+                campoPosizione.setClickable(true);
+                campoDescrizione.setFocusable(true);
+                dataInizioAttivitaButton.setEnabled(true);
+                dataFineAttivitaButton.setEnabled(true);
+                oraInizioAttivitaButton.setEnabled(true);
+                oraFineAttivitaButton.setEnabled(true);
+                mProgressBar.setVisibility(View.GONE);
             }
         };
         new Thread(runnable).start();
@@ -364,34 +265,18 @@ public class NewActivityEvent extends AppCompatActivity {
 
     public void salvaButtonNuovaAttivita() {
 
-        /*//scrittura su cloud
-        mDatabase.child("attivita").child(String.valueOf(attivita.getAttivitaId())).setValue(attivita)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
-                    }
-                });*/
-
-
         Date dataInizio = new Date();
         Date dataFine = new Date();
         try {
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
             dataInizio = formatter.parse(
-                    ((Button) findViewById(R.id.dataInizioNuovaAttivita)).getText().toString() +
-                            " " + ((Button) findViewById(R.id.oraInizioNuovaAttivita)).getText().toString());
+                    (dataInizioAttivitaButton.getText().toString() +
+                            " " + (oraInizioAttivitaButton.getText().toString())));
 
             dataFine = formatter.parse(
-                    ((Button) findViewById(R.id.dataFineNuovaAttivita)).getText().toString() +
-                            " " + ((Button) findViewById(R.id.oraFineNuovaAttivita)).getText().toString());
+                    (dataFineAttivitaButton.getText().toString() +
+                            " " + (oraFineAttivitaButton.getText().toString())));
         } catch (Exception e) {
             Log.v("MyLog", "parsing date fallito");
         }
@@ -404,59 +289,201 @@ public class NewActivityEvent extends AppCompatActivity {
         a.setDataInizio(dataInizio);
         a.setDataFine(dataFine);
 
-        if (idAttivitaI != null) {
-            a.setAttivitaId((long) idAttivitaI);
-            a.setViaggioId((long) idViaggioI);
-
-            //TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().aggiornaAttivita(a);
+        if (attivitaId != null) {
+            a.setAttivitaId(attivitaId);
+            a.setViaggioId(viaggioId);
 
             mITravelRepository.pushNuovaAttivita(a, true);
 
         } else {
-            mITravelRepository.pushNuovaAttivita(a, false);
 
-            //long idRow = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().nuovaAttivita(a);
+            mITravelRepository.pushNuovaAttivita(a, false);
         }
 
-
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), Activity_travel_view.class);
         startActivity(i);
+        finish();
+    }
+
+    private boolean checkCampi() {
+        boolean compilato = true;
+
+        if (TextUtils.isEmpty(campoNome.getText().toString())) {
+            //error
+            compilato = false;
+        }
+        if (TextUtils.isEmpty(dataInizioAttivitaButton.getText().toString())) {
+            //error
+            compilato = false;
+        }
+        if (TextUtils.isEmpty(oraInizioAttivitaButton.getText().toString())) {
+            //error
+            compilato = false;
+        }
+        if (TextUtils.isEmpty(dataFineAttivitaButton.getText().toString())) {
+            //error
+            compilato = false;
+        }
+        if (TextUtils.isEmpty(oraFineAttivitaButton.getText().toString())) {
+            //error
+            compilato = false;
+        }
+
+        return compilato;
+    }
+
+    private void showDatePickerDialog(String dateButtonString) {
+        final Calendar calendar=Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendar.set(Calendar.YEAR,year);
+                calendar.set(Calendar.MONTH,month);
+                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd");
+
+                if (dateButtonString.equals("StartDate")) /*set inizio attivita date*/ {
+                    if (dataFineAttivitaButton.getText().toString().equals("")) {
+                        dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                        dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                    } else {
+                        Date dateI = calendar.getTime();
+                        Date dateF = new Date();
+                        try {
+                            dateF = simpleDateFormat.parse(dataFineAttivitaButton.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if (dateI.after(dateF)) {
+                            dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            dataFineAttivitaButton.setText(null);
+                            oraFineAttivitaButton.setText(null);
+                        } else {
+                            if (dateI.equals(dateF) && oraInizioAttivitaButton.getText().toString().equals("") && oraFineAttivitaButton.getText().toString().equals("")) {
+                                Date timeI = new Date();
+                                Date timeF = new Date();
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                                try {
+                                    timeI = timeFormat.parse(oraInizioAttivitaButton.getText().toString());
+                                    timeF = timeFormat.parse(oraFineAttivitaButton.getText().toString());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                if (timeI != null && timeF != null && timeI.getHours() > timeF.getHours() && timeI.getMinutes() > timeF.getMinutes()) {
+                                    oraFineAttivitaButton.setText(null);
+                                } else {
+                                    dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                                }
+                            } else {
+                                dataInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        }
+                    }
+
+                } else /*set fine attivita date*/ {
+                    if (dataInizioAttivitaButton.getText().toString().equals("")) {
+                        dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                    } else {
+                        Date dateI = new Date();
+                        try {
+                            dateI = simpleDateFormat.parse(dataInizioAttivitaButton.getText().toString());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        Date dateF = calendar.getTime();
+                        if (dateI != null && dateI.getYear() > dateF.getYear() && dateI.getMonth() > dateF.getMonth() && dateI.getDay() > dateF.getDay()) {
+                            dataFineAttivitaButton.setText(null);
+                            Toast.makeText(NewActivityEvent.this, "Data di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
+                        } else {
+                            if (dateI.equals(dateF) && !oraInizioAttivitaButton.getText().toString().equals("") && !oraFineAttivitaButton.getText().toString().equals("")) {
+                                Date timeI = new Date();
+                                Date timeF = new Date();
+                                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                                try {
+                                    timeI = timeFormat.parse(oraInizioAttivitaButton.getText().toString());
+                                    timeF = timeFormat.parse(oraFineAttivitaButton.getText().toString());
+                                } catch (ParseException e) {
+                                    e.printStackTrace();
+                                }
+                                if (timeI != null && timeF != null && timeI.getHours() > timeF.getHours() && timeI.getMinutes() > timeF.getMinutes()) {
+                                    oraFineAttivitaButton.setText(null);
+                                } else {
+                                    dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                                }
+                            } else {
+                                dataFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        new DatePickerDialog(NewActivityEvent.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
 
-    public void caricaOnline() {
+    private void showTimePickerDialog(String sceltaTimeString) {
+        final Calendar calendar=Calendar.getInstance();
 
-        Log.v("MyLog", "CaricaOnline");
-
-        long idViaggio = 1;
-        Runnable runnable = new Runnable() {
+        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
             @Override
-            public void run() {
-                ViaggioConAttivita listaAttivita = TravelDatabase.getDatabase(getApplicationContext()).getAttivitaDao().getViaggioConAttivita(idViaggio);
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                calendar.set(Calendar.MINUTE,minute);
 
-                Gson gson = new Gson();
-                String viaggiCOnAttivitaJson = gson.toJson(listaAttivita);
-                Log.v("MyLog", viaggiCOnAttivitaJson);
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
 
-                //scrittura su cloud
-                mDatabase.child("prova").child("1").setValue(viaggiCOnAttivitaJson)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                //Toast.makeText(mApplication.getApplicationContext(), "Success!!", Toast.LENGTH_SHORT).show();
+                if (sceltaTimeString.equals("StartTime")) /*set inizio attivita hour*/ {
+                    if (oraFineAttivitaButton.getText().toString().equals("") || dataFineAttivitaButton.getText().toString().equals("") || dataInizioAttivitaButton.getText().toString().equals("")) {
+                        oraInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                    } else {
+                        if (dataInizioAttivitaButton.getText().toString().equals(dataFineAttivitaButton.getText().toString())) {
+                            Date timeI = calendar.getTime();
+                            Date timeF = new Date();
+                            try {
+                                timeF = simpleDateFormat.parse(oraInizioAttivitaButton.getText().toString());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                //Toast.makeText(mApplication.getApplicationContext(), "Faliure!!", Toast.LENGTH_SHORT).show();
+                            //if (timeI.after(timeF)) {
+                            if (timeF != null && timeI.getHours() > timeF.getHours() && timeI.getMinutes() > timeF.getMinutes()) {
+                                oraFineAttivitaButton.setText(null);
+                                Toast.makeText(NewActivityEvent.this, "Ora di fine dopo l'inizio", Toast.LENGTH_SHORT).show();
+                            } else {
+                                oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
                             }
-                        });
+                        } else {
+                            oraInizioAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                        }
+                    }
+                } else /*set fine attivita hour*/ {
+                    if (oraInizioAttivitaButton.getText().toString().equals("") || dataFineAttivitaButton.getText().toString().equals("") || dataInizioAttivitaButton.getText().toString().equals("")) {
+                        oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                    } else {
+                        if (dataInizioAttivitaButton.getText().toString().equals(dataFineAttivitaButton.getText().toString())) {
+                            Date timeI = new Date();
+                            try {
+                                timeI = simpleDateFormat.parse(oraInizioAttivitaButton.getText().toString());
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            Date timeF = calendar.getTime();
+                            if (timeI != null && timeI.getHours() > timeF.getHours() && timeI.getMinutes() > timeF.getMinutes()) {
+                                oraFineAttivitaButton.setText(null);
+                                Toast.makeText(NewActivityEvent.this, "Ora di inizio dopo la fine", Toast.LENGTH_SHORT).show();
+                            } else {
+                                oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                            }
+                        } else {
+                            oraFineAttivitaButton.setText(simpleDateFormat.format(calendar.getTime()));
+                        }
+                    }
+                }
 
             }
         };
-        new Thread(runnable).start();
-
+        new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
     }
 
     public void apriMappe (String posizione) {

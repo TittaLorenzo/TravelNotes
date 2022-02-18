@@ -14,42 +14,14 @@ public class FlightViewModel extends AndroidViewModel {
     private final ITravelRepository mITravelRepository;
     private MutableLiveData<ViaggioResponse> mViaggioLiveData;
 
-    private long viaggioId;
+    private String viaggioId;
 
-    private int currentResults;
-    private int totalResult;
-    private boolean isLoading;
-
-    public long getViaggioId() {
+    public String getViaggioId() {
         return viaggioId;
     }
 
-    public void setViaggioId(long viaggioId) {
+    public void setViaggioId(String viaggioId) {
         this.viaggioId = viaggioId;
-    }
-
-    public int getCurrentResults() {
-        return currentResults;
-    }
-
-    public void setCurrentResults(int currentResults) {
-        this.currentResults = currentResults;
-    }
-
-    public int getTotalResult() {
-        return totalResult;
-    }
-
-    public void setTotalResult(int totalResult) {
-        this.totalResult = totalResult;
-    }
-
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setLoading(boolean loading) {
-        isLoading = loading;
     }
 
     public FlightViewModel(Application application) {
@@ -60,7 +32,6 @@ public class FlightViewModel extends AndroidViewModel {
 
     public MutableLiveData<ViaggioResponse> getViaggio() {
         if (mViaggioLiveData == null) {
-            // mViaggioLiveData = new MutableLiveData<ViaggioResponse>();
             fetchViaggioViewModel();
         } else {
             mViaggioLiveData.getValue().setError(false);
@@ -69,7 +40,7 @@ public class FlightViewModel extends AndroidViewModel {
     }
 
     private void fetchViaggioViewModel() {
-        mViaggioLiveData = mITravelRepository.fetchViaggio(viaggioId, false);
+        mViaggioLiveData = mITravelRepository.fetchViaggio(viaggioId);
     }
 
 }

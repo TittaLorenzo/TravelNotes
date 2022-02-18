@@ -6,38 +6,15 @@ import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.Model.Viaggio;
 
 public class ListaUtentiResponse {
-    private String status;
-    private int totalResults;
     private List<Utente> elencoUtenti;
     private Viaggio viaggio;
     private boolean isError;
-    private boolean isLoading;
 
-
-    public ListaUtentiResponse(String status, int totalResults, List<Utente> elencoUtenti, Viaggio viaggio, boolean isLoading) {
-        this.status = status;
-        this.totalResults = totalResults;
+    public ListaUtentiResponse(List<Utente> elencoUtenti, Viaggio viaggio) {
         this.elencoUtenti = elencoUtenti;
         this.viaggio = viaggio;
-        this.isLoading = isLoading;
     }
     public ListaUtentiResponse() {
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public int getTotalResults() {
-        return totalResults;
-    }
-
-    public void setTotalResults(int totalResults) {
-        this.totalResults = totalResults;
     }
 
     public List<Utente> getElencoUtenti() {
@@ -62,13 +39,5 @@ public class ListaUtentiResponse {
 
     public void setError(boolean error) {
         isError = error;
-    }
-
-    public boolean isLoading() {
-        return isLoading;
-    }
-
-    public void setLoading(boolean loading) {
-        isLoading = loading;
     }
 }

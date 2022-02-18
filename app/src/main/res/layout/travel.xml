@@ -61,7 +61,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:textColor="@color/white" />
 
                 <ImageView
                     android:id="@+id/timeImage"
@@ -73,12 +74,13 @@
                     app:tint="@color/white" />
 
                 <TextView
-                    android:id="@+id/time"
+                    android:id="@+id/arrivalTime"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/white" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -87,7 +89,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/departure2"
+                    android:id="@+id/destination2"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
@@ -103,12 +105,13 @@
                     app:tint="@color/white" />
 
                 <TextView
-                    android:id="@+id/destination2"
+                    android:id="@+id/departure2"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/white" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -121,7 +124,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:gravity="center" />
+                    android:gravity="center"
+                    android:textColor="@color/white" />
 
                 <ImageView
                     android:id="@+id/timeImage2"
@@ -133,12 +137,13 @@
                     app:tint="@color/white" />
 
                 <TextView
-                    android:id="@+id/time2"
+                    android:id="@+id/arrivalTime2"
                     android:layout_width="wrap_content"
                     android:layout_height="50dp"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:textColor="@color/white" />
+
             </LinearLayout>
 
         </LinearLayout>

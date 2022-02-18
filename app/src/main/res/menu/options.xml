@@ -3,8 +3,9 @@
 
     <item
         android:id="@+id/RefreshItemMenu"
-        android:title="Refresh" />
-    <item android:title="@string/impostazioniItemMenu" />
+        android:title="@string/refresh" />
+    <item android:id="@+id/chUsernamePwItemMenu"
+        android:title="@string/chUsernameItemMenu" />
     <item android:title="@string/changePwItemMenu"
         android:id="@+id/changePwItemMenu" />
     <item android:title="@string/logoutItemMenu"

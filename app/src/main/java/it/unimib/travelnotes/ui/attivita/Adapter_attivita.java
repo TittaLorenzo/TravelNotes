@@ -1,40 +1,39 @@
 package it.unimib.travelnotes.ui.attivita;
 
-import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 import it.unimib.travelnotes.Model.Attivita;
-import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.R;
-import it.unimib.travelnotes.ui.attivita.AttivitaFragment;
+import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.AttivitaViewHolder> {
-    Attivita[] attivita;
-    AttivitaFragment context;
+    private List<Attivita> attivitaList;
+    private AttivitaFragment context;
+    private Attivita attivita;
 
-    public Adapter_attivita(Attivita[] attivita, AttivitaFragment activity) {
-        this.attivita= attivita;
+    String pattern = "MM/dd/yyyy \n HH:mm";
+    DateFormat df = new SimpleDateFormat(pattern);
+
+
+    public Adapter_attivita(List<Attivita> attivita, AttivitaFragment activity) {
+        this.attivitaList= attivita;
         this.context = activity;
     }
-/*
-    public interface OnItemClickListener {
-        void onItemClick(Viaggio viaggio);
-    }
-    private List <Viaggio> travelList;
-    private final OnItemClickListener mOnItemClickListener;
-    //private String [] localDataSet;
-    public TravelAdapter(Viaggio[] travelList, TravelListActivity onItemClickListener) {
-        this.travelList = travelList;
-        this.mOnItemClickListener = onItemClickListener;
-    }
-*/
+
+
 
     @NonNull
     @Override
@@ -44,60 +43,83 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
         Adapter_attivita.AttivitaViewHolder viewHolder = new Adapter_attivita.AttivitaViewHolder(view);
         return viewHolder;
     }
-
     //da modificare con il database
     @Override
     public void onBindViewHolder(@NonNull Adapter_attivita.AttivitaViewHolder holder, int position) {
         //AttivitaViewHolder.getTextView(localDataSet[position]);
-        final Attivita attivitaList = attivita[position];
-        holder.attivitaNome.setText(attivitaList.getNome());
-        holder.descrizione.setText(attivitaList.getDescrizione());
-        //holder.travelDestination.setText(travelList.getDestinazioneAndata());
-        //holder.travelTime.setText((int) travelList.getDurataAndata());
+        attivita = attivitaList.get(position);
+        Date dataInizio = attivita.getDataInizio();
+        String stringaDataInizio = df.format(dataInizio);
+        holder.dataInizio.setText(stringaDataInizio);
+        Date dataFine = attivita.getDataFine();
+        String stringaDataFine = df.format(dataFine);
+        holder.dataFine.setText(stringaDataFine);
+        holder.attivitaNome.setText(attivita.getNome());
+        holder.descrizione.setText(attivita.getDescrizione());
+        holder.posizione.setText(attivita.getPosizione());
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                /*
-                APRIRE IL VIAGGIO
-                Intent intent = new Intent(this, NewTravel.class);
-                 */
-            }
-        });
-        /*
-        Viaggio viaggio = travelList.get(position);
-        holder.travelDestination.setText(viaggio.getDestinazioneAndata());
-        */
+    }
+    public void removeItem(int position) {
+        attivitaList.remove(position);
+        notifyItemRemoved(position);
     }
 
+    public void restoreItem(Attivita att, int position) {
+        attivitaList.add(position, att);
+        notifyItemInserted(position);
+    }
+
+    public List<Attivita> getData() {
+        return attivitaList ;
+    }
     @Override
     public int getItemCount() {
-        if (attivita != null){
-            return attivita.length;
+        if (attivitaList != null){
+            return attivitaList.size();
         }
         return 0;
 
     }
 
-    public class AttivitaViewHolder extends RecyclerView.ViewHolder{
 
+    public class AttivitaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView attivitaNome;
         TextView descrizione;
-
-
-
+        TextView dataInizio;
+        TextView dataFine;
+        TextView posizione;
+        ImageButton modificaAttivita;
 
 
         public AttivitaViewHolder(@NonNull View itemView) {
             super(itemView);
             attivitaNome = itemView.findViewById(R.id.nome_attivita);
             descrizione = itemView.findViewById(R.id.descrizione);
+            posizione= itemView.findViewById(R.id.pozione);
+            dataInizio = itemView.findViewById(R.id.data_inizio);
+            dataFine = itemView.findViewById(R.id.data_fine);
+
+            modificaAttivita =  itemView.findViewById(R.id.button_modifica_attivita);
+            modificaAttivita.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = (new Intent(view.getContext(), NewActivityEvent.class));
+                    intent.putExtra("modifica_attivita", true);
+                    view.getContext().startActivity(intent);
 
 
 
+                }
+            });
         }
 
 
+        @Override
+        public void onClick(View v) {
+
+        }
     }
+
+
 }
 

@@ -15,7 +15,8 @@
         tools:layout="@layout/fragment_flight" >
         <action
             android:id="@+id/action_navigation_home_to_navigation_dashboard"
-            app:destination="@id/navigation_dashboard" />
+            app:destination="@id/navigation_dashboard"
+            app:popUpTo="@id/navigation_dashboard" />
     </fragment>
 
     <fragment
@@ -25,7 +26,8 @@
         tools:layout="@layout/fragment_attivita" >
         <action
             android:id="@+id/action_navigation_dashboard_to_navigation_notifications"
-            app:destination="@id/navigation_notifications" />
+            app:destination="@id/navigation_notifications"
+            app:popUpTo="@id/navigation_notifications" />
     </fragment>
 
     <fragment

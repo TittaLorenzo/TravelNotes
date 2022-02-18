@@ -4,44 +4,53 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.text.DateFormat;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.textfield.TextInputEditText;
+
 import java.text.ParseException;
-import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
-import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
 
+
 public class NewTravel extends AppCompatActivity {
 
-    ImageButton invio;
     Button partenzaAndataButton;
     Button arrivoAndataButton;
     Button partenzaRitornoButton;
     Button arrivoRitornoButton;
-    EditText andataVDa;
-    EditText andataVA;
-    EditText ritornoVDa;
-    EditText ritornoVA;
-    CheckBox checkAR;
-    String s1, s2;
-    Date data1, data2;
+    TextInputEditText andataVDa;
+    TextInputEditText andataVA;
+    TextInputEditText ritornoVDa;
+    TextInputEditText ritornoVA;
+    SwitchMaterial checkAR;
+    FloatingActionButton salvaVolo;
+    Boolean datoPassato;
+    TextView titolo;
+    String idProva = "-Mw1t0DF3fhKyEqBTtrI";
+    String idProva2 = "-Mw1sqayw-igEvEfPrGh";
+    String idPorova3 = "-MupwdkEslROOOnQgYd3";
+    static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
+
 
     private ITravelRepository mITravelRepository;
 
@@ -55,13 +64,22 @@ public class NewTravel extends AppCompatActivity {
         arrivoAndataButton = findViewById(R.id.NT_sceltaAndataR);
         partenzaRitornoButton = findViewById(R.id.NT_sceltaRitornoP);
         arrivoRitornoButton = findViewById(R.id.NT_sceltaRitornoA);
-        invio = findViewById(R.id.NT_newTravelButton);
         checkAR = findViewById(R.id.NT_checkAR);
         andataVDa = findViewById(R.id.NT_andataDa);
         andataVA = findViewById(R.id.NT_andataA);
         ritornoVDa = findViewById(R.id.NT_ritornoDa);
         ritornoVA = findViewById(R.id.NT_ritornoA);
         mITravelRepository = new TravelRepository(getApplication());
+        salvaVolo = findViewById(R.id.NT_floatingButton);
+        mITravelRepository = new TravelRepository(getApplication());
+        titolo = findViewById(R.id.NT_creaViaggioTV);
+
+        datoPassato = getIntent().getExtras().getBoolean("modifica_viaggio");
+
+        if(datoPassato){
+            titolo.setText(R.string.title_modificaViaggio);
+            caricaDatiAttivita(idProva);
+        }
 
         partenzaAndataButton.setOnClickListener(v -> {
             showDateTimeDialog(partenzaAndataButton);
@@ -87,7 +105,7 @@ public class NewTravel extends AppCompatActivity {
             }
         });
 
-        invio.setOnClickListener(v -> {
+        salvaVolo.setOnClickListener(v -> {
             String daA = andataVDa.getText().toString();
             String aA = andataVA.getText().toString();
             String daR = ritornoVDa.getText().toString();
@@ -95,7 +113,7 @@ public class NewTravel extends AppCompatActivity {
             //uso un if per verificare quale delle
 
             if (checkAR.isChecked()){
-                Log.i("Prova_invioAR", "viagg.toString()");
+                //Log.i("Prova_invioAR", "viagg.toString()");
                 try {
                     SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
                     Date andataD = simpleDateFormat.parse(partenzaAndataButton.getText().toString());
@@ -106,13 +124,21 @@ public class NewTravel extends AppCompatActivity {
                     long diffMinutesD = diff / (60 * 1000);
                     diff = (arrivoR.getTime() - andataR.getTime());
                     long diffMinutesR = diff / (60 * 1000);
-                    Viaggio viagg = new Viaggio(andataD, andataR, daA, aA, daR, aR, Double.longBitsToDouble(diffMinutesD), Double.longBitsToDouble(diffMinutesR));
-                    if(diffMinutesD <= 0 || diffMinutesR <= 0 || andataR.compareTo(andataD) <= 0 || arrivoR.compareTo(arrivoD) <= 0){
+                    Viaggio viagg = new Viaggio(andataD, andataR, daA, aA, daR, aR, (double)(diffMinutesD), (double)(diffMinutesR));
+                    if(diffMinutesD <= 0 || diffMinutesR <= 0 || andataR.compareTo(andataD) <= 0 || arrivoR.compareTo(arrivoD) <= 0 || andataR.compareTo(arrivoD) <= 0){
                         Toast.makeText(this, "Correggere le date", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(andataVDa.getText().toString().trim().matches("") || andataVA.getText().toString().trim().matches("") || ritornoVDa.getText().toString().trim().matches("") || ritornoVA.getText().toString().trim().matches("")){
+                        Toast.makeText(this, "Inserire città valide", Toast.LENGTH_SHORT).show();
                     }
                     else{
                         Toast.makeText(this, "Viaggio creato", Toast.LENGTH_SHORT).show();
-                        //mITravelRepository.pushNuovoViaggio(viagg, false);
+                        if(idProva!=null){
+                            viagg.setViaggioId(idProva);
+                        }
+                        mITravelRepository.pushNuovoViaggio(viagg, datoPassato);
+                        startActivity(new Intent(this, TravelList.class));
+                        finish();
                     }
                     /*new AsyncTask<Void, Void, Void>() {
                         @Override
@@ -140,13 +166,21 @@ public class NewTravel extends AppCompatActivity {
                     Date arrivoD = simpleDateFormat.parse(arrivoAndataButton.getText().toString());
                     long diff = (arrivoD.getTime() - andataD.getTime());
                     long diffMinutes = diff / (60 * 1000);
-                    Viaggio viagg = new Viaggio(andataD, daA, aA, Double.longBitsToDouble(diffMinutes));
+                    Viaggio viagg = new Viaggio(andataD, daA, aA, (double) diffMinutes);
                     if(diffMinutes <= 0){
                         Toast.makeText(this, "Correggere le date", Toast.LENGTH_SHORT).show();
                     }
+                    else if(andataVDa.getText().toString().trim().matches("") || andataVA.getText().toString().trim().matches("")){
+                        Toast.makeText(this, "Inserire città valide", Toast.LENGTH_SHORT).show();
+                    }
                     else{
                         Toast.makeText(this, "Viaggio creato", Toast.LENGTH_SHORT).show();
-                        //mITravelRepository.pushNuovoViaggio(viagg, false);
+                        if(idProva!=null){
+                            viagg.setViaggioId(idProva);
+                        }
+                        mITravelRepository.pushNuovoViaggio(viagg, datoPassato);
+                        startActivity(new Intent(this, TravelList.class));
+                        finish();
                     }
                     /*new AsyncTask<Void, Void, Void>() {
                         @Override
@@ -168,6 +202,7 @@ public class NewTravel extends AppCompatActivity {
                 }
             }
         });
+
     }
 
 
@@ -198,6 +233,69 @@ public class NewTravel extends AppCompatActivity {
 
         new DatePickerDialog(NewTravel.this,dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
+    }
+
+    private void caricaDatiAttivita(String idAttivitaI) {
+        partenzaAndataButton = (Button) findViewById(R.id.NT_sceltaAndataP);
+        salvaVolo = findViewById(R.id.NT_floatingButton);
+        arrivoAndataButton = findViewById(R.id.NT_sceltaAndataR);
+        partenzaRitornoButton = findViewById(R.id.NT_sceltaRitornoP);
+        arrivoRitornoButton = findViewById(R.id.NT_sceltaRitornoA);
+        checkAR = findViewById(R.id.NT_checkAR);
+        andataVDa = findViewById(R.id.NT_andataDa);
+        andataVA = findViewById(R.id.NT_andataA);
+        ritornoVDa = findViewById(R.id.NT_ritornoDa);
+        ritornoVA = findViewById(R.id.NT_ritornoA);
+        checkAR = findViewById(R.id.NT_checkAR);
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Viaggio viaggoSelezionato = TravelDatabase.getDatabase(getApplicationContext()).getViaggioDao().findViaggioById(idAttivitaI);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(viaggoSelezionato.getDataRitorno() != null){
+                            checkAR.setChecked(true);
+                            if (checkAR.isChecked()){
+                                findViewById(R.id.NT_layoutRitorno).setVisibility(View.VISIBLE);
+                            } else{
+                                findViewById(R.id.NT_layoutRitorno).setVisibility(View.INVISIBLE);
+                            }
+                            andataVDa.setText(viaggoSelezionato.getPartenzaAndata());
+                            andataVA.setText(viaggoSelezionato.getDestinazioneAndata());
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(viaggoSelezionato.getDataAndata());
+                            SimpleDateFormat simpleDateFormat2=new SimpleDateFormat("yy-MM-dd HH:mm");
+                            partenzaAndataButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            long t= calendar.getTimeInMillis();
+                            Date afterAddingTenMins=new Date(t + ((int) Math.round(viaggoSelezionato.getDurataRitorno()) * ONE_MINUTE_IN_MILLIS));
+                            arrivoAndataButton.setText(simpleDateFormat2.format(afterAddingTenMins));
+                            ritornoVDa.setText(viaggoSelezionato.getPartenzaRitorno());
+                            ritornoVA.setText(viaggoSelezionato.getDestinazioneRitorno());
+                            calendar.setTime(viaggoSelezionato.getDataRitorno());
+                            partenzaRitornoButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            t= calendar.getTimeInMillis();
+                            afterAddingTenMins=new Date(t + ((int) Math.round(viaggoSelezionato.getDurataRitorno()) * ONE_MINUTE_IN_MILLIS));
+                            arrivoRitornoButton.setText(simpleDateFormat2.format(afterAddingTenMins));
+                            //vedere andata ritorno
+                        }else{
+                            andataVDa.setText(viaggoSelezionato.getPartenzaAndata());
+                            andataVA.setText(viaggoSelezionato.getDestinazioneAndata());
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(viaggoSelezionato.getDataAndata());
+                            SimpleDateFormat simpleDateFormat2=new SimpleDateFormat("yy-MM-dd HH:mm");
+                            partenzaAndataButton.setText(simpleDateFormat2.format(calendar.getTime()));
+                            long t= calendar.getTimeInMillis();
+                            Double d = viaggoSelezionato.getDurataAndata();
+                            Date afterAddingTenMins=new Date(t + ((int) Math.round(d) * ONE_MINUTE_IN_MILLIS));
+                            arrivoAndataButton.setText(simpleDateFormat2.format(afterAddingTenMins));
+                            //vedere andata ritorno
+                        }
+                    }
+                });
+            }
+        };
+        new Thread(runnable).start();
     }
 
 }

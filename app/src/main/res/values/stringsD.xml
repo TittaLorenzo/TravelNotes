@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string name="title_activity_travel_view">Activity_travel_view</string>
-<string name="volo">volo</string>
-<string name="attivita">attività</string>
-<string name="gruppo">gruppo</string>
+
+    <string name="title_activity_travel_view">Activity_travel_view</string>
+    <string name="volo">volo</string>
+    <string name="attivita">attività</string>
+    <string name="gruppo">gruppo</string>
     <string name="nuovaAttivita">nuova attività</string>
+    <string name="modificavolo">modifica volo</string>
 
 </resources>
