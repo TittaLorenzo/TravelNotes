@@ -32,16 +32,19 @@
                     android:layout_width="78dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0"
-                    app:srcCompat="@drawable/ic_baseline_sports_basketball_24"
+                    app:srcCompat="@drawable/ic_baseline_person_24"
                     app:tint="@color/white" />
 
                 <TextView
                     android:id="@+id/username"
-                    android:layout_width="322dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="0"
+                    android:layout_weight="1"
+                    android:layout_width="78dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="casual"
                     android:gravity="center"
-                    android:textColor="@color/white" />
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
+
 
             </LinearLayout>
 
@@ -52,10 +55,13 @@
 
                 <TextView
                     android:id="@+id/email_user"
-                    android:layout_width="wrap_content"
-                    android:layout_height="50dp"
                     android:layout_weight="1"
-                    android:gravity="center" />
+                    android:layout_width="78dp"
+                    android:layout_height="match_parent"
+                    android:fontFamily="casual"
+                    android:gravity="center"
+                    android:textColor="#000000"
+                    android:textSize="20sp" />
 
             </LinearLayout>
         </LinearLayout>
