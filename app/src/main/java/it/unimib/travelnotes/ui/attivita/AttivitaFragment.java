@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
@@ -30,7 +29,6 @@ import it.unimib.travelnotes.Model.response.ListaAttivitaResponse;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.TravelList;
 import it.unimib.travelnotes.databinding.FragmentAttivitaBinding;
-import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class AttivitaFragment extends Fragment  {
 
@@ -134,14 +132,7 @@ public class AttivitaFragment extends Fragment  {
             itemTouchhelper.attachToRecyclerView(recyclerView);
 
 
-        ImageButton button_n_attivita = (ImageButton) view.findViewById(R.id.new_attivita);
-        button_n_attivita.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), NewActivityEvent.class);
-                startActivity(intent);
-            }
-        });
+
 
 
         final Observer<ListaAttivitaResponse> observer = new Observer<ListaAttivitaResponse>() {

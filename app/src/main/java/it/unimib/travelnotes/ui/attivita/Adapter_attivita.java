@@ -48,6 +48,7 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
     public void onBindViewHolder(@NonNull Adapter_attivita.AttivitaViewHolder holder, int position) {
         //AttivitaViewHolder.getTextView(localDataSet[position]);
         attivita = attivitaList.get(position);
+        holder.idAttivita =attivita.getAttivitaId();
         Date dataInizio = attivita.getDataInizio();
         String stringaDataInizio = df.format(dataInizio);
         holder.dataInizio.setText(stringaDataInizio);
@@ -83,6 +84,7 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
 
 
     public class AttivitaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        String idAttivita;
         TextView attivitaNome;
         TextView descrizione;
         TextView dataInizio;
@@ -105,6 +107,7 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
                 public void onClick(View view) {
                     Intent intent = (new Intent(view.getContext(), NewActivityEvent.class));
                     intent.putExtra("modifica_attivita", true);
+                    intent.putExtra("idAttivita",idAttivita);
                     view.getContext().startActivity(intent);
 
 
