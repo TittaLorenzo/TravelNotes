@@ -64,6 +64,8 @@ public class MyAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
+        simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
+
         if(this.getItemViewType(position)==0){
             Viaggio viaggio = list.get(position);
             TravelAViewHolder viewHolder = (TravelAViewHolder) holder;
@@ -72,13 +74,14 @@ public class MyAdapter extends RecyclerView.Adapter {
             viewHolder.travelDestination.setText(viaggio.getDestinazioneAndata());
 
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDate.setText(dateTime);
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
-            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
-            viewHolder.travelDateArrival.setText(dateTime);
+            String ora = Double.toString(viaggio.getDurataAndata())+ " minuti";
+            viewHolder.travelDateArrival.setText(ora);
+
+
+
 
             //viewHolder.travelDate.setText(viaggio.getDataAndata().toString());
 
@@ -92,24 +95,23 @@ public class MyAdapter extends RecyclerView.Adapter {
             viewHolder.travelDepartureR.setText(viaggio.getPartenzaRitorno());
             viewHolder.travelDestinationR.setText(viaggio.getDestinazioneRitorno());
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
+
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDate.setText(dateTime);
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
-            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
-            viewHolder.travelDateArrival.setText(dateTime);
+            String ora = Double.toString(viaggio.getDurataAndata())+ " minuti";
+            viewHolder.travelDateArrival.setText(ora);
+
 
             //viewHolder.travelDate.setText(viaggio.getDataAndata().toString());
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
             dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
             viewHolder.travelDateR.setText(dateTime);
             //viewHolder.travelDateR.setText(viaggio.getDataAndata().toString());
 
-            simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy \n HH:mm");
-            dateTime = simpleDateFormat.format(viaggio.getDataAndata()).toString();
-            viewHolder.travelDateRArrival.setText(dateTime);
+
+            String ora2 = Double.toString(viaggio.getDurataRitorno())+ " minuti";
+            viewHolder.travelDateRArrival.setText(ora2);
         }
     }
 
@@ -210,6 +212,16 @@ public class MyAdapter extends RecyclerView.Adapter {
 
 
 
+    }
+
+    public void removeTravel(int position) {
+        list.remove(position);
+        notifyItemRemoved(position);
+    }
+
+    public void restoreTravel(Viaggio viaggio, int position) {
+        list.add(position, viaggio);
+        notifyItemInserted(position);
     }
 
 

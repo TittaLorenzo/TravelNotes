@@ -579,26 +579,31 @@ public class TravelRepository implements ITravelRepository {
             public void run() {
                 List<Utente> listaUtenti = mLocalDatabase.getViaggioDao().getViaggioConUtenti(viaggioId).gruppoViaggio;
 
-                for (Utente utente : listaUtenti) {
-                    mRtDatabase.child("utenti").child(utente.getUtenteId()).child("listaviaggi").child(viaggioId).removeValue();
-                }
+                mRtDatabase.child("viaggi").child(viaggioId).removeValue()
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+
+                                for (Utente utente : listaUtenti) {
+                                    mRtDatabase.child("utenti").child(utente.getUtenteId()).child("listaviaggi").child(viaggioId).removeValue();
+                                }
+
+                                Runnable runnable = new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mLocalDatabase.getViaggioDao().deleteViaggioById(viaggioId);
+                                    }
+                                };
+                                new Thread(runnable).start();
+                            }
+                        });
+
+
             }
         };
         new Thread(runnable).start();
 
-        mRtDatabase.child("viaggi").child(viaggioId).removeValue()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                Runnable runnable = new Runnable() {
-                    @Override
-                    public void run() {
-                        mLocalDatabase.getViaggioDao().deleteViaggioById(viaggioId);
-                    }
-                };
-                new Thread(runnable).start();
-            }
-        });
+
     }
 
     @Override

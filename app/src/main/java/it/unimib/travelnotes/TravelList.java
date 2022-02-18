@@ -2,6 +2,7 @@ package it.unimib.travelnotes;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,12 +17,14 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -41,6 +44,7 @@ import it.unimib.travelnotes.Model.response.ListaViaggiResponse;
 import it.unimib.travelnotes.autentication.LoginActivity;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
+import it.unimib.travelnotes.ui.attivita.SwipeToDeleteCallBack;
 
 public class TravelList extends AppCompatActivity {
 
@@ -48,11 +52,14 @@ public class TravelList extends AppCompatActivity {
     private TravelListViewModel mTravelListViewModel;
     private String utenteId;
     private ProgressBar mProgressBar;
+    private boolean d;
+    private Viaggio temp;
 
     RecyclerView recyclerView;
     DatabaseReference database;
     MyAdapter myAdapter;
     ArrayList<Viaggio> list;
+
     public static final String FIREBASE_DATABASE_URL = "https://travelnotes-334817-default-rtdb.europe-west1.firebasedatabase.app/";
 
 
@@ -73,6 +80,52 @@ public class TravelList extends AppCompatActivity {
         database = FirebaseDatabase.getInstance(FIREBASE_DATABASE_URL).getReference("travel");
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        SwipeToDeleteCallBack swipeToDeleteCallback = new SwipeToDeleteCallBack(this) {
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                final int position = viewHolder.getAdapterPosition();
+                final Viaggio item = list.get(position);
+                d=true;
+                temp = item;
+                myAdapter.removeTravel(position);
+                //activity_travel_view.onChange(attivitaList);
+                Snackbar snackbar = Snackbar
+                        .make(findViewById(R.id.recyclerView), "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        d=false;
+                        myAdapter.restoreTravel(item, position);
+                        recyclerView.scrollToPosition(position);
+                    }
+
+                });
+
+                snackbar.setActionTextColor(Color.YELLOW);
+                snackbar.show();
+                snackbar.addCallback(new Snackbar.Callback() {
+
+                    @Override
+                    public void onDismissed(Snackbar snackbar, int event) {
+                        if(d){
+                            mTravelListViewModel.deleteViaggioViewModel(item.getViaggioId());
+                        }
+
+                    }
+
+                    @Override
+                    public void onShown(Snackbar snackbar) {
+
+                    }
+                });
+            }
+
+
+        };
+
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchhelper.attachToRecyclerView(recyclerView);
 
         if (list == null) {
             list = new ArrayList<>();

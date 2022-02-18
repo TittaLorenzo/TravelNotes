@@ -1,14 +1,10 @@
 package it.unimib.travelnotes;
 
 import android.app.Application;
-import android.view.View;
-import android.widget.ProgressBar;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.recyclerview.widget.RecyclerView;
 
-import it.unimib.travelnotes.Model.response.ListaAttivitaResponse;
 import it.unimib.travelnotes.Model.response.ListaViaggiResponse;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
@@ -59,6 +55,10 @@ public class TravelListViewModel extends AndroidViewModel {
 
     public MutableLiveData<ListaViaggiResponse> getListaViaggiResponse() {
         return mListaViaggiLiveData;
+    }
+
+    public void deleteViaggioViewModel(String viaggioId) {
+        mITravelRepository.deleteViaggio(viaggioId);
     }
 
     public void delateAll() {
