@@ -15,6 +15,18 @@
         android:layout_height="match_parent"
         android:background="@color/primaryColor"
         android:orientation="horizontal">
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/flight_progress_a"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/flight_bar"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:hideAnimationBehavior="inward"
+            app:indicatorColor="@color/secondaryDarkColor"
+            app:minHideDelay="500"
+            app:showAnimationBehavior="inward"
+            app:trackColor="@color/secondaryLightColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
