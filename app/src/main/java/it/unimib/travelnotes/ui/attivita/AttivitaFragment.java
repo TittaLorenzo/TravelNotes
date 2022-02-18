@@ -151,14 +151,13 @@ public class AttivitaFragment extends Fragment  {
                     attivitaList.addAll(listaAttivitaResponse.getElencoAttivita());
 
 
-                    // mRecyclerViewAdapter.notifyDataSetChanged();
+                    adapter_attivita.notifyDataSetChanged();
                 }
-                //mProgressBar.setVisibility(View.GONE);
+                mProgressBar.setVisibility(View.GONE);
             }
         };
         mListaAttivitaViewModel.getlistaAttivita().observe(getViewLifecycleOwner(), observer);
-
-
+        mProgressBar.setVisibility(View.VISIBLE);
 
         return view;
     }
