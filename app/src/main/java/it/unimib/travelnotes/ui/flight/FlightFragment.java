@@ -129,13 +129,13 @@ public class FlightFragment extends Fragment {
                     viaggio = viaggioResponse.getViaggio();
                     departures.setText(viaggio.getPartenzaAndata());
                     destination.setText(viaggio.getDestinazioneAndata());
-                    String ora = Double.toString(viaggio.getDurataAndata())+ " ore";
+                    String ora = Double.toString(viaggio.getDurataAndata())+ " minuti";
                     time.setText(ora);
                     Date dataAndata = viaggio.getDataAndata();
                     String stringaDataAndata = df.format(dataAndata);
                     departureTime.setText(stringaDataAndata);
                     if(a_r) {
-                        String ora2 = Double.toString(viaggio.getDurataRitorno()) + " ore";
+                        String ora2 = Double.toString(viaggio.getDurataRitorno()) + " minuti";
                         Date dataRitorno = viaggio.getDataRitorno();
                         String stringaDataRitorno = df.format(dataRitorno);
                         departureTime2.setText(stringaDataRitorno);

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -119,6 +120,7 @@ public class GroupFragment extends Fragment {
 
 
         ImageButton button_add_user = (ImageButton) view.findViewById(R.id.new_user);
+        ImageButton button_link = (ImageButton) view.findViewById(R.id.new_user_2);
         button_add_user.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,6 +128,11 @@ public class GroupFragment extends Fragment {
                 fragmentdialog.show(getChildFragmentManager(),"custodialog" );
 
             }
+        });
+
+        button_link.setOnClickListener(v -> {
+            mGruppoViaggioViewModel.createDynamicLink();
+            Toast.makeText(getActivity(), "Link copiato negli appunti", Toast.LENGTH_SHORT).show();
         });
 
         final Observer<ListaUtentiResponse> observer = new Observer<ListaUtentiResponse>() {

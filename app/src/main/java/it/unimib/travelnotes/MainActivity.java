@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                             if (userId != null) {
                                 deepLink = pendingDynamicLinkData.getLink();
 
-                                String viaggioId = deepLink.getQueryParameter("viaggioId");
+                                String viaggioId = deepLink.getQueryParameter("invitoviaggio");
                                 String email = mSharedPreferencesProvider.getSharedUserEmail();
 
                                 ITravelRepository mITravelRepository = new TravelRepository(getApplication());

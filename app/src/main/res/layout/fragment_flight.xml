@@ -163,10 +163,10 @@
 
                 <Button
                     android:id="@+id/modify_volo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="200dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:backgroundTint="#FFFFFF"
+                    android:backgroundTint="@color/secondaryColor"
                     android:text="@string/modificavolo" />
             </LinearLayout>
         </LinearLayout>
