@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import it.unimib.travelnotes.Model.response.ListaAttivitaResponse;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.TravelList;
 import it.unimib.travelnotes.databinding.FragmentAttivitaBinding;
+import it.unimib.travelnotes.ui.newactivityevent.NewActivityEvent;
 
 public class AttivitaFragment extends Fragment  {
 
@@ -130,7 +132,18 @@ public class AttivitaFragment extends Fragment  {
 
             ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeToDeleteCallback);
             itemTouchhelper.attachToRecyclerView(recyclerView);
+        FloatingActionButton nuovaAttivita =   view.findViewById(R.id.new_attivita);
+        nuovaAttivita.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = (new Intent(view.getContext(), NewActivityEvent.class));
+                intent.putExtra("modifica_attivita", false);
+                view.getContext().startActivity(intent);
 
+
+
+            }
+        });
 
 
 
