@@ -204,7 +204,7 @@ public class NewActivityEvent extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        //buttonSalva.setImageResource(R.drawable.ic_baseline_update);
+                        buttonSalva.setImageResource(R.drawable.ic_baseline_update_24);
 
                         TextView titoloNuovaAttivita = findViewById(R.id.titloloNuovaAttivitaId);
                         titoloNuovaAttivita.setText(R.string.titleModificaAttivita);
