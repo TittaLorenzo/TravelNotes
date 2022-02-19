@@ -337,7 +337,7 @@ public class NewActivityEvent extends AppCompatActivity {
                 calendar.set(Calendar.MONTH,month);
                 calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yy-MM-dd");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
                 if (dateButtonString.equals("StartDate")) /*set inizio attivita date*/ {
                     if (dataFineAttivitaButton.getText().toString().equals("")) {
