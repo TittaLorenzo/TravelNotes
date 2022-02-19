@@ -277,16 +277,27 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="end">
 
-                    <Button
+                    <!--Button
                         android:id="@+id/salvaBottoneNuovaAttivita"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textColor="@color/whiteTextColor"
                         android:textSize="18dp"
-                        android:text="@string/bottoneSalvaNewActivity" />
+                        android:text="@string/bottoneSalvaNewActivity" /-->
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/salvaBottoneNuovaAttivita"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|right"
+                        android:layout_margin="16dp"
+                        android:contentDescription="@string/bottoneSalvaNewActivity"
+                        android:src="@drawable/ic_baseline_add_24"
+                        app:rippleColor="@color/secondaryColor" />
                 </LinearLayout>
 
             </LinearLayout>

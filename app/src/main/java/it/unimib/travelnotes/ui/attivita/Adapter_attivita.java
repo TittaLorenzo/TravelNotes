@@ -1,6 +1,7 @@
 package it.unimib.travelnotes.ui.attivita;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,6 +113,18 @@ public class Adapter_attivita extends RecyclerView.Adapter<Adapter_attivita.Atti
 
 
 
+                }
+            });
+            posizione.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String posizioneStr = posizione.getText().toString();
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse("geo:0,0?q=" + Uri.encode(posizioneStr)));
+
+                    if (i.resolveActivity(v.getContext().getPackageManager()) != null) {
+                        v.getContext().startActivity(i);
+                    }
                 }
             });
         }

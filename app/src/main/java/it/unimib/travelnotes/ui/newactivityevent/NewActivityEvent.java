@@ -35,6 +35,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -60,7 +61,7 @@ import it.unimib.travelnotes.roomdb.TravelDatabase;
 
 public class NewActivityEvent extends AppCompatActivity {
 
-    private String AUTOCOMPLETE_API_KEY = "AIzaSyAmaveq8N5RXhsJhELqQWYP-coB78I89NQ";
+    private static final String AUTOCOMPLETE_API_KEY = "AIzaSyAmaveq8N5RXhsJhELqQWYP-coB78I89NQ";
 
     private FirebaseAuth mAuth;
 
@@ -70,7 +71,7 @@ public class NewActivityEvent extends AppCompatActivity {
     private Button dataFineAttivitaButton;
     private Button oraInizioAttivitaButton;
     private Button oraFineAttivitaButton;
-    private Button buttonSalva;
+    private FloatingActionButton buttonSalva;
 
     private EditText campoNome;
     private EditText campoPosizione;
@@ -203,6 +204,8 @@ public class NewActivityEvent extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //buttonSalva.setImageResource(R.drawable.ic_baseline_update);
+
                         TextView titoloNuovaAttivita = findViewById(R.id.titloloNuovaAttivitaId);
                         titoloNuovaAttivita.setText(R.string.titleModificaAttivita);
 

@@ -12,16 +12,24 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import it.unimib.travelnotes.Model.Viaggio;
 import it.unimib.travelnotes.repository.ITravelRepository;
@@ -46,6 +54,7 @@ public class NewTravel extends AppCompatActivity {
     String idProva ;
 
     static final long ONE_MINUTE_IN_MILLIS=60000;//millisecs
+    private static final String AUTOCOMPLETE_API_KEY = "AIzaSyAmaveq8N5RXhsJhELqQWYP-coB78I89NQ";
 
 
     private ITravelRepository mITravelRepository;
@@ -67,8 +76,56 @@ public class NewTravel extends AppCompatActivity {
         ritornoVA = findViewById(R.id.NT_ritornoA);
         mITravelRepository = new TravelRepository(getApplication());
         salvaVolo = findViewById(R.id.NT_floatingButton);
-        mITravelRepository = new TravelRepository(getApplication());
         titolo = findViewById(R.id.NT_creaViaggioTV);
+
+        // Autocomplete Place API
+        // Initialize the SDK
+        Places.initialize(getApplicationContext(), AUTOCOMPLETE_API_KEY);
+
+        andataVDa.setFocusable(false);
+        andataVDa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS/*, Place.Type.TRAIN_STATION, Place.Type.AIRPORT, Place.Field.ADDRESS*/);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NewTravel.this);
+                startActivityForResult(intent, 101);
+
+            }
+        });
+        andataVA.setFocusable(false);
+        andataVA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NewTravel.this);
+                startActivityForResult(intent, 102);
+
+            }
+        });
+        ritornoVDa.setFocusable(false);
+        ritornoVDa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NewTravel.this);
+                startActivityForResult(intent, 103);
+
+            }
+        });
+        ritornoVA.setFocusable(false);
+        ritornoVA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                List<Place.Field> fieldList = Arrays.asList(Place.Field.NAME, Place.Field.ADDRESS);
+
+                Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fieldList).build(NewTravel.this);
+                startActivityForResult(intent, 104);
+
+            }
+        });
 
         datoPassato = getIntent().getExtras().getBoolean("modifica_viaggio");
         idProva = getIntent().getExtras().getString("viaggio_id");
@@ -200,6 +257,26 @@ public class NewTravel extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode > 100 && requestCode < 105 && resultCode == RESULT_OK) {
+            Place place = Autocomplete.getPlaceFromIntent(data);
+            if (requestCode == 101) {
+                andataVDa.setText(place.getName());
+            } else if (requestCode == 102) {
+                andataVA.setText(place.getName());
+            } else if (requestCode == 103) {
+                ritornoVDa.setText(place.getName());
+            } else if (requestCode == 104) {
+                ritornoVA.setText(place.getName());
+            }
+        } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+            Status status = Autocomplete.getStatusFromIntent(data);
+            Toast.makeText(getApplicationContext(), status.getStatusMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 
