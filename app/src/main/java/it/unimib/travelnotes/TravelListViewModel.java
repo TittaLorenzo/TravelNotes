@@ -57,8 +57,8 @@ public class TravelListViewModel extends AndroidViewModel {
         return mListaViaggiLiveData;
     }
 
-    public void deleteViaggioViewModel(String viaggioId) {
-        mITravelRepository.deleteViaggio(viaggioId);
+    public void deleteViaggioViewModel(String viaggioId,String utenteId) {
+        mITravelRepository.deleteViaggioUtente(viaggioId, utenteId);
     }
 
     public void delateAll() {

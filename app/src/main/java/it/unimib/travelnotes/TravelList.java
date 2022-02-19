@@ -109,7 +109,7 @@ public class TravelList extends AppCompatActivity {
                     @Override
                     public void onDismissed(Snackbar snackbar, int event) {
                         if(d){
-                            mTravelListViewModel.deleteViaggioViewModel(item.getViaggioId());
+                            mTravelListViewModel.deleteViaggioViewModel(item.getViaggioId(),mAuth.getUid());
                         }
 
                     }

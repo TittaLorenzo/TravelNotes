@@ -605,6 +605,26 @@ public class TravelRepository implements ITravelRepository {
 
 
     }
+    @Override
+    public void deleteViaggioUtente(String viaggioId, String utenteId) {
+
+        mRtDatabase.child("utenti").child(utenteId).child("listaviaggi").child(viaggioId).removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                        Runnable runnable = () -> {
+                            mLocalDatabase.getViaggioDao().deleteViaggioById(viaggioId);
+                        };
+                        new Thread(runnable).start();
+                    }
+                });
+        rimuoviDalGruppo(viaggioId, utenteId);
+
+    }
+
+
+
 
     @Override
     public void deleteAttivita(String attivitaId, String viaggioId) {
@@ -670,6 +690,9 @@ public class TravelRepository implements ITravelRepository {
                         new Thread(runnable).start();
                     }
                 });
+      /*  if( mRtDatabase.child("viaggi").child(viaggioId).child("listautenti")==null){
+            deleteViaggio(viaggioId);
+        }*/
 
     }
 
