@@ -321,6 +321,7 @@ public class NewTravel extends AppCompatActivity {
         ritornoVDa = findViewById(R.id.NT_ritornoDa);
         ritornoVA = findViewById(R.id.NT_ritornoA);
         checkAR = findViewById(R.id.NT_checkAR);
+        salvaVolo.setImageResource(R.drawable.ic_baseline_update_24);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
