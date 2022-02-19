@@ -6,6 +6,7 @@
   <color name="secondaryColor">#fb8c00</color>
   <color name="secondaryLightColor">#ffbd45</color>
   <color name="secondaryDarkColor">#c25e00</color>
+  <color name="nightBackgrountColor">#111818</color>
   <color name="primaryTextColor">#000000</color>
   <color name="blackTextColor">#000000</color>
   <color name="whiteTextColor">#ffffff</color>
