@@ -55,6 +55,7 @@ import it.unimib.travelnotes.Model.Attivita;
 import it.unimib.travelnotes.Model.Utente;
 import it.unimib.travelnotes.R;
 import it.unimib.travelnotes.SharedPreferencesProvider;
+import it.unimib.travelnotes.TravelList;
 import it.unimib.travelnotes.repository.ITravelRepository;
 import it.unimib.travelnotes.repository.TravelRepository;
 import it.unimib.travelnotes.roomdb.TravelDatabase;
@@ -80,6 +81,7 @@ public class NewActivityEvent extends AppCompatActivity {
 
     private String attivitaId;
     private String viaggioId;
+    private boolean a_r;
 
 
 
@@ -148,22 +150,24 @@ public class NewActivityEvent extends AppCompatActivity {
         });
 
 
-        // Leggo valori passati come intent extra: se ci sono valori non nulli allora è una modifica a una attività, quindi bisogna
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
         try {
             attivitaId = (String) getIntent().getExtras().get("idAttivita");
         } catch (Exception e) {
             attivitaId = null;
         }
         try {
-            SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
             viaggioId = sharedPreferencesProvider.getSelectedViaggioId();
         } catch (Exception e) {
             viaggioId = null;
         }
         if (viaggioId == null) {
-            //startActivity(new Intent(getApplicationContext(), TravelList.class));
-            //fittizio
-            viaggioId = "-Mu6oqj3vibywB7EjgGG";
+            startActivity(new Intent(getApplicationContext(), TravelList.class));
+        }
+        try {
+            a_r = sharedPreferencesProvider.getViaggioA_R();
+        } catch (Exception e) {
+            a_r = true;
         }
 
         if (attivitaId != null) {
@@ -173,11 +177,6 @@ public class NewActivityEvent extends AppCompatActivity {
 
             caricaDatiAttivita(attivitaId);
         }
-
-        /*Button buttonMaps = findViewById(R.id.buttonMaps);
-        buttonMaps.setOnClickListener(v -> {
-            apriMappe(campoPosizione.getText().toString());
-        });*/
     }
 
     @Override
@@ -297,6 +296,8 @@ public class NewActivityEvent extends AppCompatActivity {
         }
 
         Intent i = new Intent(getApplicationContext(), Activity_travel_view.class);
+        i.putExtra("viaggioId", viaggioId);
+        i.putExtra("a_r", a_r);
         startActivity(i);
         finish();
     }
@@ -481,14 +482,4 @@ public class NewActivityEvent extends AppCompatActivity {
         };
         new TimePickerDialog(NewActivityEvent.this,timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
     }
-
-    public void apriMappe (String posizione) {
-        Intent i = new Intent(Intent.ACTION_VIEW);
-        i.setData(Uri.parse("geo:0,0?q=" + Uri.encode(posizione)));
-
-        if (i.resolveActivity(getPackageManager()) != null) {
-            startActivity(i);
-        }
-    }
-
 }

@@ -38,7 +38,6 @@ import it.unimib.travelnotes.ui.flight.FlightViewModel;
 
 public class Activity_travel_view extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private String viaggioId;
     private String viaggio_id; ;
     private ActivityTravelView2Binding binding;
     BottomNavigationView bottomNavigation;
@@ -63,11 +62,22 @@ public class Activity_travel_view extends AppCompatActivity {
         }catch (Exception e){
             viaggio_id = null;
         }
+        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
+        if (viaggio_id == null) {
+            viaggio_id = sharedPreferencesProvider.getSelectedViaggioId();
+        }
         if(viaggio_id == null){
             Intent intent = new Intent(getApplicationContext(), TravelList.class);
+            startActivity(intent);
         }
-        SharedPreferencesProvider sharedPreferencesProvider = new SharedPreferencesProvider(getApplication());
         sharedPreferencesProvider.setSelectedViaggioId(viaggio_id);
+
+        try{
+            boolean a_r = (boolean) getIntent().getExtras().get("a_r");
+            sharedPreferencesProvider.setViaggioA_R(a_r);
+        }catch (Exception e){
+            sharedPreferencesProvider.setViaggioA_R(true);
+        }
 
 
         //Logic to intercept te Intent and its data
@@ -163,9 +173,6 @@ public class Activity_travel_view extends AppCompatActivity {
 
                 break;
 
-            case R.id.RefreshItemMenu:
-                //refresh method
-                break;
             case R.id.chUsernamePwItemMenu:
                 EditText newUsername = new EditText(this);
                 AlertDialog.Builder changeUnDialog = new AlertDialog.Builder(this);

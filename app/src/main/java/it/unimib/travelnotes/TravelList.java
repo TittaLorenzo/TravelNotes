@@ -276,9 +276,6 @@ public class TravelList extends AppCompatActivity {
 
                 break;
 
-            case R.id.RefreshItemMenu:
-                //refresh method
-                break;
             case R.id.chUsernamePwItemMenu:
                 EditText newUsername = new EditText(this);
                 AlertDialog.Builder changeUnDialog = new AlertDialog.Builder(this);

@@ -43,4 +43,14 @@ public class SharedPreferencesProvider {
         editor.putString(mApplication.getString(R.string.shared_viaggio_key), viaggioId);
         editor.apply();
     }
+
+    public boolean getViaggioA_R() {
+        return sharedPref.getBoolean(mApplication.getString(R.string.shared_viaggio_ar_key), true);
+    }
+
+    public void setViaggioA_R(boolean a_r) {
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(mApplication.getString(R.string.shared_viaggio_ar_key), a_r);
+        editor.apply();
+    }
 }

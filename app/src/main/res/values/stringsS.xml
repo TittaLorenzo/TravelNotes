@@ -4,6 +4,7 @@
     <string name="shared_userid_key">UidKey</string>
     <string name="shared_useremail_key">UemailKey</string>
     <string name="shared_viaggio_key">VidKey</string>
+    <string name="shared_viaggio_ar_key">ArKey</string>
 
     <string name="titleNuovaAttivita">Nuova attività</string>
     <string name="titleModificaAttivita">Modifica attività</string>
